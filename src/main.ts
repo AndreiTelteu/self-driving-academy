@@ -7,6 +7,7 @@ import {
   createLiveEconomyComposition,
   createLiveDailyProgress,
   createLiveChallenges,
+  createLiveChaos,
   createLiveChallengeRoutePort,
   createLiveChallengeZones,
   createLivePersistence,
@@ -43,6 +44,8 @@ import {
   type CompositionFrame,
   type GameTickPort,
   type LiveChallenges,
+  type LiveChaos,
+  type LiveChaosReaction,
   type LiveChallengeFrameFact,
   type LiveChallengeVehicleFact,
   type LiveDailyProgress,
@@ -139,6 +142,7 @@ import type { DrivingProfile, ProfileVersion } from './profiles';
 import { parameterDefinitions, parseDrivingProfile } from './profiles';
 import { PLAYER_XP_POLICY } from './missions';
 import { VEHICLE_CLASSES, createLiveVehiclePhysics, type LiveVehiclePhysics } from './vehicles';
+import { createAudioEngine, createWebAudioBackend, type AudioEngine } from './audio';
 import { copyProfileForChaos, liveSaveFingerprint } from './persistence';
 import type { SessionKind, SessionWorldPort } from './persistence';
 import './style.css';
@@ -169,6 +173,77 @@ trafficViolationNotice.style.cssText = [
 app.append(trafficViolationNotice);
 let lastTrafficViolationId: string | null = null;
 let trafficViolationShownAt = 0;
+/**
+ * PBI 285: the visual twin of the destruction feedback. It is always written, including before the
+ * audio gesture and when the browser refuses audio, so the material/intensity information never
+ * depends on a played sound.
+ */
+const destructionNotice = document.createElement('div');
+destructionNotice.id = 'destruction-notice';
+destructionNotice.setAttribute('role', 'status');
+destructionNotice.setAttribute('aria-live', 'polite');
+destructionNotice.style.cssText = [
+  'position:absolute',
+  'left:12px',
+  'bottom:12px',
+  'z-index:30',
+  'display:none',
+  'max-width:420px',
+  'padding:10px 12px',
+  'border-radius:10px',
+  'border:1px solid #e8b86b',
+  'background:rgba(28,22,10,0.92)',
+  'color:#fff1d6',
+  'font:13px/1.4 system-ui,sans-serif',
+  'box-shadow:0 2px 12px rgba(0,0,0,0.45)',
+  'pointer-events:none',
+].join(';');
+app.append(destructionNotice);
+let destructionNoticeTimer: number | null = null;
+/** PBI 285: the live owners of this backend; a renderer reload releases them together. */
+let liveChaos: LiveChaos | undefined;
+let liveAudio: AudioEngine | undefined;
+let releaseAudioGesture: (() => void) | undefined;
+
+function showDestructionReaction(reaction: LiveChaosReaction): void {
+  const fallback = reaction.audioPlayed
+    ? 'audio'
+    : `audio ${reaction.audioReason === 'AWAITING_GESTURE' ? 'după primul gest' : 'indisponibil'} · efect vizual`;
+  destructionNotice.textContent = `${reaction.symbol} ${reaction.text} · ${fallback}`;
+  destructionNotice.setAttribute('data-event', reaction.eventId);
+  destructionNotice.setAttribute('data-object', reaction.objectId);
+  destructionNotice.setAttribute('data-material', reaction.material);
+  destructionNotice.setAttribute('data-intensity', reaction.intensity.tier);
+  destructionNotice.setAttribute('data-variant', reaction.variant);
+  destructionNotice.setAttribute(
+    'data-audio',
+    reaction.audioPlayed ? 'PLAYED' : reaction.audioReason,
+  );
+  destructionNotice.style.display = 'block';
+  if (destructionNoticeTimer !== null) window.clearTimeout(destructionNoticeTimer);
+  destructionNoticeTimer = window.setTimeout(() => {
+    destructionNotice.style.display = 'none';
+    destructionNoticeTimer = null;
+  }, 3200);
+}
+
+function armAudioGesture(engine: AudioEngine): () => void {
+  const unlock = (event: Event): void => {
+    try {
+      engine.startFromUserGesture(event.type === 'keydown' ? 'KEYBOARD' : 'POINTER');
+    } catch {
+      // The explicit visual fallback stays visible; no second audio path is created.
+    }
+    document.removeEventListener('pointerdown', unlock, true);
+    document.removeEventListener('keydown', unlock, true);
+  };
+  document.addEventListener('pointerdown', unlock, true);
+  document.addEventListener('keydown', unlock, true);
+  return () => {
+    document.removeEventListener('pointerdown', unlock, true);
+    document.removeEventListener('keydown', unlock, true);
+  };
+}
 const view = createRenderingView(app);
 const world = createCompositionWorld();
 /** PBI 277: the real 041 planner and the mapped 032 zones the live challenge preflight reads. */
@@ -1890,6 +1965,8 @@ const application = createApplicationLifecycle({
         );
         let ownedComposition: V3BrowserComposition | undefined;
         let ownedPhysics: LiveVehiclePhysics | undefined;
+        let ownedAudio: AudioEngine | undefined;
+        let ownedChaos: LiveChaos | undefined;
         let ownedTraffic: ReturnType<typeof createAmbientTraffic> | undefined;
         let ownedRides: LiveRides | undefined;
         let ownedRideComposition: LiveRideComposition | undefined;
@@ -1956,6 +2033,27 @@ const application = createApplicationLifecycle({
             }),
             recovery: createRecoveryRoadProvider(world.graph),
           });
+          // PBI 285: one audio engine and one destruction composition over the same physics owner.
+          // The engine creates its Web Audio context only from the first player gesture.
+          ownedAudio = createAudioEngine({ backend: createWebAudioBackend() });
+          releaseAudioGesture?.();
+          releaseAudioGesture = armAudioGesture(ownedAudio);
+          ownedChaos = createLiveChaos({
+            context: compositionContext,
+            layout: world.layout,
+            engine: ownedAudio,
+            physics: ownedPhysics,
+            onReaction: showDestructionReaction,
+            xpMicroXp: () => dailyModules.runtime?.read().player.xpBalanceMicroXp ?? 0,
+            profileFingerprint: () => {
+              const pipeline = learningModules.pipeline;
+              return pipeline === undefined
+                ? 'NO_LIVE_PROFILE'
+                : `${pipeline.profileId}@${pipeline.head()}`;
+            },
+          });
+          liveAudio = ownedAudio;
+          liveChaos = ownedChaos;
           ownedComposition = createV3BrowserComposition({
             scene: backend.scene,
             surface: app,
@@ -1975,6 +2073,7 @@ const application = createApplicationLifecycle({
             models,
             onCameraModeChanged: rememberCameraMode,
             physics: ownedPhysics,
+            chaos: ownedChaos,
           });
           // PBI 271: the single 069 live boundary owner over this composition, before the first
           // shell tick. It closes/opens segments at the exact accepted tick without a second model.
@@ -2106,6 +2205,12 @@ const application = createApplicationLifecycle({
             ownedHud?.dispose();
             if (ridesModules.hud === ownedHud) ridesModules.hud = undefined;
             ownedComposition?.dispose();
+            ownedChaos?.dispose();
+            if (liveChaos === ownedChaos) liveChaos = undefined;
+            releaseAudioGesture?.();
+            releaseAudioGesture = undefined;
+            ownedAudio?.dispose();
+            if (liveAudio === ownedAudio) liveAudio = undefined;
             ownedPhysics?.dispose();
           } finally {
             try {
@@ -2157,6 +2262,12 @@ const application = createApplicationLifecycle({
                 ownedHud?.dispose();
                 if (ridesModules.hud === ownedHud) ridesModules.hud = undefined;
                 ownedComposition?.dispose();
+                ownedChaos?.dispose();
+                if (liveChaos === ownedChaos) liveChaos = undefined;
+                releaseAudioGesture?.();
+                releaseAudioGesture = undefined;
+                ownedAudio?.dispose();
+                if (liveAudio === ownedAudio) liveAudio = undefined;
                 ownedPhysics?.dispose();
               } finally {
                 // PBI 256: compunerea nu deține traficul; registry-ul și actorii 058 se eliberează aici.
@@ -2996,6 +3107,11 @@ const sessionWorld: SessionWorldPort = {
     disposeLiveLearning();
     // Sesiunea nouă nu moștenește poziția fizică a celei vechi; restaurarea completă a
     // snapshotului rămâne la 278.
+    // PBI 285: the destructible decor is restored and a real WORLD_RESET is recorded before the
+    // scene is rebuilt. XP and the learned profile are only read, never written.
+    if (liveChaos !== undefined && liveChaos.getStats().tick > 0) {
+      liveChaos.reset(boundaryTick);
+    }
     composition?.reset();
     composition?.setVehicleMode('AUTO');
     shell.setMode('AUTO');
@@ -3142,6 +3258,14 @@ interface V3DebugGlobal {
   modes(): unknown;
   /** PBI 282: live Rapier state, wheels, damage, recovery, contacts and separated costs. */
   physics(): unknown;
+  /** PBI 285: live destructible states, reactions, caps, recorder and replay chunks, read-only. */
+  destructibles(): unknown;
+  /** PBI 285 (probe-only): an impact through the same 227/228/207 path, not a driven contact. */
+  destructibleImpact?(objectId: string, impulseNs: number): unknown;
+  /** PBI 285 (probe-only): the same reset the session flow performs, with the real owners read. */
+  destructibleReset?(): unknown;
+  /** PBI 285 (probe-only): replay the latest sealed chunk and compare the recorded order. */
+  destructibleReplay?(): unknown;
   /** PBI 273: the live learning pipeline, its real 103/221 queue and the immutable profile. */
   learning(): unknown;
   /** PBI 264: cererile, coada, alocările și starea panoului de curse. */
@@ -3401,6 +3525,46 @@ const debugGlobal: V3DebugGlobal = {
       costs: composition?.costs() ?? null,
     };
   },
+  destructibles: () => {
+    const chaos = liveChaos;
+    if (chaos === undefined) return null;
+    return {
+      stats: chaos.getStats(),
+      chunks: chaos.replayChunks(),
+      plan: {
+        definitions: chaos.plan.definitions.length,
+        zones: chaos.plan.zones.length,
+        objects: chaos.plan.definitions.slice(0, 8).map((definition) => ({
+          objectId: definition.objectId,
+          archetype: definition.archetype,
+          positionM: definition.initialTransform.positionM,
+        })),
+      },
+      scene: composition?.view.destructibles?.stats() ?? null,
+    };
+  },
+  destructibleImpact: (objectId, impulseNs) => {
+    const chaos = liveChaos;
+    if (chaos === undefined) return null;
+    const result = chaos.probeImpact({
+      objectId,
+      impulseNs,
+      tick: chaos.getStats().tick,
+      vehicleId: 'probe-vehicle',
+      controlSource: 'MANUAL',
+    });
+    return {
+      accepted: result !== null,
+      state: result === null ? null : chaos.decor.getState(objectId).state,
+      stats: chaos.getStats(),
+    };
+  },
+  destructibleReset: () => {
+    const chaos = liveChaos;
+    if (chaos === undefined) return null;
+    return chaos.reset(chaos.getStats().tick);
+  },
+  destructibleReplay: () => liveChaos?.checkReplay() ?? null,
   learning: () => {
     const pipeline = learningModules.pipeline;
     return {

@@ -993,3 +993,22 @@ export {
   type SessionResetPartial,
   type SessionResetRejected,
 } from './session-flow';
+
+export {
+  createLiveChaos,
+  liveChaosPhysicalWindow,
+  LIVE_CHAOS_DEFAULTS,
+  LIVE_CHAOS_VERSION,
+  type LiveChaos,
+  type LiveChaosObjectView,
+  type LiveChaosOptions,
+  type LiveChaosPhysicsPort,
+  type LiveChaosProbeImpact,
+  type LiveChaosReaction,
+  type LiveChaosReplayCheck,
+  type LiveChaosResetReport,
+  type LiveChaosStats,
+  type LiveChaosStepInput,
+  type LiveChaosVehicleSample,
+  type LiveChaosVisualFrame,
+} from './live-chaos';

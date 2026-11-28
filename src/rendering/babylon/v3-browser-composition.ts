@@ -16,6 +16,7 @@ import {
   type CompositionFrame,
   type CompositionMode,
   type CompositionVehicleSeed,
+  type LiveChaos,
   type V3Composition,
 } from '../../app';
 import type { CivilTraffic } from '../../fleet';
@@ -74,6 +75,8 @@ export interface V3BrowserCompositionOptions {
   readonly onCameraModeChanged?: (mode: CompositionCameraMode) => void;
   /** PBI 282: the live Rapier owner. Absent keeps the pre-282 kinematic fixture. */
   readonly physics?: LiveVehiclePhysics;
+  /** PBI 285: the live destructible/audio/replay composition over the same tick and physics. */
+  readonly chaos?: LiveChaos;
 }
 
 export interface CostSummary {
@@ -180,6 +183,7 @@ export function createV3BrowserComposition(
     viewport: options.viewport,
     rendererKind: options.rendererKind,
     models: options.models,
+    ...(options.chaos === undefined ? {} : { destructibles: options.chaos.plan }),
   });
   const composition = createV3Composition({
     layout: options.layout,
@@ -311,6 +315,7 @@ export function createV3BrowserComposition(
     view.camera.minZ = latest.camera.mode === 'FIRST_PERSON' ? 0.05 : 0.1;
     view.camera.upVector.set(latest.camera.up.x, latest.camera.up.y, latest.camera.up.z);
     view.apply(latest, characterFrame);
+    view.applyDestruction(options.chaos?.visual() ?? null);
     applyFirstPersonVisibility(
       latest.camera.mode === 'FIRST_PERSON' ? latest.camera.entityId : null,
     );
@@ -330,6 +335,26 @@ export function createV3BrowserComposition(
       keyboard.sync();
       const started = performance.now();
       latest = composition.step({ tick });
+      if (options.chaos !== undefined) {
+        const playerId = latest.playerVehicleId;
+        const player =
+          playerId === null
+            ? undefined
+            : latest.vehicles.find((vehicle) => vehicle.vehicleId === playerId);
+        options.chaos.step({
+          tick,
+          vehicles: latest.vehicles.map((vehicle) => ({
+            vehicleId: vehicle.vehicleId,
+            driverKind: vehicle.driverKind,
+            positionM: vehicle.positionM,
+            yawRad: vehicle.yawRad,
+            speedMps: vehicle.speedMps,
+            controlMode: vehicle.controlMode,
+            isPlayer: vehicle.vehicleId === playerId,
+          })),
+          listenerPositionM: player?.positionM ?? latest.character.positionM,
+        });
+      }
       if (tickSamples.length >= MAX_SAMPLES) tickSamples.shift();
       tickSamples.push(performance.now() - started);
       return latest;
@@ -494,6 +519,8 @@ export function createV3BrowserComposition(
           }),
         ),
         physics: composition.physicsStats(),
+        destructibles: options.chaos?.getStats() ?? null,
+        destructibleScene: view.destructibles?.stats() ?? null,
         segments: Object.freeze({
           walking: segments.walking,
           openSegmentId: segments.openSegmentId,

@@ -13,6 +13,9 @@
  * a real solver contact with a real damage incident.
  */
 import { createCollisionEpisodes } from '../collision-episodes';
+import type { CollisionIncident } from '../collision-episodes';
+import type { CollisionIdentity } from '../collision-port';
+import { COLLISION_LIMITS } from '../collision-port';
 import { createVehicleController } from '../controller';
 import { createVehicleDamage } from '../damage-state';
 import type { DamageHistoryRecord, DamageProjection } from '../damage-port';
@@ -59,6 +62,37 @@ export interface LivePhysicsStaticBox {
   readonly id: string;
   readonly centerM: Readonly<{ x: number; y: number; z: number }>;
   readonly halfExtentsM: Readonly<{ x: number; y: number; z: number }>;
+}
+
+/**
+ * PBI 285 — a bounded destructible obstacle of the one live physics world.
+ *
+ * The 227 decor owns the logical object; this port only makes the object a real native box so a
+ * car contact produces a real 028 incident with a real solver impulse. The name is namespaced so a
+ * building or vehicle identity can never be mistaken for a destructible.
+ */
+export interface LivePhysicsObstacle {
+  readonly id: string;
+  readonly centerM: Readonly<{ x: number; y: number; z: number }>;
+  readonly halfExtentsM: Readonly<{ x: number; y: number; z: number }>;
+}
+
+export interface LivePhysicsObstacleStats {
+  readonly active: number;
+  /** The 028 collision registry capacity shared with the named world obstacles. */
+  readonly capacity: number;
+  /** Named collision obstacles already registered by buildings and other world owners. */
+  readonly worldObstacles: number;
+  readonly available: number;
+  readonly added: number;
+  readonly moved: number;
+  readonly removed: number;
+  readonly refused: number;
+}
+
+/** The obstacle name a 227 object receives in the one live collision registry. */
+export function liveDestructibleObstacleName(objectId: string): string {
+  return `destructible:${objectId}`;
 }
 
 export interface LivePhysicsRecoveryLocator {
@@ -228,6 +262,8 @@ export interface LiveVehiclePhysicsStats {
     fault: string | null;
   }>;
   readonly costs: LivePhysicsStepCosts;
+  /** PBI 285: destructible obstacle bindings of the same native world, never a second body store. */
+  readonly obstacles: LivePhysicsObstacleStats;
   readonly disposed: boolean;
 }
 
@@ -256,6 +292,20 @@ export interface LiveVehiclePhysics {
   commitRecovery(atTick: number): LiveRecoveryOutcome | null;
   readRecovery(): LiveRecoveryProjection;
   readRecoveryHistory(offset?: number, limit?: number): readonly RecoveryRecord[];
+  /**
+   * PBI 285: binds one 227 destructible as a named box in the same collision registry. The caller
+   * owns the logical object and must remove the box when it is no longer a physical obstacle.
+   */
+  addObstacle(input: LivePhysicsObstacle): boolean;
+  moveObstacle(
+    id: string,
+    centerM: Readonly<{ x: number; y: number; z: number }>,
+    yawRad: number,
+  ): boolean;
+  removeObstacle(id: string): boolean;
+  hasObstacle(id: string): boolean;
+  /** The exact 028 incidents drained by the last physics step, in the real collision order. */
+  readIncidents(): readonly CollisionIncident[];
   getStats(): LiveVehiclePhysicsStats;
   dispose(): void;
 }
@@ -413,6 +463,17 @@ export async function createLiveVehiclePhysics(
   });
   const registrations = new Map<string, RegistrationEntry>();
   const proxies = new Map<string, ProxyEntry>();
+  /**
+   * PBI 285: the destructible obstacle bindings of the one native world. Capacity is the 028
+   * collision admission limit; buildings already occupy their share, so the caller selects the
+   * bounded physical subset and the rest stay logical 227 objects.
+   */
+  const obstacles = new Map<
+    string,
+    { readonly handle: number; readonly identity: CollisionIdentity }
+  >();
+  let lastIncidents: readonly CollisionIncident[] = Object.freeze([]);
+  const obstacleCounters = { added: 0, moved: 0, removed: 0, refused: 0 };
   const buildingCount = staticBoxes.length;
   let pendingRecovery: PendingRecovery | null = null;
   let lastRecoveryResult: LiveRecoveryOutcome['status'] | null = null;
@@ -918,6 +979,16 @@ export async function createLiveVehiclePhysics(
         result: lastRecoveryResult,
         fault: recoveryFault,
       }),
+      obstacles: (() => {
+        const used = probe.collisionResources().obstacles;
+        return Object.freeze({
+          active: obstacles.size,
+          capacity: COLLISION_LIMITS.obstacles,
+          worldObstacles: used - obstacles.size,
+          available: Math.max(0, COLLISION_LIMITS.obstacles - used),
+          ...obstacleCounters,
+        });
+      })(),
       costs: lastCosts,
       disposed,
     });
@@ -1075,10 +1146,13 @@ export async function createLiveVehiclePhysics(
       if (nativeRecovery !== null) {
         const readback = probe.readCollisionContacts();
         const emitted = episodes.update(atTick, readback.contacts);
+        const drainedIncidents: CollisionIncident[] = [];
         const drained = episodes.drain((incident) => {
+          drainedIncidents.push(incident);
           damage.applyIncident(incident);
           return undefined;
         });
+        lastIncidents = Object.freeze(drainedIncidents);
         collisions = Object.freeze({
           contacts: readback.contacts.length,
           candidatePairs: readback.candidatePairs,
@@ -1086,6 +1160,8 @@ export async function createLiveVehiclePhysics(
           incidents: emitted,
           pending: drained.pending,
         });
+      } else {
+        lastIncidents = Object.freeze([]);
       }
       const collisionEnd = input.measure ? clock() : 0;
       const vehicles = readAll();
@@ -1200,6 +1276,66 @@ export async function createLiveVehiclePhysics(
     readRecoveryHistory(offset = 0, limit = 64) {
       return ledger.readHistory(offset, limit);
     },
+    addObstacle(input) {
+      requireActive();
+      if (typeof input?.id !== 'string' || input.id.length === 0) {
+        obstacleCounters.refused += 1;
+        return false;
+      }
+      if (obstacles.has(input.id)) return false;
+      const resources = probe.collisionResources();
+      if (resources.obstacles >= COLLISION_LIMITS.obstacles) {
+        obstacleCounters.refused += 1;
+        return false;
+      }
+      try {
+        const identity = probe.addNamedBox(
+          liveDestructibleObstacleName(input.id),
+          input.centerM,
+          input.halfExtentsM,
+        );
+        obstacles.set(input.id, Object.freeze({ handle: identity.colliderHandle, identity }));
+        obstacleCounters.added += 1;
+        return true;
+      } catch {
+        // A full native world is reported, never allowed to break the authoritative step.
+        obstacleCounters.refused += 1;
+        return false;
+      }
+    },
+    moveObstacle(id, centerM, yawRad) {
+      requireActive();
+      const entry = obstacles.get(id);
+      if (entry === undefined) return false;
+      try {
+        probe.setStaticBoxPose(entry.handle, centerM, yawRad);
+        obstacleCounters.moved += 1;
+        return true;
+      } catch {
+        obstacleCounters.refused += 1;
+        return false;
+      }
+    },
+    removeObstacle(id) {
+      requireActive();
+      const entry = obstacles.get(id);
+      if (entry === undefined) return false;
+      obstacles.delete(id);
+      try {
+        probe.removeCollisionEntity(entry.identity);
+      } catch {
+        obstacleCounters.refused += 1;
+        return false;
+      }
+      obstacleCounters.removed += 1;
+      return true;
+    },
+    hasObstacle(id) {
+      return obstacles.has(id);
+    },
+    readIncidents() {
+      return lastIncidents;
+    },
     getStats: stats,
     dispose() {
       if (disposed) return;
@@ -1213,6 +1349,14 @@ export async function createLiveVehiclePhysics(
         }
       }
       proxies.clear();
+      for (const obstacle of obstacles.values()) {
+        try {
+          probe.removeCollisionEntity(obstacle.identity);
+        } catch {
+          // The probe owns the native world; disposal below releases it even if a binding is stale.
+        }
+      }
+      obstacles.clear();
       try {
         nativeRecovery?.release();
       } catch {
