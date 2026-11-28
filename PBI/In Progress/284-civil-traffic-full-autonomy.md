@@ -1,13 +1,13 @@
 ---
 id: "284"
 title: "Traficul civil complet autonom și preluarea oricărei mașini"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Trafic"
 depends_on: ["262","283"]
 performance_checks: ["simulation"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-284"
+started_at: "2026-11-28T08:59:54.576Z"
 completed_at: null
 ---
 
