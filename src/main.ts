@@ -68,7 +68,7 @@ import {
   type LiveCompanyEvolution,
   type LiveCompanyFinance,
 } from './economy';
-import type { CompanyFleetPort } from './fleet';
+import { CIVIL_TRAFFIC_LIMITS, type CompanyFleetPort } from './fleet';
 import {
   createDefaultSettings,
   createSettingsStore,
@@ -578,6 +578,31 @@ const controlTickPort: GameTickPort = {
   },
 };
 /**
+ * PBI284: every body currently in the live frame, plus the character when on foot. A purchased
+ * vehicle must not appear on top of the player or an existing car.
+ */
+function liveSpawnAvoid(): readonly Readonly<{ x: number; z: number; radiusM: number }>[] {
+  const frame = composition?.composition.frame;
+  if (frame === undefined) return Object.freeze([]);
+  const avoid: Readonly<{ x: number; z: number; radiusM: number }>[] = frame.vehicles.map(
+    (vehicle) =>
+      Object.freeze({
+        x: vehicle.positionM.x,
+        z: vehicle.positionM.z,
+        radiusM: 2.5,
+      }),
+  );
+  if (frame.playerVehicleId === null)
+    avoid.push(
+      Object.freeze({
+        x: frame.character.positionM.x,
+        z: frame.character.positionM.z,
+        radiusM: 0.5,
+      }),
+    );
+  return Object.freeze(avoid);
+}
+/**
  * PBI 269 fleet port: a purchase adds the taxi to the one 057 registry and starts its real 058
  * actor, so the same live fleet and capacity grow without a second registry or composition.
  */
@@ -591,7 +616,10 @@ function companyFleetPort(): CompanyFleetPort | undefined {
     addVehicle: (driverKind, classId, options) => {
       const vehicle = fleet.registry.addVehicle(driverKind, classId, options);
       try {
-        fleet.traffic.addVehicle(vehicle.vehicleId);
+        fleet.ambient.addVehicle(vehicle.vehicleId, {
+          avoid: liveSpawnAvoid(),
+          clearanceM: CIVIL_TRAFFIC_LIMITS.spawnClearanceM,
+        });
         return vehicle;
       } catch (error) {
         fleet.registry.removeVehicle(vehicle.vehicleId);

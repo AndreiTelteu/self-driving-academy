@@ -191,10 +191,10 @@ export interface CompositionOptions {
   /** PBI 280: saved 009 camera preference; FIRST_PERSON applies only while the player drives. */
   readonly cameraMode?: CompositionCameraMode;
   /**
-   * PBI 256: traficul 058 care devine parte vizibilă a compunerii. Compunerea îl pașește înaintea
-   * arbitrajului de input și publică actorii în `frame.vehicles`, dar NU îl deține: caller-ul îl
-   * creează proaspăt și îl eliberează împreună cu registry-ul. Mașinile AI nu sunt preluabile de
-   * jucător: `requestEntry` le refuză explicit.
+   * PBI 256/284: traficul 058 care devine parte vizibilă a compunerii. Compunerea îl pașește
+   * înaintea arbitrajului de input și publică actorii în `frame.vehicles`, dar NU îl deține:
+   * caller-ul îl creează proaspăt și îl eliberează împreună cu registry-ul. Orice mașină AI poate fi
+   * preluată: intrarea suspendă ruta 058, iar ieșirea o reconciliază și revine în AUTO.
    */
   readonly traffic?: CivilTraffic;
   /** PBI 257: harta 032 și graful 033 pentru driverul AUTO. Fără ele, M rămâne indisponibil. */
@@ -1432,8 +1432,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     let best: CompositionVehicle | undefined;
     let bestDistance = Number.POSITIVE_INFINITY;
     for (const vehicle of vehicles) {
-      // PBI 256: mașinile AI nu sunt preluabile; G trebuie să aleagă taxiul, nu o mașină care trece.
-      if (trafficIds.has(vehicle.vehicleId)) continue;
+      // PBI284: every live taxi/civil is enterable; 058 suspends its route and resumes it on exit.
       const distance = Math.hypot(vehicle.positionM.x - feet.x, vehicle.positionM.z - feet.z);
       if (distance < bestDistance) {
         best = vehicle;
@@ -1553,12 +1552,6 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       emit('ENTER_REFUSED', 'UNKNOWN_VEHICLE', atTick);
       return false;
     }
-    if (trafficIds.has(target.vehicleId)) {
-      // Traficul 058 are propriul progres de rută; o preluare fără reconcilierea poziției ar
-      // teleporta mașina înapoi la `resume`. Refuzul explicit păstrează ambele contracte curate.
-      emit('ENTER_REFUSED', 'AI_TRAFFIC: vehicle is driven by 058', atTick);
-      return false;
-    }
     const decision = decideVehicleEntry({
       tick: atTick,
       authority,
@@ -1572,20 +1565,38 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       emit('ENTER_REFUSED', `${decision.code}: ${decision.detail}`, atTick);
       return false;
     }
+    const trafficTarget = trafficIds.has(target.vehicleId);
+    if (trafficTarget) {
+      // PBI284: freeze the real 058 actor before the seat changes. Its route is suspended as-is,
+      // never replanned or duplicated; the exit path reconciles the driven pose and resumes AUTO.
+      if (traffic === null) {
+        emit('ENTER_REFUSED', 'AI_TRAFFIC: no civil-traffic owner', atTick);
+        return false;
+      }
+      try {
+        traffic.setAuthority(target.vehicleId, 'MANUAL', atTick);
+      } catch (error: unknown) {
+        emit(
+          'ENTER_REFUSED',
+          `AI_TRAFFIC: ${error instanceof Error ? error.message : String(error)}`,
+          atTick,
+        );
+        return false;
+      }
+      trafficResumeCoast.delete(target.vehicleId);
+    }
     previousEntry = decision.journal;
     takeover = decision.vehicle;
-    ensurePhysical(target, 'MANUAL');
+    const entered = trafficTarget
+      ? withVehicle(target, { controlMode: 'MANUAL' })
+      : withVehicle(target, { controlMode: 'MANUAL', speedMps: 0 });
+    ensurePhysical(entered, 'MANUAL');
     const entryDrive = autoDrives.get(target.vehicleId);
     if (entryDrive !== undefined) {
       entryDrive.dispose();
       autoDrives.delete(target.vehicleId);
     }
-    setVehicle(
-      withVehicle(target, {
-        controlMode: 'MANUAL',
-        speedMps: 0,
-      }),
-    );
+    setVehicle(entered);
     cameraFocusVehicleId = target.vehicleId;
     resetCameraOrbit();
     arbiter.setAuthority(decision.authority);
@@ -1666,8 +1677,11 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       }),
     );
     arbiter.setAuthority(decision.authority);
+    let exitReconcileFailure: string | null = null;
     if (trafficIds.has(controlled.vehicleId) && traffic !== null) {
-      // PBI 282: hand the exact physical exit pose back to 058 before dropping the Rapier body.
+      // PBI 284: hand the exact physical exit pose back to 058, but never leave the actor in MANUAL
+      // when only the projection is off-graph. The last on-graph pose from the manual ticks remains
+      // the fallback, and AUTO always resumes from it.
       try {
         traffic.reconcile(
           controlled.vehicleId,
@@ -1681,9 +1695,13 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
           },
           atTick,
         );
+      } catch (error: unknown) {
+        exitReconcileFailure = error instanceof Error ? error.message : String(error);
+      }
+      try {
         traffic.resume(controlled.vehicleId, atTick);
-      } catch {
-        // Off-graph exit poses remain on the reconciled last point; no synthetic teleport.
+      } catch (error: unknown) {
+        exitReconcileFailure ??= error instanceof Error ? error.message : String(error);
       }
     }
     if (livePhysics?.hasVehicle(controlled.vehicleId)) {
@@ -1704,7 +1722,11 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     lastSegmentAction = 'EXIT';
     emit(
       'EXIT_ACCEPTED',
-      `${decision.vehicleId} pe ${decision.exit.candidateId} la ${decision.exit.clearanceM.toFixed(3)} m`,
+      `${decision.vehicleId} pe ${decision.exit.candidateId} la ${decision.exit.clearanceM.toFixed(3)} m${
+        exitReconcileFailure === null
+          ? ''
+          : `; pose kept on the last reconciled lane (${exitReconcileFailure})`
+      }`,
       atTick,
     );
     return true;
@@ -2487,7 +2509,11 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       arbiter.releaseAll();
     },
     requestEntry(vehicleId?: string): void {
-      pendingEntry = Object.freeze({ vehicleId: vehicleId ?? null });
+      // Resolve the nearest target once: the 069 plan is prepared before stepTraffic, while the
+      // entry itself runs after it. Re-resolving there could bind the segment to a different car.
+      pendingEntry = Object.freeze({
+        vehicleId: vehicleId ?? nearestVehicle()?.vehicleId ?? null,
+      });
       pendingExit = false;
       pendingTakeover = null;
       pendingRelease = false;

@@ -19,6 +19,7 @@ import {
   type CityStyleSource,
   type CivilActorSnapshot,
   type CivilRouteSnapshot,
+  type CivilSpawnOptions,
   type CivilTraffic,
   type CivilTrafficReport,
   type FleetDriverKind,
@@ -132,8 +133,11 @@ export interface AmbientTraffic {
   refreshStyle(): Readonly<{ profileId: string; versionId: string }>;
   list(): readonly CivilActorSnapshot[];
   get(vehicleId: string): CivilActorSnapshot | undefined;
-  /** PBI 269: start simulating a taxi that a company purchase added to the same 057 registry. */
-  addVehicle(vehicleId: string): CivilActorSnapshot;
+  /**
+   * PBI 269/284: start simulating a taxi or civilian that was added to the same 057 registry.
+   * The optional spawn constraint keeps a purchase from appearing on top of the player.
+   */
+  addVehicle(vehicleId: string, options?: CivilSpawnOptions): CivilActorSnapshot;
   removeVehicle(vehicleId: string): boolean;
   route(vehicleId: string): CivilRouteSnapshot | undefined;
   report(): AmbientFleetReport;
@@ -499,7 +503,11 @@ export function createAmbientTraffic(options: unknown): AmbientTraffic {
     refreshStyle: () => prepared.traffic.refreshStyle(),
     list: () => prepared.traffic.list(),
     get: (vehicleId: string) => prepared.traffic.get(vehicleId),
-    addVehicle: (vehicleId: string) => prepared.traffic.addVehicle(vehicleId),
+    addVehicle: (vehicleId: string, spawn?: CivilSpawnOptions) =>
+      prepared.traffic.addVehicle(vehicleId, {
+        ...(spawn ?? {}),
+        avoid: Object.freeze([...(spawn?.avoid ?? []), ...read.avoid]),
+      }),
     removeVehicle: (vehicleId: string) => prepared.traffic.removeVehicle(vehicleId),
     route: (vehicleId: string) => prepared.traffic.get(vehicleId)?.route,
     trafficRules: () => prepared.rules?.report() ?? null,

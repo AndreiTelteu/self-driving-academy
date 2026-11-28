@@ -1,8 +1,9 @@
 # Trafic AI vizibil în compunerea de browser (PBI 256, extins de 262)
 
 Status: implementat și verificat în browser real (WebGL2/SwiftShader) pe 25 noiembrie 2026;
-PBI 262 a extins compunerea la flota live de taxiuri. Contractul de simulare rămâne 058; modulul
-nou este numai composition root-ul dintre harta 032, registry-ul 057 și compunerea jucabilă 236.
+PBI 262 a extins compunerea la flota live de taxiuri, PBI 283 a montat regulile live, iar PBI 284 a
+închis autonomia civilă și preluarea oricărei mașini. Contractul de simulare rămâne 058; modulul nou
+este numai composition root-ul dintre harta 032, registry-ul 057 și compunerea jucabilă 236.
 
 Până la acest PBI, `src/main.ts` afișa doar taxiul parcat și un singur civil static. Contractul
 [traficului civil 058](civil-traffic.md) exista și era testat, dar nu era instanțiat de joc. PBI 256
@@ -23,7 +24,7 @@ createCompositionWorld()  →  map 032 + graph 033 + layout 042
         └─ createV3Composition({ ..., traffic })
               ├─ step: 058 înaintea arbitrajului de input
               ├─ sync: actorii 058 devin `frame.vehicles`
-              └─ intrare: mașinile AI sunt refuzate explicit (`AI_TRAFFIC`)
+              └─ intrare/preluare: ruta 058 este suspendată, ieșirea o reconciliază și revine în AUTO
 ```
 
 `createAmbientTraffic` alege determinist primele benzi după distanța originii lor față de
@@ -65,9 +66,12 @@ verifică un actor pe banda `lane:00N0`: avansează pe `+Z`, rămâne pe bandă 
   044, deci devin lideri semantici și produc frânarea AI prin 048/047. Personajul pe jos nu este
   injectat ca vehicul: la spawn stă pe carosabil lângă bordură, iar tratarea lui ca lider ar opri o
   bandă întreagă în primul cadru.
-- **Preluare:** o mașină AI, taxi sau civil, nu poate fi condusă de jucător. `requestEntry` o refuză
-  cu `ENTER_REFUSED: AI_TRAFFIC`, iar `nearestVehicle` o ignoră. Motivul este tehnic: 058 are propriul
-  progres de rută, iar o preluare fără reconcilierea poziției ar teleporta mașina la `resume`.
+- **Preluare:** orice mașină AI, taxi sau civil, poate fi condusă de jucător. `M` din panoul `Flotă`
+  și `G` când ușa este în rază folosesc aceeași tranziție: `setAuthority(MANUAL|LEARNING)` suspendă
+  ruta 058 la poza curentă, fără o a doua rută sau un al doilea actor. La ieșire, poza condusă este
+  proiectată pe graful 033 (`reconcile`) și `resume` revine în AUTO pe aceeași rută/destinație; o
+  poziție off-graph revine în AUTO la ultima poziție reconciliată, iar `EXIT_ACCEPTED` raportează
+  motivul. `nearestVehicle` include acum toate mașinile live.
 - **Ownership:** `createAmbientTraffic` deține registry-ul și traficul; compunerea 236 doar le
   pașește. `main.ts` creează un trafic proaspăt pentru fiecare backend, deci recuperarea GPU nu
   refolosește un `lastTick` vechi, și îl eliberează la dispose.
@@ -112,6 +116,14 @@ Docs/25. Proba este a subsistemului 058, fără renderer sau GPU; nu înlocuieș
 hardware a tick-ului complet și nu este raportată ca FPS. Deciziile 044 folosesc cadența reală de
 10 Hz fazată pe șase tick-uri, iar liderul fizic este recalculat la fiecare tick.
 
+## Costul autonomiei civile (PBI 284)
+
+Aceeași probă 058, cu un singur owner 283 și contextul complet, măsoară 24/32/40 de civili cu 20 de
+taxiuri: p95 **6,06 / 7,60 / 6,80 ms** și p99 7,21 / 9,37 / 8,80 ms, sub bugetul de 8 ms al tick-ului
+laptop. Rândul 30 taxiuri + 40 civili este marcat separat `STRESS` (p95 **9,11 ms**) și nu este
+prezentat ca gate normal. Măsurătoarea este headless, pe subsistemul 058+283, fără renderer sau GPU;
+detalii în [Evidence/284-civil-autonomy/cost.json](Evidence/284-civil-autonomy/cost.json).
+
 ## Verificare
 
 ```powershell
@@ -120,6 +132,10 @@ npm test -- tests/fleet/civil-traffic.test.ts
 npm test -- tests/fleet/live-fleet.test.ts
 npm run fleet:live -- --check
 npm run fleet:live -- --measure
+npm run civil:autonomy
+npm run civil:autonomy -- --check
+npm run civil:autonomy:cost
+npm run civil:autonomy:probe
 npm run composition:report -- --browser
 npm run composition:report -- --check
 ```
@@ -133,13 +149,16 @@ Dovezi:
   proba de browser cu `traffic: { actors: 24, moved: 24 }`, costul tick-ului și cele 7 capturi.
 - [Evidence/256-browser-ai-traffic/README.md](Evidence/256-browser-ai-traffic/README.md) —
   rezumatul dovezilor acestui PBI.
+- [Evidence/284-civil-autonomy/README.md](Evidence/284-civil-autonomy/README.md) — autonomia civilă
+  completă, preluarea G/M, reluarea AUTO fără teleport, profilul comun, spawn-ul sigur, costul și
+  proba Chromium 13/13.
 
 ## Limite
 
-- 058 nu implementează semafoare live, prioritate în intersecție, STOP sau yield ca actuatoare;
-  acestea rămân contractele 036/037/038/045/050–054. Mașinile AI urmăresc ruta și liderul, dar nu
-  opresc la roșu.
-- Mașinile AI nu sunt preluabile; reconcilierea poziției la `resume` rămâne un follow-up.
+- 058 nu implementează el semafoarele, prioritatea, STOP-ul sau yield-ul; acestea rămân contractele
+  036/037/038/045/050–054 și sunt montate prin adaptorul 283, care este opt-in în fixture-uri.
+- Mașinile AI nepreluate rămân pe proxy-uri cinematice; fizica Rapier 282 se aplică mașinii conduse,
+  nu întregii flote. Decorul destructibil (285) și pietonii (286) nu sunt încă surse de context.
 - Personajul pe jos nu este tratat ca obstacol pentru AI; coliziunea fizică mașină–mașină între
   taxiul condus și AI nu este rezolvată de compunere (AI frânează semantic în spatele taxiului, dar
   nu există impuls fizic la contact).

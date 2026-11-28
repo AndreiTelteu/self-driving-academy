@@ -380,7 +380,7 @@ test('262: un taxi extern rămâne lider fizic între deciziile 044 de 10 Hz', (
   }
 });
 
-test('262: o mașină AI, taxi sau civil, nu poate fi preluată de jucător', () => {
+test('284: G no longer refuses a live AI car with AI_TRAFFIC (a distant door is a normal range refusal)', () => {
   const { composition } = fixture();
   try {
     const frame = composition.step({ tick: 1 });
@@ -388,14 +388,14 @@ test('262: o mașină AI, taxi sau civil, nu poate fi preluată de jucător', ()
     const civilian = aiVehicles(frame).find((vehicle) => vehicle.driverKind === 'CIVILIAN');
     assert.ok(taxi);
     assert.ok(civilian);
-    composition.requestEntry(taxi.vehicleId);
-    const taxiRefused = composition.step({ tick: 2 });
-    assert.equal(taxiRefused.authority.consumer, 'CHARACTER');
-    assert.match(taxiRefused.events.at(-1)?.detail ?? '', /AI_TRAFFIC/);
-    composition.requestEntry(civilian.vehicleId);
-    const civilianRefused = composition.step({ tick: 3 });
-    assert.equal(civilianRefused.authority.consumer, 'CHARACTER');
-    assert.match(civilianRefused.events.at(-1)?.detail ?? '', /AI_TRAFFIC/);
+    for (const [tick, target] of [
+      [2, taxi],
+      [3, civilian],
+    ] as const) {
+      composition.requestEntry(target.vehicleId);
+      const stepped = composition.step({ tick });
+      assert.doesNotMatch(stepped.events.at(-1)?.detail ?? '', /AI_TRAFFIC/);
+    }
   } finally {
     composition.dispose();
   }

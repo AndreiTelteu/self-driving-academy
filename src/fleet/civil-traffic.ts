@@ -55,6 +55,7 @@ import type {
   RoutePlan,
   RoutePlanner,
   ServiceZone,
+  SpatialEntity,
 } from '../world';
 import { FLEET_LIMITS, fleetDriverKinds } from './registry';
 import type { ControlMode } from '../vehicles';
@@ -85,6 +86,8 @@ export const CIVIL_TRAFFIC_LIMITS = Object.freeze({
   minimumGapM: 0.25,
   /** A merging actor holds at the lane boundary while another actor is this close to its start. */
   entryClearanceM: 6,
+  /** PBI284: a newly added actor keeps this clearance from the player and existing bodies. */
+  spawnClearanceM: 6,
   /**
    * PBI 265: deceleration used to stop a service route inside its real 032 destination zone.
    * The stop point is part of the route, never a teleport to the zone anchor.
@@ -161,6 +164,24 @@ export interface CivilTrafficVehicleObservation {
   readonly speedMps: number;
   /** Optional physical half-length packaging; defaults to CIVIL_TRAFFIC_LIMITS.vehicleRadiusM. */
   readonly radiusM?: number;
+}
+
+/** PBI284: a point a newly created actor must not spawn on top of (the player or another body). */
+export interface CivilSpawnAvoid {
+  readonly x: number;
+  readonly z: number;
+  /** Occupied radius; absent means a point. */
+  readonly radiusM?: number;
+}
+
+/**
+ * PBI284: optional spawn constraint for an actor added after creation. It only chooses among real
+ * 033 origin lanes and always asks 041 for the route; it never invents a pose or a second router.
+ */
+export interface CivilSpawnOptions {
+  readonly avoid?: readonly CivilSpawnAvoid[];
+  /** Centre-to-centre clearance from every avoid point; defaults to CIVIL_TRAFFIC_LIMITS.spawnClearanceM. */
+  readonly clearanceM?: number;
 }
 
 /** PBI 263: the authoritative pose a player-driven fleet car must hand back before AUTO resumes. */
@@ -286,11 +307,12 @@ export interface CivilTraffic {
   list(): readonly CivilActorSnapshot[];
   get(vehicleId: string): CivilActorSnapshot | undefined;
   /**
-   * PBI 269: start simulating a vehicle that was added to the same 057 registry after creation.
+   * PBI 269/284: start simulating a vehicle that was added to the same 057 registry after creation.
    * The registry remains the owner of identity/class/state; this only creates the real 058 actor
-   * route for it. A vehicle already simulated is returned unchanged.
+   * route for it. A vehicle already simulated is returned unchanged. A new actor can be constrained
+   * away from the player/other bodies without inventing a second router.
    */
-  addVehicle(vehicleId: string): CivilActorSnapshot;
+  addVehicle(vehicleId: string, options?: CivilSpawnOptions): CivilActorSnapshot;
   /** Stop simulating one actor; the 057 registry entry remains owned by the caller. */
   removeVehicle(vehicleId: string): boolean;
   step(input: CivilTrafficStep): CivilTrafficFrame;
@@ -410,6 +432,61 @@ function readOffsets(value: unknown, laneCount: number, label: string): readonly
   requireContract(Array.isArray(value), `${label} must be an array`);
   requireContract(value.length <= laneCount, `${label} requires a matching spawn lane`);
   return Object.freeze(value.map((raw) => finiteNumber(raw, 0, 1_000_000)));
+}
+
+function readSpawnOptions(value: unknown): {
+  readonly avoid: readonly CivilSpawnAvoid[];
+  readonly clearanceM: number;
+} {
+  if (value === undefined)
+    return Object.freeze({
+      avoid: Object.freeze([]),
+      clearanceM: CIVIL_TRAFFIC_LIMITS.spawnClearanceM,
+    });
+  const data = record(value);
+  for (const key of Object.keys(data))
+    requireContract(['avoid', 'clearanceM'].includes(key), 'Unknown civil spawn option');
+  const avoid: CivilSpawnAvoid[] = [];
+  if (data.avoid !== undefined) {
+    requireContract(Array.isArray(data.avoid), 'Civil spawn avoid must be an array');
+    requireContract(
+      data.avoid.length <= CIVIL_TRAFFIC_LIMITS.frameVehicles,
+      'Civil spawn avoid capacity',
+    );
+    for (const raw of data.avoid) {
+      const point = record(raw);
+      for (const key of Object.keys(point))
+        requireContract(['x', 'z', 'radiusM'].includes(key), 'Unknown civil spawn avoid field');
+      avoid.push(
+        Object.freeze({
+          x: finiteNumber(point.x, -1_000_000, 1_000_000),
+          z: finiteNumber(point.z, -1_000_000, 1_000_000),
+          radiusM: point.radiusM === undefined ? 0 : finiteNumber(point.radiusM, 0, 20),
+        }),
+      );
+    }
+  }
+  return Object.freeze({
+    avoid: Object.freeze(avoid),
+    clearanceM:
+      data.clearanceM === undefined
+        ? CIVIL_TRAFFIC_LIMITS.spawnClearanceM
+        : finiteNumber(data.clearanceM, 0, 100),
+  });
+}
+
+function spawnClearanceM(
+  point: Readonly<{ x: number; z: number }>,
+  avoid: readonly CivilSpawnAvoid[],
+): number {
+  if (avoid.length === 0) return Number.POSITIVE_INFINITY;
+  let best = Number.POSITIVE_INFINITY;
+  for (const candidate of avoid)
+    best = Math.min(
+      best,
+      Math.hypot(point.x - candidate.x, point.z - candidate.z) - (candidate.radiusM ?? 0),
+    );
+  return best;
 }
 
 interface KindSpawnHints {
@@ -712,6 +789,8 @@ class CivilTrafficImpl implements CivilTraffic {
   private readonly seed: number;
   private readonly scenarioSeed: number;
   private readonly zoneById: ReadonlyMap<string, ServiceZone>;
+  /** PBI284: the real 032 service-zone footprints published in the 044 context. */
+  private readonly zoneEntities: readonly SpatialEntity[];
   private readonly spawnLanes: readonly string[];
   private readonly spawnOffsetsM: readonly number[];
   private readonly spawnLanesByKind: Readonly<
@@ -768,6 +847,31 @@ class CivilTrafficImpl implements CivilTraffic {
     );
     this.commonStyle = style;
     this.zoneById = new Map(map.serviceZones.map((zone) => [zone.id, zone]));
+    const geometryNodes = new Map(map.geometry.nodes.map((node) => [node.id, node.positionM])),
+      geometryAreas = new Map(map.geometry.areas.map((area) => [area.id, area]));
+    this.zoneEntities = Object.freeze(
+      map.serviceZones.map((zone) => {
+        const area = geometryAreas.get(zone.geometryId);
+        requireContract(area !== undefined, 'Service zone geometry is missing');
+        const vertices = area.vertexNodeIds.map((nodeId) => {
+          const position = geometryNodes.get(nodeId);
+          requireContract(position !== undefined, 'Service zone vertex is missing');
+          return Object.freeze({ x: position.x, y: position.y, z: position.z });
+        });
+        requireContract(vertices.length > 0, 'Service zone footprint is empty');
+        return Object.freeze({
+          id: zone.id,
+          incarnation: 1,
+          kind: 'ZONE' as const,
+          shape: Object.freeze({
+            type: 'PRISM' as const,
+            verticesM: Object.freeze(vertices),
+            minHeightM: 0,
+            maxHeightM: 3,
+          }),
+        });
+      }),
+    );
     const kinds = new Set(options.driverKinds);
     this.allowedKinds = kinds;
     this.fleetVehicles = Object.freeze(
@@ -908,18 +1012,30 @@ class CivilTrafficImpl implements CivilTraffic {
     throw new RangeError('No route for civil vehicle');
   }
 
+  private laneStart(laneId: string): Readonly<{ x: number; z: number }> | null {
+    const path = this.graph.getDirectedPath(laneId),
+      point = path?.points[0];
+    return point === undefined ? null : point;
+  }
+
   private spawnRoute(
     vehicleId: string,
     cycle: number,
     access: RoadAccess,
     usedOrigins?: Set<string>,
     preferredOrigin?: string,
+    avoid: readonly CivilSpawnAvoid[] = Object.freeze([]),
+    clearanceM: number = CIVIL_TRAFFIC_LIMITS.spawnClearanceM,
   ): RouteState {
     const vehicleSeed = this.vehicleSeed(vehicleId),
-      lanes = this.laneIds(access);
+      lanes = this.laneIds(access),
+      clear = (laneId: string): boolean => {
+        const start = this.laneStart(laneId);
+        return start !== null && spawnClearanceM(start, avoid) >= clearanceM;
+      };
     if (preferredOrigin !== undefined) {
       requireContract(lanes.includes(preferredOrigin), 'Unknown fleet traffic spawn lane');
-      if (!usedOrigins?.has(preferredOrigin)) {
+      if (!usedOrigins?.has(preferredOrigin) && clear(preferredOrigin)) {
         try {
           const route = this.buildRoute(preferredOrigin, vehicleSeed, cycle, access);
           usedOrigins?.add(preferredOrigin);
@@ -930,17 +1046,26 @@ class CivilTrafficImpl implements CivilTraffic {
       }
     }
     const start = randomUint32(vehicleSeed, 'civil-origin', cycle) % lanes.length;
-    let origin = lanes[start]!;
-    if (usedOrigins !== undefined) {
-      for (let attempt = 0; attempt < lanes.length; attempt += 1) {
-        const candidate = lanes[(start + attempt) % lanes.length]!;
-        if (!usedOrigins.has(candidate)) {
-          origin = candidate;
-          break;
-        }
+    let origin: string | null = null,
+      bestOrigin: string | null = null,
+      bestClearanceM = Number.NEGATIVE_INFINITY;
+    for (let attempt = 0; attempt < lanes.length; attempt += 1) {
+      const candidate = lanes[(start + attempt) % lanes.length]!;
+      if (usedOrigins?.has(candidate)) continue;
+      const laneStart = this.laneStart(candidate);
+      if (laneStart === null) continue;
+      const clearance = spawnClearanceM(laneStart, avoid);
+      if (clearance >= clearanceM) {
+        origin = candidate;
+        break;
       }
-      usedOrigins.add(origin);
+      if (clearance > bestClearanceM) {
+        bestClearanceM = clearance;
+        bestOrigin = candidate;
+      }
     }
+    origin ??= bestOrigin ?? lanes[start]!;
+    usedOrigins?.add(origin);
     return this.buildRoute(origin, vehicleSeed, cycle, access);
   }
 
@@ -1193,7 +1318,7 @@ class CivilTrafficImpl implements CivilTraffic {
     return actor === undefined ? undefined : this.snapshot(actor);
   }
 
-  addVehicle(vehicleIdValue: string): CivilActorSnapshot {
+  addVehicle(vehicleIdValue: string, options?: CivilSpawnOptions): CivilActorSnapshot {
     this.assertLive();
     const vehicleId = boundedId(vehicleIdValue),
       existing = this.byId.get(vehicleId);
@@ -1207,13 +1332,22 @@ class CivilTrafficImpl implements CivilTraffic {
     requireContract(this.actors.length < FLEET_LIMITS.vehicles, 'Fleet traffic population cap');
     const state = this.registry.state(vehicleId);
     requireContract(state !== undefined, 'Missing fleet state');
-    const access = accessFor(vehicle.driverKind),
+    const spawn = readSpawnOptions(options),
+      access = accessFor(vehicle.driverKind),
       usedOrigins = new Set(
         this.actors
           .map((actor) => actor.route.plan.originLaneId)
           .filter((laneId): laneId is string => laneId !== null),
       ),
-      route = this.spawnRoute(vehicleId, 0, access, usedOrigins),
+      route = this.spawnRoute(
+        vehicleId,
+        0,
+        access,
+        usedOrigins,
+        undefined,
+        spawn.avoid,
+        spawn.clearanceM,
+      ),
       distanceM = 0,
       pose = routePose(route, distanceM),
       actor = Object.freeze({ id: vehicleId, incarnation: 1 }),
@@ -1557,7 +1691,7 @@ class CivilTrafficImpl implements CivilTraffic {
         })),
       ].sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0)),
       obstacles: [],
-      zones: [],
+      zones: this.zoneEntities,
       signals: rulesFrame?.signals ?? [],
       completeness: {
         vehicles: true,

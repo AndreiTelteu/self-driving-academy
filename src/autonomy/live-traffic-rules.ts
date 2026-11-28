@@ -1256,6 +1256,7 @@ export function createLiveTrafficRules(input: {
     hold: HoldState,
     tick: number,
     view: LiveTrafficActorView,
+    recovery: LiveTrafficCommand['recovery'],
   ): LiveTrafficCommand => {
     void tick;
     const front = frontPositionOf(view);
@@ -1279,7 +1280,9 @@ export function createLiveTrafficRules(input: {
       signalState: hold.signalState,
       stopLineId: hold.line?.stopLineId ?? null,
       laneChangeTargetLaneId: null,
-      recovery: null,
+      // PBI284: a 054 request inside a BLOCKED hold must reach the 058 executor; dropping it here
+      // made the reported reroute counters invisible to the only route owner.
+      recovery,
     });
   };
   const decide = (
@@ -1940,7 +1943,7 @@ export function createLiveTrafficRules(input: {
               laneChangeTargetLaneId: effective.laneChangeTargetLaneId,
               recovery: effective.recovery,
             })
-          : holdCommand(view.vehicleId, effective.hold, tick, view),
+          : holdCommand(view.vehicleId, effective.hold, tick, view, effective.recovery),
       );
     }
     lastTick = tick;
