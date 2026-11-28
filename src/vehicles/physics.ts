@@ -123,6 +123,13 @@ export interface PhysicsProbe extends PhysicsBodyPort, PhysicsCollisionPort {
     readonly wheelBrakeImpulseLimitNs: readonly number[];
   };
   addBox(position: PhysicsVector, halfSize: PhysicsVector, dynamic?: boolean): void;
+  /**
+   * Static collider outside the named collision registry. Returns an opaque native handle for
+   * live pose updates (traffic proxies); it never receives a collision/damage identity.
+   */
+  addStaticBox(position: PhysicsVector, halfSize: PhysicsVector): number;
+  setStaticBoxPose(handle: number, position: PhysicsVector, yawRad: number): void;
+  removeStaticBox(handle: number): boolean;
   setVelocity(id: string, velocity: PhysicsVector): void;
   step(inputs: ReadonlyMap<string, PhysicsInput>, measure?: boolean): PhysicsCosts;
   project(id: string): CarProjection;

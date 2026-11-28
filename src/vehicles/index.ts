@@ -18,3 +18,24 @@ export * from './recovery-port';
 export * from './recovery-road';
 export * from './recovery-ledger';
 export * from './recovery-state';
+export {
+  createLiveVehiclePhysics,
+  LIVE_VEHICLE_PHYSICS_POLICY,
+  LIVE_VEHICLE_PHYSICS_VERSION,
+  type LivePhysicsRecoveryLocator,
+  type LivePhysicsStaticBox,
+  type LivePhysicsStepCosts,
+  type LiveRecoveryOutcome,
+  type LiveRecoveryProjection,
+  type LiveRecoveryRequest,
+  type LiveVehicleCommand,
+  type LiveVehiclePhysics,
+  type LiveVehiclePhysicsFrame,
+  type LiveVehiclePhysicsOptions,
+  type LiveVehiclePhysicsStats,
+  type LiveVehiclePhysicsStep,
+  type LiveVehicleRegistration,
+  type LiveVehicleState,
+  type LiveVehicleTrafficPose,
+  type LiveVehicleWheelState,
+} from './rapier/live';
