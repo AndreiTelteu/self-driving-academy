@@ -17,6 +17,12 @@ import type {
   CruiseRoadFacts,
   FollowingProfile,
   FollowingTarget,
+  LiveTrafficActorView,
+  LiveTrafficCommand,
+  LiveTrafficExternalView,
+  LiveTrafficRules,
+  LiveTrafficRulesFrame,
+  LiveTrafficViolationEvent,
   LongitudinalProfile,
   RoadContext,
 } from '../autonomy';
@@ -139,6 +145,12 @@ export interface CivilTrafficOptions {
    */
   readonly spawnLanesByKind?: Partial<Record<FleetDriverKind, readonly string[]>>;
   readonly spawnOffsetsMByKind?: Partial<Record<FleetDriverKind, readonly number[]>>;
+  /**
+   * PBI283: the live traffic-rule adapter. It is created by the composition root that also owns the
+   * map/session and is never recreated here. Absent keeps the pre-283 058 behaviour (routes/following
+   * only), which is required by the isolated 058 fixture.
+   */
+  readonly rules?: LiveTrafficRules;
 }
 
 export interface CivilTrafficVehicleObservation {
@@ -156,6 +168,8 @@ export interface CivilPoseReconciliation {
   readonly positionM: Vector3;
   /** Map-plane heading in radians: zero +X, positive toward +Z. */
   readonly headingRad: number;
+  /** PBI283: the measured player speed, so live rules observe the real portrait, not a zero. */
+  readonly speedMps?: number;
 }
 
 /**
@@ -228,6 +242,8 @@ export interface CivilTrafficFrame {
   readonly version: typeof CIVIL_TRAFFIC_VERSION;
   readonly tick: number;
   readonly actors: readonly CivilActorSnapshot[];
+  /** PBI283: violations produced by actual 036/037 evidence on this tick only. */
+  readonly violations: readonly LiveTrafficViolationEvent[];
 }
 
 export interface CivilTrafficStep {
@@ -265,6 +281,8 @@ export interface CivilTrafficStats {
 export interface CivilTraffic {
   readonly version: typeof CIVIL_TRAFFIC_VERSION;
   readonly style: Readonly<{ profileId: string; versionId: string }>;
+  /** PBI283: the live rules owned by the composition root, or null for the isolated fixture. */
+  readonly rules: LiveTrafficRules | null;
   list(): readonly CivilActorSnapshot[];
   get(vehicleId: string): CivilActorSnapshot | undefined;
   /**
@@ -414,6 +432,7 @@ function readOptions(value: unknown): {
   spawnLanes: readonly string[];
   spawnOffsetsM: readonly number[];
   spawnLanesByKind: Readonly<Partial<Record<FleetDriverKind, KindSpawnHints>>> | null;
+  rules: LiveTrafficRules | null;
 } {
   const data = record(value);
   for (const key of Object.keys(data))
@@ -434,6 +453,7 @@ function readOptions(value: unknown): {
         'spawnOffsetsM',
         'spawnLanesByKind',
         'spawnOffsetsMByKind',
+        'rules',
       ].includes(key),
       'Unknown civil traffic option',
     );
@@ -575,6 +595,21 @@ function readOptions(value: unknown): {
       data.spawnLanesByKind === undefined && data.spawnOffsetsMByKind === undefined
         ? null
         : Object.freeze(perKind),
+    rules:
+      data.rules === undefined
+        ? null
+        : (() => {
+            const rules = data.rules as LiveTrafficRules;
+            requireContract(
+              typeof rules === 'object' &&
+                rules !== null &&
+                typeof rules.step === 'function' &&
+                typeof rules.report === 'function' &&
+                typeof rules.dispose === 'function',
+              'Invalid live traffic rules',
+            );
+            return rules;
+          })(),
   };
 }
 
@@ -697,6 +732,7 @@ class CivilTrafficImpl implements CivilTraffic {
   private readonly physical = new Map<string, PhysicalLaneOccupation[]>();
   private readonly kinds = new Map<string, FleetDriverKind>();
   private readonly styleSource: CityStyleSource | null;
+  private readonly rulesPort: LiveTrafficRules | null;
   private commonStyle: StyleBundle;
   private lastTick: number | null = null;
   private ticks = 0;
@@ -725,6 +761,11 @@ class CivilTrafficImpl implements CivilTraffic {
     this.spawnLanesByKind = options.spawnLanesByKind;
     this.contextRefresh = options.contextRefresh;
     this.styleSource = options.styleSource;
+    this.rulesPort = options.rules;
+    requireContract(
+      this.rulesPort === null || this.rulesPort.mapId === map.mapId,
+      'Live traffic rules map mismatch',
+    );
     this.commonStyle = style;
     this.zoneById = new Map(map.serviceZones.map((zone) => [zone.id, zone]));
     const kinds = new Set(options.driverKinds);
@@ -1344,6 +1385,117 @@ class CivilTrafficImpl implements CivilTraffic {
     return Object.freeze({ ...context, tick: atTick, leader });
   }
 
+  private rulesView(actor: ActorState): LiveTrafficActorView {
+    const lane = actor.route.lanes[actor.pose.laneIndex]!;
+    return Object.freeze({
+      vehicleId: actor.vehicle.vehicleId,
+      incarnation: actor.actor.incarnation,
+      access: actor.access,
+      authority: actor.authority,
+      laneId: actor.pose.laneId,
+      laneProgressM: Math.max(0, Math.min(actor.distanceM - lane.startM, lane.path.lengthM)),
+      routeLaneIds: actor.route.path,
+      positionM: actor.pose.positionM,
+      headingRad: actor.pose.headingRad,
+      speedMps: actor.speedMps,
+      profile: actor.style.profile,
+      seed: this.vehicleSeed(actor.vehicle.vehicleId),
+      leader:
+        actor.leader === null
+          ? null
+          : Object.freeze({
+              id: actor.leader.leaderId,
+              gapM: actor.leader.gapM,
+              speedMps: actor.leader.speedMps,
+            }),
+      routeStatus: actor.route.plan.status,
+      destinationLaneId: actor.route.plan.destinationLaneId,
+    });
+  }
+
+  private rulesExternalView(vehicle: CivilTrafficVehicleObservation): LiveTrafficExternalView {
+    return Object.freeze({
+      vehicleId: vehicle.vehicleId,
+      driverKind: vehicle.driverKind,
+      positionM: vehicle.positionM,
+      headingRad: vehicle.headingRad,
+      speedMps: vehicle.speedMps,
+    });
+  }
+
+  /**
+   * PBI283: a validated 053 change is executed by the existing 041 planner. The target lane is the
+   * new origin and the current destination is preserved; the longitudinal progress is projected so
+   * the car does not move backwards. This is a route continuation, never a second router.
+   */
+  private applyLaneChange(actor: ActorState, targetLaneId: string): boolean {
+    const destination = actor.route.plan.destinationLaneId;
+    if (destination === null) return false;
+    const currentLane = actor.route.lanes[actor.pose.laneIndex]!,
+      offsetM = Math.max(
+        0,
+        Math.min(actor.distanceM - currentLane.startM, currentLane.path.lengthM),
+      );
+    try {
+      const plan = this.planner.findRoute({
+        origin: targetLaneId,
+        destination,
+        access: actor.access,
+      });
+      if (
+        plan.status !== 'READY' ||
+        plan.path === null ||
+        plan.path.length === 0 ||
+        plan.path.length > CIVIL_TRAFFIC_LIMITS.routeLanes
+      )
+        return false;
+      const route = this.routeFromPlan(plan, actor.access),
+        distanceM = Math.min(offsetM, Math.max(0, route.totalLengthM - 1));
+      actor.route = route;
+      actor.distanceM = distanceM;
+      actor.pose = routePose(route, distanceM);
+      actor.routeView = null;
+      actor.blocked = false;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  private applyRecovery(actor: ActorState, command: LiveTrafficCommand): boolean {
+    if (command.recovery === null) return false;
+    if (command.recovery.action === 'REQUEST_REROUTE') {
+      const currentLane = actor.route.lanes[actor.pose.laneIndex]!,
+        offsetM = Math.max(
+          0,
+          Math.min(actor.distanceM - currentLane.startM, currentLane.path.lengthM),
+        );
+      try {
+        const route = this.buildRoute(
+          actor.pose.laneId,
+          this.vehicleSeed(actor.vehicle.vehicleId),
+          actor.replans + 1,
+          actor.access,
+        );
+        actor.route = route;
+        actor.distanceM = Math.min(offsetM, Math.max(0, route.totalLengthM - 1));
+        actor.pose = routePose(actor.route, actor.distanceM);
+        actor.routeView = null;
+        actor.replans += 1;
+        actor.speedMps = 0;
+        actor.blocked = false;
+        return true;
+      } catch {
+        const recovered = this.successorRoute(actor);
+        actor.speedMps = 0;
+        return recovered;
+      }
+    }
+    actor.blocked = true;
+    actor.speedMps = 0;
+    return false;
+  }
+
   step(input: CivilTrafficStep): CivilTrafficFrame {
     this.assertLive();
     const { tick: atTick, dtSeconds, vehicles } = this.readStep(input);
@@ -1359,22 +1511,39 @@ class CivilTrafficImpl implements CivilTraffic {
         }
       }
 
+    const actorViews = Object.freeze(this.actors.map((actor) => this.rulesView(actor))),
+      externalViews = Object.freeze(vehicles.map((vehicle) => this.rulesExternalView(vehicle))),
+      rulesFrame: LiveTrafficRulesFrame | null =
+        this.rulesPort === null
+          ? null
+          : this.rulesPort.step({
+              tick: atTick,
+              actors: actorViews,
+              externalVehicles: externalViews,
+            });
+
     const frame = {
       sessionId: this.registry.configuration.sessionId,
       worldEpoch: this.registry.configuration.worldEpoch,
       tick: atTick,
       vehicles: [
-        ...this.actors.map((actor) => ({
-          id: actor.vehicle.vehicleId,
-          incarnation: actor.actor.incarnation,
-          positionM: actor.pose.positionM,
-          headingRad: actor.pose.headingRad,
-          access: actor.access,
-          speedMps: actor.speedMps,
-          radiusM: CIVIL_TRAFFIC_LIMITS.vehicleRadiusM,
-          route: null,
-          distances: [] as const,
-        })),
+        ...this.actors.map((actor) => {
+          const route = rulesFrame?.routes.get(actor.vehicle.vehicleId) ?? null;
+          return {
+            id: actor.vehicle.vehicleId,
+            incarnation: actor.actor.incarnation,
+            positionM: actor.pose.positionM,
+            headingRad: actor.pose.headingRad,
+            access: actor.access,
+            speedMps: actor.speedMps,
+            radiusM: CIVIL_TRAFFIC_LIMITS.vehicleRadiusM,
+            route:
+              route === null
+                ? null
+                : { intersectionId: route.intersectionId, movementId: route.movementId },
+            distances: route?.relations ?? ([] as const),
+          };
+        }),
         ...vehicles.map((vehicle) => ({
           id: vehicle.vehicleId,
           incarnation: 1,
@@ -1389,8 +1558,13 @@ class CivilTrafficImpl implements CivilTraffic {
       ].sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0)),
       obstacles: [],
       zones: [],
-      signals: [],
-      completeness: { vehicles: true, obstacles: true, zones: true, signals: false },
+      signals: rulesFrame?.signals ?? [],
+      completeness: {
+        vehicles: true,
+        obstacles: true,
+        zones: true,
+        signals: rulesFrame !== null,
+      },
       discontinuity: false,
     };
     this.road.updateFrame(frame);
@@ -1445,6 +1619,14 @@ class CivilTrafficImpl implements CivilTraffic {
 
     for (const actor of this.actors) {
       actor.ticks += 1;
+      const command = rulesFrame?.commands.get(actor.vehicle.vehicleId) ?? null;
+      if (command !== null && command.recovery !== null)
+        this.rulesPort?.noteRecovery(actor.vehicle.vehicleId, this.applyRecovery(actor, command));
+      if (command !== null && command.laneChangeTargetLaneId !== null)
+        this.rulesPort?.noteLaneChange(
+          actor.vehicle.vehicleId,
+          this.applyLaneChange(actor, command.laneChangeTargetLaneId),
+        );
       const context = this.currentRoadContext(actor, this.physical, atTick),
         projected = context === null ? null : projectBehaviorContext(context),
         lane = this.graph.getLane(actor.pose.laneId, actor.access);
@@ -1558,6 +1740,19 @@ class CivilTrafficImpl implements CivilTraffic {
             }),
           });
       }
+      if (command !== null && command.hold && command.targetMps !== null) {
+        const ruleTargetMps = Math.max(0, Math.min(30, command.targetMps));
+        if (ruleTargetMps < following.target.targetMps)
+          following = Object.freeze({
+            ...following,
+            reason: command.reason,
+            target: Object.freeze({
+              ...following.target,
+              reason: command.reason,
+              targetMps: ruleTargetMps,
+            }),
+          });
+      }
       const result = this.longitudinal.step(
         Object.freeze({
           sessionId: this.registry.configuration.sessionId,
@@ -1599,6 +1794,13 @@ class CivilTrafficImpl implements CivilTraffic {
         );
         if (actor.service !== null)
           nextDistance = Math.min(nextDistance, actor.service.stopDistanceM);
+        if (command !== null && command.maxAdvanceM !== null) {
+          const capM = actor.distanceM + Math.max(0, command.maxAdvanceM);
+          if (nextDistance > capM) {
+            nextDistance = Math.max(actor.distanceM, capM);
+            actor.speedMps = 0;
+          }
+        }
         const nextPose = routePose(actor.route, nextDistance);
         if (nextPose.laneIndex > actor.pose.laneIndex) {
           const targetLane = this.occupancy.get(nextPose.laneId),
@@ -1642,7 +1844,12 @@ class CivilTrafficImpl implements CivilTraffic {
     }
     this.lastTick = atTick;
     this.ticks += 1;
-    return Object.freeze({ version: CIVIL_TRAFFIC_VERSION, tick: atTick, actors: this.list() });
+    return Object.freeze({
+      version: CIVIL_TRAFFIC_VERSION,
+      tick: atTick,
+      actors: this.list(),
+      violations: rulesFrame?.violations ?? [],
+    });
   }
 
   private assertMode(mode: unknown): ControlMode {
@@ -1688,6 +1895,14 @@ class CivilTrafficImpl implements CivilTraffic {
       typeof headingRad === 'number' && Number.isFinite(headingRad),
       'Civil vehicle pose heading must be finite',
     );
+    requireContract(
+      pose.speedMps === undefined ||
+        (typeof pose.speedMps === 'number' &&
+          Number.isFinite(pose.speedMps) &&
+          pose.speedMps >= 0 &&
+          pose.speedMps <= 100),
+      'Civil vehicle pose speed must be finite',
+    );
     const projection =
       this.graph.locateLane({
         positionM,
@@ -1728,7 +1943,7 @@ class CivilTrafficImpl implements CivilTraffic {
       actor.routeView = null;
       actor.replans += 1;
     }
-    actor.speedMps = 0;
+    actor.speedMps = pose.speedMps ?? 0;
     actor.blocked = false;
     this.registry.updateState(actor.vehicle.vehicleId, {
       tick: at,
@@ -1782,6 +1997,10 @@ class CivilTrafficImpl implements CivilTraffic {
 
   get style(): Readonly<{ profileId: string; versionId: string }> {
     return this.styleReference();
+  }
+
+  get rules(): LiveTrafficRules | null {
+    return this.rulesPort;
   }
 
   report(): CivilTrafficReport {

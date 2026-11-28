@@ -1106,6 +1106,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
                 z: vehicle.positionM.z,
               }),
               headingRad: trafficHeadingFromCompositionYaw(vehicle.yawRad),
+              speedMps: Math.abs(vehicle.speedMps),
             },
             tick,
           );
@@ -1401,6 +1402,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
             z: vehicle.positionM.z,
           }),
           headingRad: trafficHeadingFromCompositionYaw(vehicle.yawRad),
+          speedMps: Math.abs(vehicle.speedMps),
         },
         tick,
       );
@@ -1723,6 +1725,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
               z: vehicle.positionM.z,
             }),
             headingRad: trafficHeadingFromCompositionYaw(vehicle.yawRad),
+            speedMps: Math.abs(vehicle.speedMps),
           },
           tick,
         );

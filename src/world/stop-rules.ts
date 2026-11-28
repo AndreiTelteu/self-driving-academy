@@ -205,6 +205,39 @@ export function createStopRules(
     JSON.stringify([vehicle, incarnation]);
   return {
     getZones: () => frozenZones,
+    /**
+     * PBI283: authoritative readback of the live opportunity the 037 producer already owns. It
+     * exposes the same proof window (`stationaryDurationS`) and the front-datum distance to the
+     * line without re-deriving stationarity or retaining another history.
+     */
+    getOpportunity(vehicleId: string): {
+      readonly opportunityId: string;
+      readonly stopLineId: string;
+      readonly laneId: string;
+      readonly tick: number;
+      readonly startedTick: number;
+      readonly distanceToStopLineM: number;
+      readonly stationaryDurationS: number | null;
+      readonly full: boolean;
+      readonly crossed: boolean;
+    } | null {
+      live();
+      const history = histories.get(identityPart(vehicleId));
+      if (!history?.opportunity) return null;
+      const opportunity = history.opportunity;
+      return Object.freeze({
+        opportunityId: opportunity.id,
+        stopLineId: opportunity.zone.stopLineId,
+        laneId: opportunity.zone.laneId,
+        tick: history.tick,
+        startedTick: opportunity.startedTick,
+        distanceToStopLineM: distance(opportunity.zone, history.position),
+        stationaryDurationS:
+          opportunity.stillTicks >= 0 ? opportunity.stillTicks / FIXED_TICK_HZ : null,
+        full: opportunity.full,
+        crossed: opportunity.crossed,
+      });
+    },
     observe(value: StopObservation): readonly SimulationEvent[] {
       live();
       const raw = fields(value, [

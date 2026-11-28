@@ -145,6 +145,30 @@ import './style.css';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('Containerul aplicației #app lipsește.');
+/** PBI283: the visible consequence of a real player violation, not a second metric store. */
+const trafficViolationNotice = document.createElement('div');
+trafficViolationNotice.id = 'traffic-violation-notice';
+trafficViolationNotice.setAttribute('role', 'status');
+trafficViolationNotice.setAttribute('aria-live', 'polite');
+trafficViolationNotice.style.cssText = [
+  'position:absolute',
+  'top:12px',
+  'right:12px',
+  'z-index:30',
+  'display:none',
+  'max-width:360px',
+  'padding:10px 12px',
+  'border-radius:10px',
+  'border:1px solid #ff7a6b',
+  'background:rgba(52,8,8,0.92)',
+  'color:#ffe5e0',
+  'font:13px/1.4 system-ui,sans-serif',
+  'box-shadow:0 2px 12px rgba(0,0,0,0.45)',
+  'pointer-events:none',
+].join(';');
+app.append(trafficViolationNotice);
+let lastTrafficViolationId: string | null = null;
+let trafficViolationShownAt = 0;
 const view = createRenderingView(app);
 const world = createCompositionWorld();
 /** PBI 277: the real 041 planner and the mapped 032 zones the live challenge preflight reads. */
@@ -1874,6 +1898,7 @@ const application = createApplicationLifecycle({
               })),
             ],
             styleSource: liveCityStyleSource,
+            liveRules: true,
           });
           liveFleet = {
             registry: ownedTraffic.registry,
@@ -2193,6 +2218,19 @@ const application = createApplicationLifecycle({
     companyDashboard.update(performance.now());
     // PBI 267: pop-up-ul KPI se actualizează numai cât timp este deschis; orașul la fel.
     if (frame !== undefined) {
+      const latestViolation = liveFleet?.ambient?.violations().at(-1) ?? null;
+      const now = performance.now();
+      if (latestViolation !== null && latestViolation.eventId !== lastTrafficViolationId) {
+        lastTrafficViolationId = latestViolation.eventId;
+        trafficViolationShownAt = now;
+        trafficViolationNotice.textContent =
+          latestViolation.kind === 'RED_LIGHT'
+            ? `Încălcare: trecere pe roșu la ${latestViolation.stopLineId ?? 'linia de semnal'} (tic ${latestViolation.tick})`
+            : `Încălcare: STOP fără oprire completă la ${latestViolation.stopLineId ?? 'linia STOP'} (tic ${latestViolation.tick})`;
+      }
+      const violationVisible =
+        lastTrafficViolationId !== null && now - trafficViolationShownAt < 8000;
+      trafficViolationNotice.style.display = violationVisible ? 'block' : 'none';
       kpiImpactHud.update(frame.tick);
       const at = performance.now();
       // PBI 281: minimap, route, fleet markers and incidents read the accepted frame at 10 Hz wall
@@ -3066,6 +3104,10 @@ interface V3DebugGlobal {
   sessionNotice(): string | null;
   /** PBI 263: lista/harta flotei, scaunul PLAYER și statisticile panoului. */
   fleet(): unknown;
+  /** PBI 283: live signals/STOP/yield/lane-change/blocked counters and violations, read-only. */
+  traffic(): unknown;
+  /** PBI 283: every authored signal movement with its lane and stop-line anchor. */
+  trafficSignalLanes(): unknown;
   /** PBI 281: minimapa live, ruta, markerii, incidentele și HUD-ul complet, read-only. */
   minimap(): unknown;
   /** PBI 271: the live 069 segments, LEARNING exposure and accepted mode. */
@@ -3163,6 +3205,51 @@ const debugGlobal: V3DebugGlobal = {
           }
         : null,
     };
+  },
+  traffic: () => {
+    const ambient = liveFleet?.ambient;
+    if (ambient === undefined) return null;
+    return {
+      report: ambient.trafficRules(),
+      violations: ambient.violations(),
+      signals: ambient.rules?.frame()?.signals ?? [],
+      actors: ambient.list().map((actor) => ({
+        vehicleId: actor.vehicleId,
+        driverKind: actor.driverKind,
+        laneId: actor.laneId,
+        routeLaneIndex: actor.routeLaneIndex,
+        speedMps: actor.speedMps,
+        positionM: actor.positionM,
+        headingRad: actor.headingRad,
+        authority: actor.authority,
+        blocked: actor.blocked,
+        leader: actor.leader,
+      })),
+    };
+  },
+  trafficSignalLanes: () => {
+    const nodes = new Map(world.map.geometry.nodes.map((node) => [node.id, node.positionM])),
+      junctions = new Map(
+        world.map.intersections.map((intersection) => [intersection.id, intersection]),
+      );
+    return world.map.stopLines
+      .filter(
+        (line) => line.kind === 'SIGNAL' && line.intersectionId !== null && line.signalId !== null,
+      )
+      .flatMap((line) => {
+        const movementList =
+          junctions
+            .get(line.intersectionId ?? '')
+            ?.movements.filter((movement) => movement.fromLaneId === line.laneId) ?? [];
+        const position = nodes.get(line.anchorNodeId) ?? null;
+        return movementList.map((movement) => ({
+          laneId: line.laneId,
+          signalId: line.signalId,
+          intersectionId: line.intersectionId,
+          movementId: movement.id,
+          positionM: position === null ? null : { x: position.x, y: position.y, z: position.z },
+        }));
+      });
   },
   minimap: () => {
     const frame = composition?.composition.frame;

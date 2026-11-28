@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict';
+﻿import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createStopRules, type StopObservation } from '../../src/world/stop-rules';
 import { createEventBus } from '../../src/simulation';
@@ -277,4 +277,30 @@ test('calibration/accessor boundaries and long valid identities remain safe', ()
   );
   assert.equal(events[0].type, 'STOP_APPROACH');
   rules.dispose();
+});
+
+test('283 getOpportunity exposes the same 037 proof window without a second history', () => {
+  const rules = createStopRules(fixture(), context);
+  assert.equal(rules.getOpportunity('taxi'), null);
+  rules.observe(sample(0));
+  const first = rules.getOpportunity('taxi');
+  assert.ok(first !== null);
+  assert.equal(first.full, false);
+  assert.equal(first.crossed, false);
+  assert.equal(first.stationaryDurationS, 0);
+  assert.ok(first.distanceToStopLineM > 0);
+  for (let t = 1; t <= 60; t++) rules.observe(sample(t));
+  const proof = rules.getOpportunity('taxi');
+  assert.ok(proof !== null);
+  assert.equal(proof.full, true);
+  assert.equal(proof.stationaryDurationS, 1);
+  assert.equal(proof.opportunityId, first.opportunityId);
+  rules.observe(sample(61, 9, 10));
+  const crossed = rules.getOpportunity('taxi');
+  assert.ok(crossed !== null);
+  assert.equal(crossed.crossed, true);
+  assert.equal(crossed.stationaryDurationS, null);
+  assert(Object.isFrozen(proof));
+  rules.dispose();
+  assert.throws(() => rules.getOpportunity('taxi'), /disposed/i);
 });
