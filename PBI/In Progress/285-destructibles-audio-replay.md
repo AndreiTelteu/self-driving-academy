@@ -1,13 +1,13 @@
 ---
 id: "285"
 title: "Decor destructibil, feedback audio și replay în joc"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Haos"
 depends_on: ["282","283"]
 performance_checks: ["simulation","assets","memory","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-285"
+started_at: "2026-11-28T11:03:36.128Z"
 completed_at: null
 ---
 

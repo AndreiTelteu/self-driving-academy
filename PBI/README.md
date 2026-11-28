@@ -6,7 +6,7 @@
 | Economie | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Fizică | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Flotă și curse | Completed | 0 | 0 | 3 / 3 | `██████████` 100% |
-| Haos | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Haos | V1 | 0 | 1 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Integrare joc | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Interfață | V1 | 1 | 0 | 6 / 7 | `████████░░` 86% |
 | Misiuni | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
@@ -17,7 +17,7 @@
 | Release | V4 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Sesiuni | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Trafic | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
-| Total | - | 4 | 1 | 24 / 29 | `████████░░` 83% |
+| Total | - | 3 | 2 | 24 / 29 | `████████░░` 83% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
