@@ -34,8 +34,8 @@ Done și publicarea rămân ale orchestratorului.
 - [report.json](report.json) / [report.md](report.md) — 13/13 verificări deterministe: 35 de obiecte,
   6 profiluri de material, paritate MANUAL/LEARNING/AUTO, deduplicare, lanț cu instigator real,
   plafon de 4 voci, pool de fragmente, 20 de reseturi, replay cu reset + distrugere în ordine.
-- [cost.json](cost.json) / [cost.md](cost.md) — 2 000 de pași: 0,2 ms p95 pentru pasul live,
-  0,6 ms p95 pentru un impact injectat, 1,6 ms per reset; memoria este raportată în contoare de
+- [cost.json](cost.json) / [cost.md](cost.md) — 2 000 de pași: sub 0,2 ms p95 pentru pasul live,
+  sub 0,6 ms p95 pentru un impact injectat, sub 1,8 ms per reset; memoria este raportată în contoare de
   proprietate, iar heap-ul exact este `null` în raport.
 - [browser.json](browser.json) / [browser.md](browser.md) — Chrome 157, 11/11 verificări: audio
   `RUNNING`, material `PLASTIC`, intensitate `HEAVY`, variant `FRAGMENT_BURST`, 2 fragmente active,

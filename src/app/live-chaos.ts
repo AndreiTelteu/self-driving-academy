@@ -580,6 +580,7 @@ export function createLiveChaos(options: LiveChaosOptions): LiveChaos {
         const played = sink.audioPlayed > lastAudioPlayed;
         if (played) lastAudioPlayed = sink.audioPlayed;
         visualFallback = !played;
+        const variant: DestructionVisualVariant = played ? reaction.visual.variant : 'SHOCK_RING';
         const entry: LiveChaosReaction = Object.freeze({
           sequence: reactions,
           tick: reaction.tick,
@@ -588,11 +589,11 @@ export function createLiveChaos(options: LiveChaosOptions): LiveChaos {
           archetype: reaction.archetype,
           material: reaction.material,
           intensity: reaction.intensity,
-          variant: played ? reaction.visual.variant : 'SHOCK_RING',
+          variant,
           symbol: reaction.visual.symbol,
           text: reaction.visual.text,
           positionM: reaction.positionM,
-          fragments: reaction.fragments.count,
+          fragments: variant === 'SHOCK_RING' ? 0 : reaction.fragments.count,
           audioPlayed: played,
           audioReason: played
             ? 'PLAYED'
