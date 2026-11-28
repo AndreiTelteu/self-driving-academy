@@ -8,8 +8,8 @@ Contract: 286-live-pedestrian-hazards-v1
 | Pedestrians | 96 |
 | Hazard data obstacles | 96 |
 | Steps | 600 |
-| Wall time | 214.3 ms |
-| Per step mean / p50 / p95 / max | 0.097 / 0.087 / 0.137 / 0.670 ms |
+| Wall time | 224.5 ms |
+| Per step mean / p50 / p95 / max | 0.100 / 0.088 / 0.140 / 0.642 ms |
 | Pedestrian / hazard evaluations | 65456 / 170068 |
 | Peak pedestrians / hazards per step | 96 / 192 |
 | Heap after GC | 23.6 MiB |

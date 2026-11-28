@@ -594,6 +594,8 @@ Dovezile sunt în [Evidence/284-civil-autonomy](Evidence/284-civil-autonomy/READ
 
 **PBI:** [286](../PBI/README.md) · **Dependențe:** 282, 283.
 
+**Stare:** Done la 28 noiembrie 2026. 32 din 80 de treceri nu au trotuar la ambele capete; pietonii nu au collider Rapier nativ, iar proba de browser este un fixture al compunerii reale.
+
 ### 287 — Gate V4, QA final, playtest și release verificat
 
 **Ce lipsește:** Gate-ul V4 este singurul task rămas în vechiul board; nu există un release end-to-end, playtest uman sau dovadă hardware.

@@ -12,12 +12,12 @@
 | Misiuni | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
 | Moduri și learning | V1 | 0 | 1 | 2 / 3 | `██████░░░░` 67% |
 | Persistență | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Pietoni și pericole | V2 | 0 | 1 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Pietoni și pericole | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Progres | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Release | V4 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Sesiuni | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Trafic | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
-| Total | - | 2 | 2 | 25 / 29 | `████████░░` 86% |
+| Total | - | 2 | 1 | 26 / 29 | `████████░░` 90% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy

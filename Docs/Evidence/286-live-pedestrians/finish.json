@@ -1,0 +1,12 @@
+{
+  "id": "286",
+  "criteriaSatisfied": true,
+  "result": "Live pedestrians cross real crosswalks through ON_SIDEWALK/WAITING/CROSSING/CROSSED/WITHDRAWN phases. Yield is proven by real tick order and a physical stop, an unobserved pedestrian produces no yield evidence, and hazard obstacles react and are avoided by the same 282 Rapier solver. Live V2 frames expose PEDESTRIAN, OBSTACLE, BRAKE_INPUT and LONGITUDINAL_ACCEL to estimators and challenges. The 96-pedestrian/96-hazard cost is reported with bounded counters.",
+  "limitations": "32 of 80 crosswalks have no derived sidewalk at both ends and are refused with NO_SIDEWALK; the report keeps the gap. Pedestrians have no native Rapier collider in 282, so no vehicle-pedestrian impact evidence is invented; the 164 contact channel remains available to the collision owner. Only free named-box slots of the 028 registry become physical; the 96-hazard cost probe uses data obstacles without 96 native bodies. The browser probe is a fixture of the same composition and physics, not the full game shell; it does not claim FPS/GPU/heap. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/app/live-pedestrians.test.ts"],
+    ["npm", "run", "pedestrians:live", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}
