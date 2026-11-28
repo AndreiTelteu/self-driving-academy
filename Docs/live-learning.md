@@ -102,11 +102,24 @@ simularea: fiecare faptă provine din cadrul autoritar V3 și din segmentele 069
 npm run learning:live
 npm run learning:live -- --check
 npm run learning:live:cost
+npm run learning:live:fixture
+$env:PLAYWRIGHT_MODULE='<path>/node_modules/playwright'; npm run learning:live:probe
 node --import ./scripts/register-typescript.mjs --test tests/learning/live-evidence.test.ts
 node --import ./scripts/register-typescript.mjs --test tests/app/live-learning.test.ts
 node --import ./scripts/register-typescript.mjs --test tests/learning/estimator-queue.test.ts
 ```
 
 Raportul determinist este în [Evidence/273-live-learning](Evidence/273-live-learning/README.md).
-Proba de browser folosește Playwright când este disponibil și scrie `browser.json`; în lipsa lui este
-`NOT_RUN`, nu PASS simulat.
+
+Proba de browser deterministă `npm run learning:live:fixture` deschide în Chromium o pagină care
+rulează modulele reale 272/103/221/109/110/205 peste harta reală și un segment LEARNING cu o fereastră
+087 `ELIGIBLE` reală. Pagina scrie `browser-fixture.json`, `browser-fixture.md` și capturi, iar rezultatul
+este **22/22 PASS**: o versiune imuabilă `browser-composed~112` cu părinte `profile-v1`, activare la
+tick-ul comun 2 și toate cele 64 de vehicule (24 taxiuri, 40 civili) pe versiunea nouă. Numai
+transportul `worker_threads` al cozii 103 este înlocuit de harness-ul cu microtask, ca în testele Node;
+estimatoarele, poarta, store-ul, activarea și bariera sunt cele reale.
+
+Proba live `npm run learning:live:probe` rămâne o limitare separată și documentată: în lumea jucată cu
+tastatura, fereastra 087 eligibilă a taxiului urmărit nu apare în primele 10 s ale segmentului, deci
+raportul rămâne **4/9** în `browser.json`, fără PASS simulat. Ambele probe folosesc Playwright când este
+disponibil; în lipsa lui scriu `NOT_RUN` cu motivul real.

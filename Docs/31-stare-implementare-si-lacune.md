@@ -358,14 +358,14 @@ Dovezile sunt în [Evidence/270-company-dashboard](Evidence/270-company-dashboar
 
 Refuzurile sunt închise: MANUAL/AUTO `SKIPPED_MANUAL`, LEARNING neeligibil `SKIPPED_INELIGIBLE`, segment incomplet `SKIPPED_INCOMPLETE`, epocă/profil străin `STALE_JOB`, dovezi insuficiente `INSUFFICIENT_EVIDENCE` fără versiune, compoziție neschimbată `NO_CHANGE`. Restore/import/profil nou folosesc bariera 205: închid generația, anulează joburile 103, incrementează epoca, publică ținta și păstrează starea fizică; un import invalid nu are niciun efect. Un rezultat târziu este `STALE_JOB` și nu publică nimic, inclusiv când sosește după ce pipeline-ul a fost eliberat.
 
-- Dovezi: `npm run learning:live` (30/30), `npm run learning:live:cost`, `npm run learning:live:probe` (4/9, limitat de renderer), în [Evidence/273-live-learning](Evidence/273-live-learning/README.md).
-- Limitări: proba de browser headless cu SwiftShader intră în pauze de overload, iar singura fereastră eligibilă apare la finalul segmentului (tick 841 din 849), prea târziu pentru prefixul de 10 s; pipeline-ul este dovedit determinist pe segmentul real 272. UI-ul de profil rămâne 274, setările 279, fizica 282 și persistența 278.
+- Dovezi: `npm run learning:live` (30/30), `npm run learning:live:cost`, `npm run learning:live:fixture` (22/22 în Chromium, fixture determinist peste modulele reale 272/103/221/109/110/205), `npm run learning:live:probe` (4/9, probă live limitată), în [Evidence/273-live-learning](Evidence/273-live-learning/README.md).
+- Limitări: proba live headless cu SwiftShader intră în pauze de overload, iar singura fereastră eligibilă apare la finalul segmentului (tick 841 din 849), prea târziu pentru prefixul de 10 s; proba deterministă de browser publică însă versiunea și o aplică pe toată flota. UI-ul de profil rămâne 274, setările 279, fizica 282 și persistența 278.
 
 **Documentație:** [Învățarea stilului](10-invatarea-stilului.md) · [Profiluri și propagare](12-profiluri-si-propagare.md) · [Worker-ul de learning](learning-worker.md) · [Pipeline-ul de profil](profile-pipeline.md) · [Activarea profilului](profile-activation.md) · [Bariera de generație](learning-epoch.md) · [Pipeline-ul live](live-learning.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [273](../PBI/README.md) · **Dependențe:** 272.
 
-**Stare:** Implementat local la 27 noiembrie 2026. Raportul determinist 30/30 și testele țintă trec; proba de browser este 4/9 din cauza pauzelor de overload ale renderer-ului software, nu a pipeline-ului. Taskul rămâne In Progress până la integrarea orchestratorului și dovada de browser pe hardware/browser real.
+**Stare:** Implementat local la 27 noiembrie 2026. Raportul determinist 30/30, testele țintă și proba de browser deterministă 22/22 trec; proba live rămâne 4/9 din cauza pauzelor de overload ale renderer-ului software, nu a pipeline-ului, și este documentată ca limitare. Taskul rămâne In Progress până la integrarea orchestratorului.
 
 ### 274 — Interfața de learning și profil: notificări, explicații, istoric și restore
 
