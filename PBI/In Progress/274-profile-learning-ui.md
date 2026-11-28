@@ -1,13 +1,13 @@
 ---
 id: "274"
 title: "Interfața de learning și profil: notificări, explicații, istoric și restore"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Interfață"
 depends_on: ["273"]
 performance_checks: ["ui","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-274"
+started_at: "2026-11-28T15:42:12.343Z"
 completed_at: null
 ---
 
