@@ -17,6 +17,7 @@ import {
   type CompositionMode,
   type CompositionVehicleSeed,
   type LiveChaos,
+  type LivePedestrianHazards,
   type V3Composition,
 } from '../../app';
 import type { CivilTraffic } from '../../fleet';
@@ -35,6 +36,7 @@ import {
   type V3CompositionSceneStats,
 } from './v3-composition-scene';
 import type { GlbModelLibrary } from './glb-model-library';
+import { createLivePedestrianScene, type LivePedestrianScene } from './live-pedestrian-scene';
 
 export const V3_BROWSER_COMPOSITION_VERSION = '236-v3-browser-composition-v1' as const;
 
@@ -77,6 +79,8 @@ export interface V3BrowserCompositionOptions {
   readonly physics?: LiveVehiclePhysics;
   /** PBI 285: the live destructible/audio/replay composition over the same tick and physics. */
   readonly chaos?: LiveChaos;
+  /** PBI 286: the live pedestrians/hazards composition over the same tick and physics. */
+  readonly livePedestrians?: LivePedestrianHazards;
 }
 
 export interface CostSummary {
@@ -196,7 +200,10 @@ export function createV3BrowserComposition(
     ...(options.map === undefined ? {} : { map: options.map }),
     ...(options.graph === undefined ? {} : { graph: options.graph }),
     ...(options.physics === undefined ? {} : { physics: options.physics }),
+    ...(options.livePedestrians === undefined ? {} : { livePedestrians: options.livePedestrians }),
   });
+  const livePedestrianView: LivePedestrianScene | null =
+    options.livePedestrians === undefined ? null : createLivePedestrianScene(options.scene);
   const hud = createCharacterHud(options.hudRoot);
   const tickSamples: number[] = [];
   const presentSamples: number[] = [];
@@ -316,6 +323,7 @@ export function createV3BrowserComposition(
     view.camera.upVector.set(latest.camera.up.x, latest.camera.up.y, latest.camera.up.z);
     view.apply(latest, characterFrame);
     view.applyDestruction(options.chaos?.visual() ?? null);
+    livePedestrianView?.apply(options.livePedestrians?.visual() ?? null);
     applyFirstPersonVisibility(
       latest.camera.mode === 'FIRST_PERSON' ? latest.camera.entityId : null,
     );
@@ -521,6 +529,10 @@ export function createV3BrowserComposition(
         physics: composition.physicsStats(),
         destructibles: options.chaos?.getStats() ?? null,
         destructibleScene: view.destructibles?.stats() ?? null,
+        pedestrians: options.livePedestrians?.getStats() ?? null,
+        pedestrianScene: livePedestrianView?.stats() ?? null,
+        pedestrianNetwork: options.livePedestrians?.getNetwork() ?? null,
+        pedestrianV2: options.livePedestrians?.getV2Frame() ?? null,
         segments: Object.freeze({
           walking: segments.walking,
           openSegmentId: segments.openSegmentId,
@@ -561,6 +573,7 @@ export function createV3BrowserComposition(
       keyboard.dispose();
       restoreHiddenMeshes();
       composition.dispose();
+      livePedestrianView?.dispose();
       hud.dispose();
       view.dispose();
     },

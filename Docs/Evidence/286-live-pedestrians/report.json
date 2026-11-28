@@ -1,0 +1,161 @@
+{
+  "version": "286-live-pedestrians-report-v1",
+  "generatedAt": "2026-11-28T00:00:00.000Z",
+  "contract": "286-live-pedestrian-hazards-v1",
+  "level": "V2",
+  "summary": {
+    "total": 9,
+    "pass": 9,
+    "fail": 0
+  },
+  "network": {
+    "mapId": "neighbourhood-compact-v1",
+    "crosswalks": 80,
+    "links": 48,
+    "refusedLinks": 32,
+    "pedestriansRequested": 96,
+    "pedestriansCreated": 96,
+    "crossingLengthM": {
+      "min": 10,
+      "max": 17.399999999999977,
+      "mean": 12.46666666666666
+    }
+  },
+  "phase": {
+    "crossingsStarted": 96,
+    "crossingsCompleted": 92,
+    "gapCrossings": 94,
+    "assertedCrossings": 2,
+    "yieldedCrossings": 2,
+    "unobservedCrossings": 0,
+    "freeCrossings": 90
+  },
+  "yield": {
+    "conflictTick": 197,
+    "stopTick": 284,
+    "stopDistanceM": 9.677140808105463,
+    "minimumDistanceM": 9.675309753417963,
+    "stopSpeedMps": 0.16917179339796026,
+    "outcome": "YIELDED",
+    "stopsDuringCrossing": 1,
+    "conflictCount": 2,
+    "stopCount": 1,
+    "stopEvents": 1,
+    "yieldStopEvents": 1,
+    "yieldRate": {
+      "status": "OBSERVED",
+      "value": 1
+    },
+    "coverage": {
+      "complete": 900,
+      "incomplete": 0
+    }
+  },
+  "unobserved": {
+    "stopEvents": 0,
+    "yieldedCrossings": 0,
+    "unobservedCrossings": 92,
+    "yieldRate": "MISSING",
+    "coverageIncomplete": 900,
+    "gaps": [
+      "REFUSED_CROSSWALK_LINK",
+      "INCOMPLETE_VEHICLE_COVERAGE",
+      "NO_COMPLETE_CONFLICT_EPISODE"
+    ]
+  },
+  "obstacle": {
+    "physicalAdded": 1,
+    "physicalActive": 1,
+    "outcome": "PASSED_CLEAR",
+    "contactTick": null,
+    "minimumDistanceM": 4.033115976808184,
+    "reactionTick": 198,
+    "latencyTicks": 197,
+    "reactionHook": "BRAKE",
+    "incidents": 0
+  },
+  "v2": {
+    "frames": 900,
+    "observableKeys": [
+      "cruise_speed_variability",
+      "cruise_accel_deadband",
+      "braking_jerk",
+      "coasting_bias",
+      "pedestrian_yield_probability",
+      "pedestrian_clearance",
+      "hazard_reaction_delay"
+    ],
+    "facets": [
+      "SPEED_MEASURED",
+      "ROAD_TYPE_URBAN",
+      "THROTTLE_INPUT",
+      "LONGITUDINAL_ACCEL",
+      "CONFLICT",
+      "PEDESTRIAN",
+      "COASTING",
+      "BRAKE_INPUT"
+    ]
+  },
+  "cost": {
+    "pedestrians": 96,
+    "hazards": 96,
+    "steps": 600,
+    "pedestrianEvaluations": 53985,
+    "hazardEvaluations": 103664,
+    "peakPedestriansPerStep": 96,
+    "peakHazardsPerStep": 192
+  },
+  "checks": [
+    {
+      "id": "network-real-crosswalks",
+      "pass": true,
+      "detail": "48 links on 80 crosswalks, 96 pedestrians"
+    },
+    {
+      "id": "crossing-phase",
+      "pass": true,
+      "detail": "96 started, 92 completed"
+    },
+    {
+      "id": "yield-real-tick-order",
+      "pass": true,
+      "detail": "conflict tick 197, stop tick 284, outcome YIELDED"
+    },
+    {
+      "id": "yield-real-physics-distance",
+      "pass": true,
+      "detail": "stop 9.68 m, minimum 9.68 m"
+    },
+    {
+      "id": "unobserved-no-yield",
+      "pass": true,
+      "detail": "92 unobserved crossings, stop events 0"
+    },
+    {
+      "id": "obstacle-same-physics",
+      "pass": true,
+      "detail": "box added 1, outcome PASSED_CLEAR, incidents 0"
+    },
+    {
+      "id": "obstacle-reaction-and-avoidance",
+      "pass": true,
+      "detail": "reaction BRAKE +197 ticks, clearance 4.03 m, contact none"
+    },
+    {
+      "id": "v2-context-live",
+      "pass": true,
+      "detail": "7 observable keys, pedestrian true, brake true"
+    },
+    {
+      "id": "cost-96-pedestrians-96-hazards",
+      "pass": true,
+      "detail": "96 pedestrians, 96 hazards, 53985 pedestrian / 103664 hazard evaluations"
+    }
+  ],
+  "limitations": [
+    "32 of the 80 authored crosswalks have no derived sidewalk at both ends; the 164 contract refuses them and the report keeps that gap instead of approximating a link.",
+    "A pedestrian has no native Rapier collider in 282, so a vehicle-pedestrian impact is not invented in this report; the 164 contact channel remains available to the collision owner when it exists.",
+    "The physical hazard window is bounded by the 028 registry: only free named-box slots are added; the cost probe uses the 96 data obstacles without creating 96 native boxes.",
+    "The browser probe renders the real composition and the real Rapier world without claiming FPS, GPU cost or heap; those remain outside this report."
+  ]
+}

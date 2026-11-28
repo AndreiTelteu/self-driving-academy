@@ -107,6 +107,13 @@ export {
   type CaptureView,
 } from '../visual-capture';
 export {
+  LIVE_PEDESTRIAN_SCENE_LIMITS,
+  LIVE_PEDESTRIAN_SCENE_VERSION,
+  createLivePedestrianScene,
+  type LivePedestrianScene,
+  type LivePedestrianSceneStats,
+} from './live-pedestrian-scene';
+export {
   COMPOSITION_KEYS,
   V3_BROWSER_COMPOSITION_VERSION,
   createV3BrowserComposition,
