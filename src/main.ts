@@ -2235,7 +2235,7 @@ const application = createApplicationLifecycle({
             taxiId: taxiId ?? '',
             mode: hudVehicle?.controlMode ?? frame.hud.mode,
             tick: frame.tick,
-            speedMps: frame.hud.speedMps,
+            speedMps: Math.abs(hudVehicle?.speedMps ?? frame.hud.speedMps),
             sessionKind: shell.status().sessionId === CHAOS_SESSION_ID ? 'CHAOS' : 'ACADEMY',
           }),
           hudNow,

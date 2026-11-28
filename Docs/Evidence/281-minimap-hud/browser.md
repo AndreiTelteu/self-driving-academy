@@ -1,6 +1,6 @@
 # 281 — proba de browser a minimapei și HUD-ului
 
-Generată de `npm run minimap:hud:probe` pe 2026-11-28T00:51:15.690Z; Chromium 157.0.8103.51,
+Generată de `npm run minimap:hud:probe` pe 2026-11-28T01:08:08.121Z; Chromium 157.0.8103.51,
 backend WEBGL2, viewport 1280x720 → 1920x1080 → 853x480 (zoom 150%).
 
 Secvența reală: start → minimapa live cu rută 064 → click pe marker (doar camera) → HUD complet →
@@ -15,8 +15,8 @@ fapt 065 `COLLISION_DAMAGE` injectat prin portul de probă → măsurătoare 5�
 | Markeri pickup/dropoff | 1 / 1 |
 | Benzi de rută | 2 |
 | Incidente (probe 065) | 1 |
-| Actualizări hartă | 19 (9.21 Hz) |
-| Actualizări HUD | 18 (8.72 Hz) |
+| Actualizări hartă | 19 (9.22 Hz) |
+| Actualizări HUD | 19 (9.22 Hz) |
 | Scrieri selecție | 19 |
 | Scrieri incidente | 0 |
 | Ascultători globali | 0 |
@@ -34,12 +34,12 @@ Capturi: [screenshots/01-1280x720.png](screenshots/01-1280x720.png), [screenshot
 - `fleet-markers`: PASS — 58 markeri, 58 creați
 - `no-global-listeners`: PASS — 0 listeners globali
 - `click-restores-canvas-focus`: PASS — focus CANVAS.game-canvas
-- `hud-complete`: PASS — 0 km/h · AConduce AI-ul · Academia · Du-te la pasagerul din sz:2-3 · În desfășurare
+- `hud-complete`: PASS — 7 km/h · AConduce AI-ul · Academia · Du-te la pasagerul din sz:2-3 · În desfășurare
 - `hud-session`: PASS — session Academia
-- `hud-objective-route`: PASS — objective Du-te la pasagerul din sz:2-3, route Rută: 2 benzi · 0% · 348 m
+- `hud-objective-route`: PASS — objective Du-te la pasagerul din sz:2-3, route Rută: 2 benzi · 0% · 347 m
 - `hud-ride-state`: PASS — stance În desfășurare, stage Spre pasager
-- `update-rate-5-10hz`: PASS — 19 actualizări în 2.06 s = 9.21 Hz
-- `hud-update-rate`: PASS — 18 actualizări HUD în 2.06 s = 8.72 Hz
+- `update-rate-5-10hz`: PASS — 19 actualizări în 2.06 s = 9.22 Hz
+- `hud-update-rate`: PASS — 19 actualizări HUD în 2.06 s = 9.22 Hz
 - `incident-marker`: PASS — incident probe-281:collision:id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0001
 - `layout-01-1280x720-inside`: PASS — HUD true, minimap true
 - `layout-01-1280x720-no-overlap`: PASS — HUD/minimap/game-hud/shell/economy overlaps 0.0, 0.0, 0.0, 0.0, 0.0, 0.0

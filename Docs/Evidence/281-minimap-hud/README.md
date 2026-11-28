@@ -58,8 +58,8 @@ npm run minimap:hud:probe
 ```
 
 Rezultat local: **26/26 verificări**, Chrome headed (WebGL2), 58 de markeri (25 taxi + 33 civili),
-P/D reale, 2 benzi de rută, un incident injectat prin portul 065 de probă, 9.21 Hz actualizări de
-hartă, 8.72 Hz HUD, 0 ascultători globali, 0 suprapuneri la 1280×720, 1920×1080 și 853×480 (zoom
+P/D reale, 2 benzi de rută, un incident injectat prin portul 065 de probă, 9.22 Hz actualizări de
+hartă, 9.22 Hz HUD, 0 ascultători globali, 0 suprapuneri la 1280×720, 1920×1080 și 853×480 (zoom
 150%). Capturi: [01-1280x720](screenshots/01-1280x720.png),
 [02-1920x1080](screenshots/02-1920x1080.png), [03-zoom-150](screenshots/03-zoom-150.png).
 
