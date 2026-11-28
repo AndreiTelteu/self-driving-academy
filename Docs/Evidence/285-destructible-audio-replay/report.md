@@ -35,7 +35,7 @@ Checks: 13/13 passed, 0 failed
 | chain-instigator | PASS | {"events":2,"chain":1,"instigators":["probe-vehicle","destructible:zone:alley:walk:blk:3-0:N:crate:2"],"chainBreaks":1} |
 | audio-cap | PASS | {"played":4,"refused":2,"impactVoices":4,"buffers":1,"bufferBytes":39692} |
 | fragment-cap-lifetime | PASS | {"peak":4,"dropped":8,"activeAfterLifetime":0,"poolCap":4} |
-| reset-restores-xp-profile | PASS | {"restored":true,"baseline":true,"xpUnchanged":true,"profileUnchanged":true,"xp":[0,0]} |
+| reset-restores-xp-profile | PASS | {"restored":true,"baseline":true,"xpUnchanged":true,"profileUnchanged":true,"xp":[500000,500000]} |
 | replay-order-zeros | PASS | {"status":"REPLAYED","recordedEvents":2,"destructionEvents":1,"resetEvents":1,"orderIdentical":true,"eventsIdentical":true,"reactionFingerprints":["id-v1:19:destructible-broken21:285-live-chaos-report2:201:045:destructible:zone:alley:walk:blk:3-0:N:bin:19/destructible:zone:alley:walk:blk:3-0:N:bin:19/BIN/METAL/HEAVY/1.000/1.050/0.8000/2/FRAGMENT_BURST"],"stepsSimulation":0,"policyEvaluations":0,"awardsGranted":0,"learningArtifacts":0} |
 | replay-reset-order | PASS | latest chunk: 1 destruction, 1 reset, order true |
 | structural-boundary | PASS | {"structuralIds":467,"destructibleIds":35,"overlaps":[],"untouched":true} |

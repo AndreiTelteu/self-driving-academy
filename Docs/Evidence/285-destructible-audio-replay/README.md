@@ -21,7 +21,8 @@ Done și publicarea rămân ale orchestratorului.
   Babylon are 35 de mesh-uri, un pool de 192 de fragmente cu viață de 120 tick-uri și 4 inele de șoc.
 - **Reset fără progres:** resetul publică `WORLD_RESET` în epoch-ul următor, readuce 35 de obiecte, 35
   de corpuri, 35 de collidere și 0 fragmente, iar XP-ul și checksum-ul profilului rămân identice
-  (delta 0, zero retrageri). Nu scrie daily, rewards, XP sau profil.
+  (500 000 → 500 000 micro-XP, checksum stabil, delta 0, zero retrageri). Nu scrie daily, rewards, XP
+  sau profil.
 - **Replay:** 207 înregistrează `COLLISION`, `DESTRUCTIBLE_BROKEN` și `WORLD_RESET`; 228 citește
   chunk-ul sigilat, păstrează distrugerile și reseturile în ordine și raportează 0 pași de simulare,
   0 pași de fizică, 0 reevaluări de politică, 0 recompense și 0 artefacte de învățare.

@@ -152,6 +152,17 @@ function vehicleAt(chaos: LiveChaos, objectId: string) {
 
 function xpOwner() {
   const progress = createPlayerProgress({ playerId: 'player:285-report' });
+  const credited = progress.observeActiveTime({
+    startedAtMs: 1_794_475_200_000,
+    endedAtMs: 1_794_475_230_000,
+    scope: 'ACADEMY',
+    controlMode: 'MANUAL',
+    paused: false,
+    focused: true,
+    visible: true,
+    afk: false,
+  });
+  if (credited.status !== 'CREDITED') throw new Error('Report XP seed was not credited');
   return () => progress.read().xpBalanceMicroXp;
 }
 
