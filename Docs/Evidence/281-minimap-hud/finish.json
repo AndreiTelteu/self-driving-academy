@@ -1,0 +1,12 @@
+{
+  "id": "281",
+  "criteriaSatisfied": true,
+  "result": "The live minimap mounts 074/076/incidents over one exact map box with real route, selected vehicle, taxis/civilians, pickup/dropoff and stable incident identities. The HUD shows speed, mode, session, current objective and ride state; unavailable data is explicit, never an invented zero. A marker click emits only a camera selection intention and follows 263. All layers update at 10 Hz wall-clock, never per frame, and do not steal driving keys. The 084 layout stays readable and overlap-free at 1280x720, 1920x1080 and 150% zoom.",
+  "limitations": "The live build still has no 028/029 incident producer; without the probe it can honestly show zero incidents, while the layer is wired to 065 and tested with real 065 facts. Browser evidence is local headless Chrome/WebGL2, not an FPS/GPU/hardware measurement. Zoom 150% is emulated with the effective 853x480 CSS viewport per the 084 contract. The 275 tutorial panel can cover the secondary economy status while open; the HUD, minimap and shell bar stay unobstructed. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/app/minimap-hud.test.ts", "tests/ui/minimap-live.test.ts", "tests/ui/taxi-hud.test.ts", "tests/ui/responsive-layout.test.ts"],
+    ["npm", "run", "minimap:hud", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}

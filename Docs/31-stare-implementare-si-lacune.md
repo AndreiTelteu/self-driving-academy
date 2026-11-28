@@ -513,10 +513,7 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 
 **PBI:** [281](../PBI/README.md) · **Dependențe:** 260, 263.
 
-**Stare:** implementare locală la 28 noiembrie 2026. Minimapa 074/076/281 este montată în joc,
-HUD-ul 073 arată sesiunea și starea cursei, iar raportul determinist și proba de browser sunt în
-[Evidence/281-minimap-hud](Evidence/281-minimap-hud/README.md). Mutarea pe board și integrarea
-rămân în sarcina orchestratorului.
+**Stare:** Done la 28 noiembrie 2026. Minimapa 074/076/281 este montată în joc, HUD-ul 073 arată sesiunea și starea cursei, iar raportul determinist și proba de browser sunt în [Evidence/281-minimap-hud](Evidence/281-minimap-hud/README.md).
 
 ### 282 — Fizica Rapier live pentru jucător și AI
 
