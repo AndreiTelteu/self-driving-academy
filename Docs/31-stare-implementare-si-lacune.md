@@ -31,7 +31,7 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - campania live 275 peste trackerul 116, tutorialul 117 și ledgerul 125: etapa 1 pornește automat, obiectivele se calculează din evenimente 007 reale, tutorialul are cinci pași separați de learning, iar panoul `Misiuni` arată progresul, fereastra, bugetul, motivul de eșec și reluarea;
 - misiunile zilnice și XP-ul 276 peste 211/212/213/125: exact trei obiective pe ziua reală, cel puțin unul MANUAL fără learning, XP idempotent din daily, campanie și timp activ, nivel monoton și panoul `Progres` cu sold, istoric, fereastră și motivul expirării.
 
-Sunt montate minimapa (281) și HUD-ul complet; nu sunt montate sunetul, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265; AUTO/MANUAL/LEARNING și segmentele 069 sunt montate prin 271; persistența prin 278, iar setările, remaparea și sliderele prin 279.
+Sunt montate minimapa (281) și HUD-ul complet; decorul destructibil, fragmentele, sunetul de impact/motor/frână și replay-ul sunt montate prin 285. Nu sunt montate provocările Haos, pietonii 286 și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265; AUTO/MANUAL/LEARNING și segmentele 069 sunt montate prin 271; persistența prin 278, iar setările, remaparea și sliderele prin 279.
 
 ## Matricea lacunelor
 
@@ -566,18 +566,18 @@ Dovezile sunt în [Evidence/284-civil-autonomy](Evidence/284-civil-autonomy/READ
 
 ### 285 — Decor destructibil, feedback audio și replay în joc
 
-**Ce lipsește:** Decorul destructibil 227, feedbackul audio 228 și replay-ul nu sunt conectate la compunerea din browser.
+**Ce lipsește:** Decorul destructibil 227, feedbackul audio 228 și replay-ul nu erau conectate la compunerea din browser.
 
-- Decorul destructibil 227 nu este conectat la compunerea live.
-- Nu există impact, fragmente, sunet sau reset al decorului.
-- Nu există audio de motor, coliziune, frânare sau mediu în joc.
-- Nu există replay pentru distrugeri și reseturi.
-- Nu există plafoane pentru fragmente, voci și obiecte.
-- Nu există o probă vizuală/audio pentru distrugere și reset.
+**Ce s-a livrat:** `src/app/live-chaos.ts` (`285-live-chaos-v1`) compune planul real 227, catalogul/reacția 228, recorder-ul 207 și un singur motor 148 peste lumea Rapier 282; nu creează o a doua simulare, un al doilea ledger sau un al doilea audio. Aleea demolării are 35 de obiecte din 6 arhetipuri, iar clădirile, carosabilul, liniile STOP și semafoarele rămân structurale. Fiecare incident 028 real este publicat ca `COLLISION` și introdus în 227 cu impulsul și instigatorul real; sursa MANUAL/LEARNING/AUTO este doar numărată, lanțul păstrează instigatorul fizic, iar reluarea este deduplicată. Registry-ul 028 are 96 de obstacole, dintre care 90 sunt clădiri, deci compoziția leagă cel mult 6 obiecte logice în fereastra fizică; restul rămân vizuale, iar un obiect rupt eliberează slotul imediat. Vizualul Babylon are 35 de mesh-uri, un pool de 192 de fragmente cu viață de 120 tick-uri și 4 inele de șoc; fragmentele sunt cosmetice, nu blochează traficul și nu produc scor. Sunetul folosește cele șase profiluri de material 228 pe cue-ul `impact` al lui 148, cu plafoanele 4/14 voci și 8 buffere; înainte de gest nu există context audio, dar HUD-ul și efectul vizual rămân, iar varianta explicită este `SHOCK_RING`. Resetul publică `WORLD_RESET` în epoch-ul următor, readuce decorul la 35 de obiecte, 35 de corpuri, 35 de collidere și 0 fragmente, păstrează XP-ul și checksum-ul profilului (delta 0) și nu scrie daily, rewards sau XP. 228 repetă chunk-ul 207 în ordinea înregistrată, cu 0 pași de simulare/fizică, 0 reevaluări de politică, 0 recompense și 0 artefacte de învățare. Costul software măsurat este 0,2 ms p95 pentru pasul live și 0,6 ms p95 pentru un impact injectat; heap-ul exact rămâne `null`, iar costul local este în `cost.json`.
+
+- Dovezi: `npm run destructibles:live` (13/13), testele țintă 12/12, `npm run destructibles:live:probe` (Chrome 157, 11/11) și `npm run destructibles:live:cost`, în [Evidence/285-destructible-audio-replay](Evidence/285-destructible-audio-replay/README.md).
+- Limitări: fereastra de 6 collidere fizice; audio ambiental nu există în tabelul 148; proba de browser injectează contactul prin aceeași cale și este marcată `PROBE_INJECTED`; integrarea completă în shell și mutarea în Done rămân orchestratorului; FPS/GPU/hardware nu sunt pretinse.
 
 **Documentație:** [Joacă liberă, Haos și distrugere](26-joaca-libera-haos-si-distrugere.md) · [Asseturi vizual și audio](16-asseturi-vizual-si-audio.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [285](../PBI/README.md) · **Dependențe:** 282, 283.
+
+**Stare:** Implementat local la 28 noiembrie 2026. Decorul, sunetul, fragmentele, resetul și replay-ul sunt montate în compunere; orchestratorul integrează și mută fișierul în Done după proba finală.
 
 ### 286 — Pietoni, treceri și pericole V2 în lumea live
 

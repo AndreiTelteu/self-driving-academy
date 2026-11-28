@@ -20,7 +20,7 @@ import { atmosphereAt, nextTimeOfDay, TIME_OF_DAY_NAMES, type TimeOfDayName } fr
 import { createCharacterAsset, type CharacterRenderFrame } from '../../character';
 import type { CompositionFrame } from '../../app';
 import type { QualityPreferences } from '../../settings';
-import type { CityLayout } from '../../world';
+import type { CityLayout, DestructiblePlayground } from '../../world';
 import type { RendererKind } from '../backend-policy';
 import { SURFACE_PRESETS, type QualityPreset } from '../quality-policy';
 import { VEHICLE_RIDE_HEIGHT_M } from '../vehicle-visuals';
@@ -37,6 +37,11 @@ import { createSurfaceMaterials, type SurfaceMaterials } from './surface-materia
 import { createWorldEdgeScene, type WorldEdgeScene } from './world-edge-scene';
 import { createVehicleVisualStage, type VehicleVisualStage } from './vehicle-scene';
 import type { GlbModelLibrary } from './glb-model-library';
+import {
+  createDestructibleDecorScene,
+  type DestructibleDecorScene,
+  type DestructibleVisualFrame,
+} from './destructible-decor-scene';
 
 export const V3_COMPOSITION_SCENE_VERSION = '236-v3-composition-scene-v2' as const;
 
@@ -51,6 +56,8 @@ export interface V3CompositionSceneOptions {
   readonly decor?: boolean;
   /** PBI 254: imported GLB models, owned (and disposed) by the composition. */
   readonly models?: GlbModelLibrary;
+  /** PBI 285: the real 227 plan; the scene only draws the states it receives. */
+  readonly destructibles?: DestructiblePlayground;
 }
 
 export interface V3BackendInfo {
@@ -80,6 +87,10 @@ export interface V3CompositionSceneStats {
   readonly vehicleMeshes: number;
   readonly vehicleDrawCalls: number;
   readonly vehicles: number;
+  /** PBI 285: destructible object meshes, cosmetic fragments and shock rings. */
+  readonly destructibleMeshes: number;
+  readonly destructibleFragments: number;
+  readonly destructibleRings: number;
   readonly frames: number;
 }
 
@@ -99,11 +110,15 @@ export interface V3CompositionScene {
   readonly surfaces: SurfaceMaterials;
   readonly character: CharacterScene;
   readonly vehicles: VehicleVisualStage;
+  /** PBI 285: the live destructible presentation, `null` when the composition has no plan. */
+  readonly destructibles: DestructibleDecorScene | null;
   readonly camera: FreeCamera;
   readonly daylight: ReturnType<typeof createDaylight>;
   /** PBI 244: umbre de contact active (numai pe LOW). */
   contactShadowCount(): number;
   apply(frame: CompositionFrame, characterFrame: CharacterRenderFrame): void;
+  /** PBI 285: copies the authoritative destructible states and spawns cosmetic fragments. */
+  applyDestruction(frame: DestructibleVisualFrame | null): void;
   /** Reprezentarea vizuală a unui vehicul, după apariția lui în primul cadru (239: capturi). */
   representation(vehicleId: string): ReturnType<VehicleVisualStage['create']> | undefined;
   /** PBI 240: dimensiune CSS/DPR nouă; actualizează rezoluția internă fără a recrea scena. */
@@ -202,6 +217,10 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     options.decor === false
       ? null
       : createCityDecorScene(scene, layout, { models: options.models });
+  const destructibles =
+    options.destructibles === undefined
+      ? null
+      : createDestructibleDecorScene(scene, options.destructibles);
   // PBI 249: decorul este acum PBR; ca la suprafețele 245, meshurile PBR ies din lumina
   // hemisferică de rezervă (altfel primesc ambient dublu: hemisferic + IBL).
   for (const mesh of decor?.shadowCasterMeshes() ?? []) daylight.excludeFromLegacyAmbient(mesh);
@@ -395,9 +414,13 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     surfaces,
     character,
     vehicles,
+    destructibles,
     camera,
     daylight,
     contactShadowCount: () => contactShadows.count,
+    applyDestruction(frame: DestructibleVisualFrame | null): void {
+      destructibles?.apply(frame);
+    },
     apply(frame: CompositionFrame, characterFrame: CharacterRenderFrame): void {
       frames += 1;
       character.applyFrame(characterFrame);
@@ -559,6 +582,7 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
       const cityStats = city.stats;
       const characterStats = character.stats;
       const vehicleMetrics = vehicles.metrics;
+      const destructibleStats = destructibles?.stats();
       return Object.freeze({
         cityMeshes: cityStats.meshes,
         cityDrawCalls: cityStats.drawCalls,
@@ -572,6 +596,9 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
         vehicleMeshes: vehicleMetrics.meshes,
         vehicleDrawCalls: vehicleMetrics.drawCalls,
         vehicles: representations.size,
+        destructibleMeshes: destructibleStats?.meshes ?? 0,
+        destructibleFragments: destructibleStats?.fragmentsActive ?? 0,
+        destructibleRings: destructibleStats?.shockRingsActive ?? 0,
         frames,
       });
     },
@@ -582,6 +609,7 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
       representations.clear();
       vehicles.dispose();
       character.dispose();
+      destructibles?.dispose();
       buildingModules?.dispose();
       decor?.dispose();
       worldEdge.dispose();
