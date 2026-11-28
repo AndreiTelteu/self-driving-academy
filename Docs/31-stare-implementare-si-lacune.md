@@ -365,7 +365,7 @@ Refuzurile sunt închise: MANUAL/AUTO `SKIPPED_MANUAL`, LEARNING neeligibil `SKI
 
 **PBI:** [273](../PBI/README.md) · **Dependențe:** 272.
 
-**Stare:** Implementat local la 27 noiembrie 2026. Raportul determinist 30/30, testele țintă și proba de browser deterministă 22/22 trec; proba live rămâne 4/9 din cauza pauzelor de overload ale renderer-ului software, nu a pipeline-ului, și este documentată ca limitare. Taskul rămâne In Progress până la integrarea orchestratorului.
+**Stare:** Done la 28 noiembrie 2026. Raportul determinist 30/30, testele țintă și proba de browser deterministă 22/22 trec; proba live rămâne 4/9 din cauza ferestrei 087 eligibile care nu apare în prefixul live și este documentată ca limitare, fără PASS fals.
 
 ### 274 — Interfața de learning și profil: notificări, explicații, istoric și restore
 

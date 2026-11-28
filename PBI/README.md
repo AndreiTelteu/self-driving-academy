@@ -10,14 +10,14 @@
 | Integrare joc | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Interfață | V1 | 1 | 0 | 6 / 7 | `████████░░` 86% |
 | Misiuni | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
-| Moduri și learning | V1 | 0 | 1 | 2 / 3 | `██████░░░░` 67% |
+| Moduri și learning | Completed | 0 | 0 | 3 / 3 | `██████████` 100% |
 | Persistență | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Pietoni și pericole | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Progres | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Release | V4 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Sesiuni | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Trafic | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
-| Total | - | 2 | 1 | 26 / 29 | `████████░░` 90% |
+| Total | - | 2 | 0 | 27 / 29 | `█████████░` 93% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
