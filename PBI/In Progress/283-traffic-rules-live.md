@@ -1,13 +1,13 @@
 ---
 id: "283"
 title: "Regulile de trafic live: semafoare, STOP, prioritate, yield și benzi"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Trafic"
 depends_on: ["260","262","282"]
 performance_checks: ["simulation","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-283"
+started_at: "2026-11-28T03:03:46.952Z"
 completed_at: null
 ---
 
