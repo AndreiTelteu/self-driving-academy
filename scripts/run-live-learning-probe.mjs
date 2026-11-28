@@ -289,6 +289,13 @@ try {
     return relative;
   };
 
+  // The 275 tutorial intentionally blocks LEARNING until it is finished or skipped.
+  const skipTutorial = page.getByRole('button', { name: 'Sari peste tutorial' });
+  if ((await skipTutorial.count()) > 0 && (await skipTutorial.first().isVisible())) {
+    await skipTutorial.first().click();
+    await page.waitForTimeout(300);
+    await focusCanvas();
+  }
   await waitTicks(100);
   await ensurePlaying();
   const beforeLearning = await learning();
@@ -307,16 +314,22 @@ try {
     const frame = await read();
     const rows = (frame?.vehicles ?? []).filter(
       (vehicle) =>
-        vehicle.driverKind === 'TAXI' &&
-        vehicle.controlMode === 'AUTO' &&
-        vehicle.blocked === false &&
-        vehicle.laneId !== null &&
-        vehicle.speedMps > 0.5,
+        vehicle.driverKind === 'TAXI' && vehicle.controlMode === 'AUTO' && vehicle.laneId !== null,
     );
     let best = null;
     let bestDistance = Infinity;
     let bestLine = null;
     for (const vehicle of rows) {
+      const direct = lineByLane.get(vehicle.laneId);
+      if (direct?.positionM) {
+        const value = distance(direct.positionM, vehicle.positionM);
+        const max = direct.stopLineId !== undefined ? 35 : 65;
+        if (value >= 0.5 && value <= max && value < bestDistance) {
+          best = vehicle;
+          bestDistance = value;
+          bestLine = direct;
+        }
+      }
       const route = vehicle.routeLaneIds ?? [];
       const current = Math.max(0, route.indexOf(vehicle.laneId));
       for (let index = current; index < Math.min(route.length, current + 6); index += 1) {
@@ -326,7 +339,7 @@ try {
         if (kind === 'STOP' && (!stop || signalLaneIds.has(line.laneId))) continue;
         if (kind === 'SIGNAL' && stop) continue;
         const value = distance(line.positionM, vehicle.positionM);
-        if (value >= (stop ? 5 : 15) && value <= (stop ? 35 : 65) && value < bestDistance) {
+        if (value >= 0.5 && value <= (stop ? 35 : 65) && value < bestDistance) {
           best = vehicle;
           bestDistance = value;
           bestLine = line;
@@ -336,14 +349,113 @@ try {
     }
     return best === null ? null : { vehicle: best, distance: bestDistance, line: bestLine };
   };
-  let approach = await approachTaxi('ANY');
+  // A blocked taxi is normally held at a real line; taking it over gives the new LEARNING segment
+  // the signal/STOP opportunity immediately.
+  const blockedTaxi = async () => {
+    const traffic = await page.evaluate(() => globalThis.__v3Composition.traffic?.() ?? null);
+    const frame = await read();
+    for (const actor of traffic?.actors ?? []) {
+      if (actor.driverKind !== 'TAXI' || actor.blocked !== true) continue;
+      const vehicle = (frame?.vehicles ?? []).find(
+        (candidate) => candidate.vehicleId === actor.vehicleId && candidate.controlMode === 'AUTO',
+      );
+      if (vehicle) return { vehicle, distance: 0, line: null };
+    }
+    return null;
+  };
+  // A free taxi that is also approaching a real line can produce both a 086 opportunity and a
+  // FREE_TRAFFIC 087 window after LEARNING opens.
+  const freeApproachTaxi = async () => {
+    const traffic = await page.evaluate(() => globalThis.__v3Composition.traffic?.() ?? null);
+    const leaders = new Map(
+      (traffic?.actors ?? []).map((actor) => [actor.vehicleId, actor.leader]),
+    );
+    const frame = await read();
+    let best = null;
+    let bestDistance = Infinity;
+    let bestLine = null;
+    for (const vehicle of frame?.vehicles ?? []) {
+      if (
+        vehicle.driverKind !== 'TAXI' ||
+        vehicle.controlMode !== 'AUTO' ||
+        vehicle.laneId === null ||
+        (leaders.get(vehicle.vehicleId) !== null &&
+          !((leaders.get(vehicle.vehicleId)?.gapM ?? 0) > 65))
+      )
+        continue;
+      const direct = lineByLane.get(vehicle.laneId);
+      if (direct?.positionM) {
+        const value = distance(direct.positionM, vehicle.positionM);
+        const max = direct.stopLineId !== undefined ? 35 : 65;
+        if (value >= 0.5 && value <= max && value < bestDistance) {
+          best = vehicle;
+          bestDistance = value;
+          bestLine = direct;
+        }
+      }
+      const route = vehicle.routeLaneIds ?? [];
+      const current = Math.max(0, route.indexOf(vehicle.laneId));
+      for (let index = current; index < Math.min(route.length, current + 6); index += 1) {
+        const line = lineByLane.get(route[index]);
+        if (!line?.positionM) continue;
+        const stop = line.stopLineId !== undefined;
+        const value = distance(line.positionM, vehicle.positionM);
+        if (value >= 0.5 && value <= (stop ? 35 : 65) && value < bestDistance) {
+          best = vehicle;
+          bestDistance = value;
+          bestLine = line;
+        }
+        break;
+      }
+    }
+    return best === null ? null : { vehicle: best, distance: bestDistance, line: bestLine };
+  };
+  // A taxi with no live leader can produce a real FREE_TRAFFIC 087 window after LEARNING opens.
+  const freeTaxi = async () => {
+    const traffic = await page.evaluate(() => globalThis.__v3Composition.traffic?.() ?? null);
+    const frame = await read();
+    for (const actor of traffic?.actors ?? []) {
+      if (
+        actor.driverKind !== 'TAXI' ||
+        (actor.leader !== null && !((actor.leader?.gapM ?? 0) > 65))
+      )
+        continue;
+      const vehicle = (frame?.vehicles ?? []).find(
+        (candidate) => candidate.vehicleId === actor.vehicleId && candidate.controlMode === 'AUTO',
+      );
+      if (vehicle) return { vehicle, distance: 0, line: null, fromWindow: false };
+    }
+    return null;
+  };
+  // A real 087 ELIGIBLE/FREE_TRAFFIC window is the strongest signal that a taxi can produce
+  // learning evidence. Prefer a taxi that already owns one over a merely nearby line.
+  const windowTaxi = async () => {
+    const model = await learning();
+    const frame = await read();
+    const tick = frame?.tick ?? 0;
+    for (const window of model?.telemetry?.windows ?? []) {
+      if (window.windowClass !== 'ELIGIBLE' || window.label !== 'FREE_TRAFFIC') continue;
+      if (tick - window.lastTick > 120 || !String(window.segmentId).includes('TAXI')) continue;
+      const vehicleId = String(window.segmentId).replace(/^live:\d+:/, '');
+      const vehicle = (frame?.vehicles ?? []).find(
+        (candidate) =>
+          candidate.vehicleId === vehicleId &&
+          candidate.driverKind === 'TAXI' &&
+          candidate.controlMode === 'AUTO',
+      );
+      if (vehicle) return { vehicle, distance: 0, line: null, fromWindow: true };
+    }
+    return null;
+  };
+  let approach = (await freeApproachTaxi()) ?? (await blockedTaxi()) ?? (await approachTaxi('ANY'));
   const approachDeadline = Date.now() + 60000;
   while (approach === null && Date.now() < approachDeadline) {
     if (await ensurePlaying()) continue;
     await pumpFrame();
     await page.waitForTimeout(50);
-    approach = await approachTaxi('ANY');
+    approach = (await freeApproachTaxi()) ?? (await blockedTaxi()) ?? (await approachTaxi('ANY'));
   }
+  approach = approach ?? (await freeTaxi()) ?? (await windowTaxi());
   let moving = approach?.vehicle ?? null;
   if (moving === null) {
     const frame = await read();
@@ -619,6 +731,9 @@ try {
           ? 'STOP'
           : null,
     approachDistanceM: approach?.distance ?? null,
+    signalLanes: signalLanes.length,
+    stopLanes: stopLanes.length,
+    lineByLane: lineByLane.size,
     segmentId: last?.segmentId ?? segmentId,
     jobs: model?.stats?.jobs ?? 0,
     versions: model?.stats?.versions ?? 0,
