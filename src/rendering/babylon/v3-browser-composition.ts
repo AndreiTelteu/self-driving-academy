@@ -22,6 +22,7 @@ import type { CivilTraffic } from '../../fleet';
 import { bindKeyboardDriveInput, type KeyboardDriveBinding } from '../../input';
 import type { ContractContext } from '../../sessions';
 import type { RuntimeSettings } from '../../settings';
+import type { LiveVehiclePhysics } from '../../vehicles';
 import { createCharacterHud, type CharacterHud } from '../../ui';
 import type { CityLayout, LaneGraph, RoadMap } from '../../world';
 import type { RendererKind } from '../backend-policy';
@@ -71,6 +72,8 @@ export interface V3BrowserCompositionOptions {
   readonly models?: GlbModelLibrary;
   /** PBI 280: called only after a real C press changed the presentation preference. */
   readonly onCameraModeChanged?: (mode: CompositionCameraMode) => void;
+  /** PBI 282: the live Rapier owner. Absent keeps the pre-282 kinematic fixture. */
+  readonly physics?: LiveVehiclePhysics;
 }
 
 export interface CostSummary {
@@ -112,7 +115,12 @@ export interface V3BrowserComposition {
   playerVehicleId(): string | null;
   reset(): void;
   probeDoubleDelivery(): string;
-  costs(): Readonly<{ tick: CostSummary; present: CostSummary; frame: CostSummary }>;
+  costs(): Readonly<{
+    tick: CostSummary;
+    present: CostSummary;
+    frame: CostSummary;
+    physics: CostSummary;
+  }>;
   read(): Readonly<Record<string, unknown>>;
   backendInfo(): ReturnType<V3CompositionScene['backendInfo']>;
   stats(): V3CompositionSceneStats;
@@ -183,6 +191,7 @@ export function createV3BrowserComposition(
     ...(options.traffic === undefined ? {} : { traffic: options.traffic }),
     ...(options.map === undefined ? {} : { map: options.map }),
     ...(options.graph === undefined ? {} : { graph: options.graph }),
+    ...(options.physics === undefined ? {} : { physics: options.physics }),
   });
   const hud = createCharacterHud(options.hudRoot);
   const tickSamples: number[] = [];
@@ -202,7 +211,8 @@ export function createV3BrowserComposition(
   // driving map from the saved settings. Other composition keys (F/G/T) are not 009 actions.
   let modeCode = options.settings.input.bindings.manualMode,
     learningCode = options.settings.input.bindings.learningMode,
-    cameraCode = options.settings.input.bindings.camera;
+    cameraCode = options.settings.input.bindings.camera,
+    recoverCode = options.settings.input.bindings.recover;
 
   const doc = options.surface.ownerDocument;
   const interact = (): void => {
@@ -236,6 +246,11 @@ export function createV3BrowserComposition(
         const mode = composition.toggleCameraMode();
         options.onCameraModeChanged?.(mode);
       }
+      return;
+    }
+    if (event.code === recoverCode) {
+      event.preventDefault();
+      if (event.type === 'keydown' && !event.repeat) composition.requestRecovery();
       return;
     }
     if (event.code === COMPOSITION_KEYS.time) {
@@ -329,6 +344,7 @@ export function createV3BrowserComposition(
       modeCode = next.input.bindings.manualMode;
       learningCode = next.input.bindings.learningMode;
       cameraCode = next.input.bindings.camera;
+      recoverCode = next.input.bindings.recover;
       composition.setControlPreferences(next.input.control);
       composition.setCameraMode(next.input.cameraMode);
       view.daylight.applyPreferences(next.quality);
@@ -392,6 +408,7 @@ export function createV3BrowserComposition(
         tick: summarise(tickSamples),
         present: summarise(presentSamples),
         frame: summarise(frameSamples),
+        physics: composition.physicsStats()?.cost ?? summarise([]),
       });
     },
     read(): Readonly<Record<string, unknown>> {
@@ -470,8 +487,13 @@ export function createV3BrowserComposition(
             speedLimitMps: vehicle.speedLimitMps,
             laneId: vehicle.laneId,
             routeLaneIds: vehicle.routeLaneIds,
+            wheels: vehicle.wheels?.length ?? 0,
+            wheelContacts: vehicle.wheelContacts ?? null,
+            availability: vehicle.availability ?? null,
+            suspensionLengthsM: vehicle.suspensionLengthsM ?? null,
           }),
         ),
+        physics: composition.physicsStats(),
         segments: Object.freeze({
           walking: segments.walking,
           openSegmentId: segments.openSegmentId,

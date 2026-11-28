@@ -519,16 +519,17 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 
 **Ce lipsește:** Mașina condusă folosește un adaptor cinematic, nu Rapier; nu există roți, suspensie, daune sau recuperare fizică în joc.
 
-- Compunerea live folosește `driveVehicle` cinematic, nu adaptorul Rapier 022/024.
-- Nu există corpuri fizice, roți, suspensie sau contacte reale în joc.
-- Nu există daune, avarii sau recuperare fizică în compunerea live.
-- Nu există paritate player/AI pe aceeași comandă și aceeași suprafață.
-- Nu există calibrare sedan/compact în jocul live.
-- Nu există o probă de browser cu impact, frânare și revenire fără penetrare.
+**Ce s-a livrat:** `src/vehicles/rapier/live.ts` (`282-live-rapier-v1`) este unicul proprietar live al lumii Rapier și refolosește 022/024/028/029/030 fără o a doua simulare sau un al doilea ledger. `walking-composition.ts` primește opțional portul physics: taxiul și civilul seed sunt corpuri dinamice reale cu roți/suspensie, orice actor 058 preluat primește un corp la poziția/viteza/yaw-ul exacte, iar restul flotei 058 rămâne pe rutele lui cu proxy-uri cinematice stabile. PLAYER și AUTONOMY trec prin același controller la 60 Hz; comenzile AUTO provin din `VehicleAutoDrive` avansat cu viteza măsurată. Clădirile sunt obstacole 028 numite, deci impactul produce contact solver și incident 029; decorul 026 rămâne resolverul static. Recuperarea R folosește `PhysicsRecoveryPort` 030, mută corpul pe o bandă sigură, zeroizează viteza și scrie un record `TELEPORT` exclus din learning. Rendererul aplică steering/spin/suspensia roților din proiecția nativă. Probele deterministe și browser sunt în [Evidence/282-live-physics](../Docs/Evidence/282-live-physics/README.md).
+
+- Dovezi: `npm run physics:live` (15/15, paritate PLAYER/AUTONOMY exactă, sedan/compact, contact, recuperare, cost) și `npm run physics:live:probe` (Chrome 157/WEBGL2, 10/10: frânare, impact, recuperare, AUTO/MANUAL).
+- Cost: pas Rapier p95 0,367 ms; tick de compunere p95 4,158 ms față de baseline-ul pereche 3,886 ms pe fixture-ul normal V1 (buget 8 ms), incremental 0,272 ms. Targetul desktop de 5,5 ms este raportat separat.
+- Limitări: proxy-urile 058 sunt cinematice până la 284, decorul rămâne resolver 026, iar frame-ul Chrome nu este un gate hardware.
 
 **Documentație:** [Vehicule și fizică](05-vehicule-si-fizica.md) · [Adaptorul fizic](physics-adapter.md) · [Controllerul vehiculului](vehicle-controller.md) · [Dinamica roților](wheel-dynamics.md) · [Daunele vehiculului](vehicle-damage.md) · [Recuperarea vehiculului](vehicle-recovery.md) · [Calibrarea fizicii](physics-calibration.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [282](../PBI/README.md) · **Dependențe:** 260, 262.
+
+**Stare:** Implementat local la 28 noiembrie 2026. Integrarea finală, mutarea în Done și validarea boardului rămân orchestratorului.
 
 ### 283 — Regulile de trafic live: semafoare, STOP, prioritate, yield și benzi
 

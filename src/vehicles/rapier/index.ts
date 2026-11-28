@@ -303,6 +303,7 @@ export async function createRapierProbe(
         }
       >();
       const dynamicColliders: RAPIER.Collider[] = [];
+      const staticBoxes = new Map<number, RAPIER.Collider>();
       const registry = new PhysicsBodyRegistry();
       const collisionRegistry = new CollisionRegistry();
       const namedBoxes = new Map<CollisionIdentity, RAPIER.Collider>();
@@ -595,6 +596,44 @@ export async function createRapierProbe(
           if (obstacles >= PHYSICS_CONFIG.obstacles) throw new RangeError('Obstacle capacity');
           allocateBox(position, halfSize, dynamic);
           obstacles++;
+        },
+        addStaticBox(position, halfSize) {
+          assertMutable();
+          vector(position);
+          vector(halfSize);
+          for (const k of ['x', 'y', 'z'] as const) finite(halfSize[k], 0.01, 500);
+          if (world.colliders.len() >= PHYSICS_CONFIG.colliders)
+            throw new RangeError('Physics admission capacity');
+          const collider = world.createCollider(
+            RAPIER.ColliderDesc.cuboid(halfSize.x, halfSize.y, halfSize.z)
+              .setTranslation(position.x, position.y, position.z)
+              .setFriction(0.8)
+              .setRestitution(0),
+          );
+          staticBoxes.set(collider.handle, collider);
+          return collider.handle;
+        },
+        setStaticBoxPose(handle, position, yawRad) {
+          assertMutable();
+          finite(yawRad, -1000, 1000);
+          vector(position);
+          const collider = staticBoxes.get(handle);
+          if (!collider) throw new Error('Unknown static box');
+          collider.setTranslation(position);
+          collider.setRotation({
+            x: 0,
+            y: Math.sin(yawRad / 2),
+            z: 0,
+            w: Math.cos(yawRad / 2),
+          });
+        },
+        removeStaticBox(handle) {
+          assertMutable();
+          const collider = staticBoxes.get(handle);
+          if (!collider) return false;
+          staticBoxes.delete(handle);
+          world.removeCollider(collider, true);
+          return true;
         },
         addNamedBox(id, position, halfSize, options: CollisionBoxOptions = {}) {
           assertMutable();

@@ -411,6 +411,20 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
         const existing = representations.get(vehicle.vehicleId);
         if (existing) {
           existing.setTransform(transform);
+          if (vehicle.wheels !== undefined)
+            existing.applyWheels(
+              vehicle.wheels.map((wheel) =>
+                Object.freeze({
+                  wheelId: wheel.wheelId,
+                  transform: Object.freeze({
+                    positionM: wheel.localPositionM,
+                    rotationQuaternion: Object.freeze({ x: 0, y: 0, z: 0, w: 1 }),
+                  }),
+                  spinRad: wheel.spinRad,
+                  steeringRad: wheel.steeringRad,
+                }),
+              ),
+            );
           continue;
         }
         const created = vehicles.create(
@@ -420,6 +434,20 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
           vehicle.driverKind,
         );
         representations.set(vehicle.vehicleId, created);
+        if (vehicle.wheels !== undefined)
+          created.applyWheels(
+            vehicle.wheels.map((wheel) =>
+              Object.freeze({
+                wheelId: wheel.wheelId,
+                transform: Object.freeze({
+                  positionM: wheel.localPositionM,
+                  rotationQuaternion: Object.freeze({ x: 0, y: 0, z: 0, w: 1 }),
+                }),
+                spinRad: wheel.spinRad,
+                steeringRad: wheel.steeringRad,
+              }),
+            ),
+          );
       }
       // 244: prioritatea de umbră urmărește vehiculul din cadru; se rescrie numai la schimbare.
       const hero = heroVehicleId(frame);

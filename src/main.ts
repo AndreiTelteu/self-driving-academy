@@ -17,6 +17,7 @@ import {
   createLiveTelemetryComposition,
   createLiveRideComposition,
   createCityStyleProfile,
+  createRecoveryRoadProvider,
   createRendererRecovery,
   createSessionFlow,
   dailyCalendarInputOf,
@@ -137,7 +138,7 @@ import {
 import type { DrivingProfile, ProfileVersion } from './profiles';
 import { parameterDefinitions, parseDrivingProfile } from './profiles';
 import { PLAYER_XP_POLICY } from './missions';
-import { VEHICLE_CLASSES } from './vehicles';
+import { VEHICLE_CLASSES, createLiveVehiclePhysics, type LiveVehiclePhysics } from './vehicles';
 import { copyProfileForChaos, liveSaveFingerprint } from './persistence';
 import type { SessionKind, SessionWorldPort } from './persistence';
 import './style.css';
@@ -1836,6 +1837,7 @@ const application = createApplicationLifecycle({
           onLost,
         );
         let ownedComposition: V3BrowserComposition | undefined;
+        let ownedPhysics: LiveVehiclePhysics | undefined;
         let ownedTraffic: ReturnType<typeof createAmbientTraffic> | undefined;
         let ownedRides: LiveRides | undefined;
         let ownedRideComposition: LiveRideComposition | undefined;
@@ -1878,6 +1880,29 @@ const application = createApplicationLifecycle({
             traffic: ownedTraffic.traffic,
             ambient: ownedTraffic,
           };
+          // PBI 282: one live Rapier world for the composition cars. Buildings are named 028
+          // obstacles, so a wall impact is a real contact with a real 029 incident.
+          ownedPhysics = await createLiveVehiclePhysics({
+            context: compositionContext,
+            initialTick: 0,
+            staticBoxes: world.walkWorld.blockers.map((blocker) => {
+              const bounds = blocker.polygon.bounds;
+              return Object.freeze({
+                id: blocker.id,
+                centerM: Object.freeze({
+                  x: (bounds.minX + bounds.maxX) / 2,
+                  y: (blocker.bottomM + blocker.topM) / 2,
+                  z: (bounds.minZ + bounds.maxZ) / 2,
+                }),
+                halfExtentsM: Object.freeze({
+                  x: Math.max(0.05, (bounds.maxX - bounds.minX) / 2),
+                  y: Math.max(0.05, (blocker.topM - blocker.bottomM) / 2),
+                  z: Math.max(0.05, (bounds.maxZ - bounds.minZ) / 2),
+                }),
+              });
+            }),
+            recovery: createRecoveryRoadProvider(world.graph),
+          });
           ownedComposition = createV3BrowserComposition({
             scene: backend.scene,
             surface: app,
@@ -1896,6 +1921,7 @@ const application = createApplicationLifecycle({
             enabled: () => application.getState().kind === 'PLAYING',
             models,
             onCameraModeChanged: rememberCameraMode,
+            physics: ownedPhysics,
           });
           // PBI 271: the single 069 live boundary owner over this composition, before the first
           // shell tick. It closes/opens segments at the exact accepted tick without a second model.
@@ -2027,6 +2053,7 @@ const application = createApplicationLifecycle({
             ownedHud?.dispose();
             if (ridesModules.hud === ownedHud) ridesModules.hud = undefined;
             ownedComposition?.dispose();
+            ownedPhysics?.dispose();
           } finally {
             try {
               ownedTraffic?.dispose();
@@ -2077,6 +2104,7 @@ const application = createApplicationLifecycle({
                 ownedHud?.dispose();
                 if (ridesModules.hud === ownedHud) ridesModules.hud = undefined;
                 ownedComposition?.dispose();
+                ownedPhysics?.dispose();
               } finally {
                 // PBI 256: compunerea nu deține traficul; registry-ul și actorii 058 se eliberează aici.
                 ownedTraffic?.dispose();
@@ -3042,6 +3070,8 @@ interface V3DebugGlobal {
   minimap(): unknown;
   /** PBI 271: the live 069 segments, LEARNING exposure and accepted mode. */
   modes(): unknown;
+  /** PBI 282: live Rapier state, wheels, damage, recovery, contacts and separated costs. */
+  physics(): unknown;
   /** PBI 273: the live learning pipeline, its real 103/221 queue and the immutable profile. */
   learning(): unknown;
   /** PBI 264: cererile, coada, alocările și starea panoului de curse. */
@@ -3227,6 +3257,33 @@ const debugGlobal: V3DebugGlobal = {
         selectedVehicleId: composition?.composition.frame.selectedVehicleId ?? null,
         playerVehicleId: composition?.composition.frame.playerVehicleId ?? null,
       },
+    };
+  },
+  physics: () => {
+    const model = composition?.composition;
+    if (model === undefined) return null;
+    const stats = model.physicsStats();
+    const frame = model.frame;
+    return {
+      stats,
+      recovery: model.physics?.readRecovery() ?? null,
+      recoveryHistory: model.physics?.readRecoveryHistory() ?? [],
+      vehicles: frame.vehicles.map((vehicle) =>
+        Object.freeze({
+          vehicleId: vehicle.vehicleId,
+          classId: vehicle.classId,
+          positionM: vehicle.positionM,
+          yawRad: vehicle.yawRad,
+          speedMps: vehicle.speedMps,
+          controlMode: vehicle.controlMode,
+          wheelContacts: vehicle.wheelContacts ?? null,
+          wheels: vehicle.wheels ?? [],
+          suspensionLengthsM: vehicle.suspensionLengthsM ?? null,
+          availability: vehicle.availability ?? null,
+          lastIncidentId: model.physics?.readDamage(vehicle.vehicleId)?.lastIncidentId ?? null,
+        }),
+      ),
+      costs: composition?.costs() ?? null,
     };
   },
   learning: () => {

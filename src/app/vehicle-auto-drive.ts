@@ -70,7 +70,7 @@ export interface VehicleAutoDrive {
   readonly vehicleId: string;
   readonly pose: AutoDrivePose;
   /** Advances one fixed tick and returns the new pose. */
-  step(dtSeconds: number): AutoDrivePose;
+  step(dtSeconds: number, actualSpeedMps?: number): AutoDrivePose;
   /** Called by the composition when a static/dynamic body blocks the candidate pose. */
   stop(): void;
   report(): AutoDriveReport;
@@ -343,12 +343,17 @@ export function createVehicleAutoDrive(options: VehicleAutoDriveOptions): Vehicl
     get pose(): AutoDrivePose {
       return poseAt(distanceM);
     },
-    step(dtSeconds: number): AutoDrivePose {
+    step(dtSeconds: number, actualSpeedMps?: number): AutoDrivePose {
       requireContract(!disposed, 'Auto-drive disposed');
       requireContract(
         Number.isFinite(dtSeconds) && dtSeconds > 0 && dtSeconds <= 1 / 60 + 1e-12,
         'Auto-drive step exceeds one 60 Hz tick',
       );
+      if (actualSpeedMps !== undefined)
+        requireContract(
+          Number.isFinite(actualSpeedMps) && actualSpeedMps >= 0,
+          'Auto-drive actual speed must be finite and non-negative',
+        );
       if (blocked || route === null) return poseAt(distanceM);
       if (!advanceRoute()) return poseAt(distanceM);
       const lane = laneAt(route, distanceM);
@@ -367,7 +372,11 @@ export function createVehicleAutoDrive(options: VehicleAutoDriveOptions): Vehicl
           speedMps - mechanics.brakeAcceleration * VEHICLE_AUTO_DRIVE_POLICY.brakeShare * dtSeconds,
         );
       }
-      distanceM = Math.min(route.totalLengthM, distanceM + speedMps * dtSeconds);
+      // PBI 282: a live Rapier car supplies its own measured speed, so the route cursor follows
+      // the physical car instead of a second kinematic integration. The pure fixture keeps the
+      // original internal distance advance.
+      const advanceMps = actualSpeedMps ?? speedMps;
+      distanceM = Math.min(route.totalLengthM, distanceM + advanceMps * dtSeconds);
       return poseAt(distanceM);
     },
     stop(): void {

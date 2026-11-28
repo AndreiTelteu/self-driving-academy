@@ -873,6 +873,8 @@ export {
   type VehicleAutoDriveOptions,
 } from './vehicle-auto-drive';
 
+export { createRecoveryRoadProvider } from './vehicle-recovery-road';
+
 export {
   V3_COMPOSITION_POLICY,
   V3_COMPOSITION_VERSION,

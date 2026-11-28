@@ -17,12 +17,21 @@ export function createRecoveryRoadProvider(graph: LaneGraph) {
       transform = recoveryTransform(transform);
       const q = transform.rotationQuaternion;
       const yaw = Math.atan2(2 * q.y * q.w, 1 - 2 * q.y * q.y);
-      const location = graph.locateLane({
+      const headingRad = Math.atan2(Math.cos(yaw), Math.sin(yaw));
+      let location = graph.locateLane({
         positionM: { ...transform.positionM, y: 0 },
         access,
-        headingRad: Math.atan2(Math.cos(yaw), Math.sin(yaw)),
+        headingRad,
         maxHeightDifferenceM: 0,
       });
+      // A collision may leave the yaw across the lane; recovery still requires the real lane under
+      // the body, so retry without the heading fence and publish the lane's directed yaw.
+      if (!location)
+        location = graph.locateLane({
+          positionM: { ...transform.positionM, y: 0 },
+          access,
+          maxHeightDifferenceM: 0,
+        });
       if (!location) return null;
       const lane = graph.getLane(location.lane.id, access),
         path = graph.getDirectedPath(location.lane.id);

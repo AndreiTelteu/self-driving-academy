@@ -57,6 +57,7 @@ export type {
   VehicleCameraPose,
   CameraSweep,
 } from './vehicle-camera';
+export type { VehicleRenderWheel } from './babylon/vehicle-scene';
 export { resolveCameraObstacles } from './camera-collision';
 export type { CameraPoint, CameraObstacle } from './camera-collision';
 export { DiagnosticsCollector, UNAVAILABLE_DIAGNOSTIC_COUNTERS } from './diagnostics';
