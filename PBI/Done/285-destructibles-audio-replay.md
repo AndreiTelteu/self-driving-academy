@@ -1,14 +1,14 @@
 ---
 id: "285"
 title: "Decor destructibil, feedback audio și replay în joc"
-status: "In Progress"
+status: "Done"
 release: "V1"
 module: "Haos"
 depends_on: ["282","283"]
 performance_checks: ["simulation","assets","memory","frame"]
 owner: "loop-pbi/deepseek-285"
 started_at: "2026-11-28T11:03:36.128Z"
-completed_at: null
+completed_at: "2026-11-28T13:05:25.063Z"
 ---
 
 # 285 Decor destructibil, feedback audio și replay în joc
@@ -67,12 +67,13 @@ Limitări sau follow-up: fereastra de 6 collidere fizice; audio ambiental nu exi
 
 - [x] Criterii îndeplinite și verificate.
 - [x] Dovezi completate și documentație actualizată.
-- [ ] Status Done și completed_at completat.
-- [ ] Fișier mutat fizic în Done și absent din celelalte coloane.
+- [x] Status Done și completed_at completat.
+- [x] Fișier mutat fizic în Done și absent din celelalte coloane.
 
 Verificare finală: `PBI/Validate-Board.ps1 -RequireDone '285'`.
 
 ## Istoric
 
 - 2026-11-26: Creat în To Do la resetarea boardului; înlocuiește munca rămasă din generația 001–258.
-- 2026-11-28: Implementare locală de sub-agent: decor destructibil live, feedback de material, fragmente, reset și replay; criterii bifate după raportul 13/13, testele țintă 12/12 și proba de browser 11/11. Fișierul rămâne In Progress până la integrarea și mutarea orchestratorului.
+- 2026-11-28: Implementare locală de sub-agent: decor destructibil live, feedback de material, fragmente, reset și replay; criterii bifate după raportul 13/13, testele țintă 12/12 și proba de browser 11/11.
+- 2026-11-28: Integrat de orchestrator, verificat pe `main` și mutat în Done.

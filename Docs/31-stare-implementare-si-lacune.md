@@ -577,7 +577,7 @@ Dovezile sunt în [Evidence/284-civil-autonomy](Evidence/284-civil-autonomy/READ
 
 **PBI:** [285](../PBI/README.md) · **Dependențe:** 282, 283.
 
-**Stare:** Implementat local la 28 noiembrie 2026. Decorul, sunetul, fragmentele, resetul și replay-ul sunt montate în compunere; orchestratorul integrează și mută fișierul în Done după proba finală.
+**Stare:** Done la 28 noiembrie 2026. Decorul, sunetul, fragmentele, resetul și replay-ul sunt montate în compunere; fereastra de 6 collidere fizice și audio-ul ambiental absent rămân limitări documentate.
 
 ### 286 — Pietoni, treceri și pericole V2 în lumea live
 
