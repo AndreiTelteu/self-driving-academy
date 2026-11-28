@@ -1,0 +1,396 @@
+{
+  "version": "284-civil-autonomy-v1",
+  "generatedBy": "npm run civil:autonomy",
+  "contract": {
+    "trafficVersion": "058-civil-traffic-v1",
+    "ambientVersion": "262-live-fleet-v1",
+    "actors": 64,
+    "taxis": 24,
+    "civilians": 40,
+    "outsideWindowM": 80,
+    "spawnClearanceM": 6,
+    "tickHz": 60
+  },
+  "rules": {
+    "ticks": 9000,
+    "actors": 64,
+    "taxis": 24,
+    "civilians": 40,
+    "signals": 126,
+    "commandedActors": 64,
+    "civilSignalHolds": 167875,
+    "civilStopHolds": 40714,
+    "civilYieldHolds": 43186,
+    "civilBlockedHolds": 0,
+    "civilLaneChanges": 4,
+    "signalStops": 69,
+    "stopApproaches": 35,
+    "stopFullStops": 32,
+    "yieldChecks": 14231,
+    "yieldHolds": 10081,
+    "laneChangeValidated": 4,
+    "laneChangeApplied": 4,
+    "blockedReroutes": 0,
+    "deadlockStays": 0,
+    "movingActors": 64,
+    "outsideWindow": 62,
+    "outsideMoved": 62,
+    "uniqueIds": 64,
+    "rules": {
+      "version": "283-live-traffic-rules-v1",
+      "tick": 9000,
+      "mapId": "neighbourhood-compact-v1",
+      "actors": 64,
+      "signals": {
+        "programs": 4,
+        "movements": 126,
+        "phaseChanges": 72,
+        "redHolds": 48967,
+        "redStops": 69,
+        "redProceedByProfile": 0,
+        "greenStartDelays": 176
+      },
+      "stop": {
+        "approaches": 35,
+        "fullStops": 32,
+        "rollingStops": 0,
+        "lineCrossings": 25,
+        "trafficCausedStops": 59,
+        "holds": 8790
+      },
+      "yield": {
+        "checks": 14231,
+        "holds": 10081,
+        "accepted": 4150,
+        "unknown": 1012,
+        "deadlockBreaks": 0
+      },
+      "laneChange": {
+        "attempts": 474,
+        "validated": 4,
+        "applied": 4,
+        "refusedFrontGap": 466,
+        "refusedBackGap": 4,
+        "refusedAdvantage": 0,
+        "refusedCooldown": 0,
+        "otherRefusals": 0
+      },
+      "blocked": {
+        "episodes": 0,
+        "rerouteRequests": 0,
+        "recoveryRequests": 0,
+        "stayBlocked": 0,
+        "applied": 0,
+        "stalledRecoveries": 7
+      },
+      "violations": {
+        "total": 0,
+        "redLight": 0,
+        "stopLine": 0
+      },
+      "retainedHistory": 0,
+      "disposed": false
+    }
+  },
+  "recovery": {
+    "ticks": 600,
+    "vehicleId": "284-civil-recovery",
+    "laneId": "lane:41S0",
+    "destinationLaneId": "lane:00E0",
+    "blockedEpisodes": 1,
+    "blockedCommands": 481,
+    "rerouteRequests": 2,
+    "applied": 1,
+    "stayBlocked": 0,
+    "recoveryAction": "REQUEST_REROUTE"
+  },
+  "takeover": {
+    "ticks": 581,
+    "vehicleId": "id-v1:7:vehicle13:v3:city:fleet8:CIVILIAN4:0001",
+    "routeBefore": [
+      "lane:00E0",
+      "lane:10E0",
+      "lane:20N1",
+      "lane:21N1",
+      "lane:22N1",
+      "lane:23N1",
+      "lane:24E0",
+      "lane:34E0",
+      "lane:43S0"
+    ],
+    "routeAfterFreeze": [
+      "lane:00E0",
+      "lane:10E0",
+      "lane:20N1",
+      "lane:21N1",
+      "lane:22N1",
+      "lane:23N1",
+      "lane:24E0",
+      "lane:34E0",
+      "lane:43S0"
+    ],
+    "routeAfterResume": [
+      "lane:00E0",
+      "lane:10E0",
+      "lane:20N1",
+      "lane:21N1",
+      "lane:22N1",
+      "lane:23N1",
+      "lane:24E0",
+      "lane:34E0",
+      "lane:43S0"
+    ],
+    "destinationBefore": "lane:43S0",
+    "destinationAfter": "lane:43S0",
+    "distanceBefore": 27.51638888888888,
+    "frozenDistance": 27.51638888888888,
+    "drivenDistance": 35.516388888888876,
+    "resumedDistance": 35.516388888888876,
+    "resumedMovedM": 2.0976388888888877,
+    "actorCountBefore": 56,
+    "actorCountAfter": 56,
+    "freezeMovedM": 0,
+    "exitJumpM": 0.000009259259265093078,
+    "registryMode": "AUTO",
+    "authorityDuringManual": "MANUAL",
+    "authorityAfterResume": "AUTO"
+  },
+  "profile": {
+    "profileId": "v3-city-style",
+    "versionBefore": "v3-city-style-v1",
+    "versionAfter": "v3-city-style-v2",
+    "taxisAfterRefresh": 20,
+    "civiliansAfterRefresh": 20,
+    "newTaxiVersion": "v3-city-style-v2",
+    "newCivilianVersion": "v3-city-style-v2",
+    "newCivilianClearanceM": 495.2383499891963,
+    "uniqueVehicleIds": 42,
+    "registryVehicles": 42,
+    "actorCountBefore": 40,
+    "actorCountAfter": 42
+  },
+  "checks": [
+    {
+      "name": "population",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "The report simulates 40 civilians."
+    },
+    {
+      "name": "taxis",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "The same live fleet keeps 24 taxis."
+    },
+    {
+      "name": "unique-ids",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "Every actor identity is unique."
+    },
+    {
+      "name": "full-context-signals",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "126 036 movement signals are published in the 044 frame."
+    },
+    {
+      "name": "every-actor-commanded",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "Every taxi and civilian receives a 283 command, not only the near cars."
+    },
+    {
+      "name": "civil-signal-policy",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "167875 civil signal holds; 69 red stop episodes."
+    },
+    {
+      "name": "civil-stop-policy",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "40714 civil STOP holds; 32 full stops proved."
+    },
+    {
+      "name": "civil-yield-policy",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "43186 civil yield holds; 14231 priority checks."
+    },
+    {
+      "name": "civil-lane-policy",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "4 civil lane requests; 4 applied changes."
+    },
+    {
+      "name": "recovery-stagnation",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "054 opened 1 blocked episodes and held 481 decisions on real civil lane lane:41S0."
+    },
+    {
+      "name": "recovery-reroute",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The civil actor requested 2 reroutes (REQUEST_REROUTE)."
+    },
+    {
+      "name": "recovery-applied",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The 058 owner acknowledged 1 executed recoveries."
+    },
+    {
+      "name": "hidden-actors-move",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "Every actor moves over 1 m during the 9000-tick run, including off-camera cars."
+    },
+    {
+      "name": "outside-window-simulated",
+      "expected": 62,
+      "actual": 62,
+      "pass": true,
+      "detail": "62 actors start outside 80 m and all move."
+    },
+    {
+      "name": "takeover-route-before",
+      "expected": "[\"lane:00E0\",\"lane:10E0\",\"lane:20N1\",\"lane:21N1\",\"lane:22N1\",\"lane:23N1\",\"lane:24E0\",\"lane:34E0\",\"lane:43S0\"]",
+      "actual": "[\"lane:00E0\",\"lane:10E0\",\"lane:20N1\",\"lane:21N1\",\"lane:22N1\",\"lane:23N1\",\"lane:24E0\",\"lane:34E0\",\"lane:43S0\"]",
+      "pass": true,
+      "detail": "The frozen 058 route is identical to the route before takeover."
+    },
+    {
+      "name": "takeover-route-suspended",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The civil AI does not advance while the route is suspended."
+    },
+    {
+      "name": "takeover-authority",
+      "expected": "MANUAL",
+      "actual": "MANUAL",
+      "pass": true,
+      "detail": "The taken-over civilian is MANUAL in the 058 owner."
+    },
+    {
+      "name": "takeover-driven",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The player pose advances 7.9999999999999964 m on the same route."
+    },
+    {
+      "name": "exit-route-preserved",
+      "expected": "[\"lane:00E0\",\"lane:10E0\",\"lane:20N1\",\"lane:21N1\",\"lane:22N1\",\"lane:23N1\",\"lane:24E0\",\"lane:34E0\",\"lane:43S0\"]",
+      "actual": "[\"lane:00E0\",\"lane:10E0\",\"lane:20N1\",\"lane:21N1\",\"lane:22N1\",\"lane:23N1\",\"lane:24E0\",\"lane:34E0\",\"lane:43S0\"]",
+      "pass": true,
+      "detail": "Resume keeps the route path."
+    },
+    {
+      "name": "exit-destination",
+      "expected": "lane:43S0",
+      "actual": "lane:43S0",
+      "pass": true,
+      "detail": "Resume keeps the same destination lane."
+    },
+    {
+      "name": "exit-mode",
+      "expected": "AUTO",
+      "actual": "AUTO",
+      "pass": true,
+      "detail": "The registry returns to AUTO."
+    },
+    {
+      "name": "exit-no-teleport",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The first AUTO step moves 0.0000 m from the handoff pose."
+    },
+    {
+      "name": "exit-route-continues",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The resumed civil advances 2.098 m from the driven point."
+    },
+    {
+      "name": "no-route-duplicate",
+      "expected": 56,
+      "actual": 56,
+      "pass": true,
+      "detail": "Takeover and resume do not create a second actor."
+    },
+    {
+      "name": "common-profile-refresh",
+      "expected": "v3-city-style-v2",
+      "actual": "v3-city-style-v2",
+      "pass": true,
+      "detail": "One explicit refresh applies the active common version."
+    },
+    {
+      "name": "taxi-profile-parity",
+      "expected": 20,
+      "actual": 20,
+      "pass": true,
+      "detail": "Taxis and civilians share the same applied version."
+    },
+    {
+      "name": "new-taxi-profile",
+      "expected": "v3-city-style-v2",
+      "actual": "v3-city-style-v2",
+      "pass": true,
+      "detail": "A new taxi reads the active version."
+    },
+    {
+      "name": "new-civilian-profile",
+      "expected": "v3-city-style-v2",
+      "actual": "v3-city-style-v2",
+      "pass": true,
+      "detail": "A new civilian reads the active version."
+    },
+    {
+      "name": "new-vehicle-spawn-clearance",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The new civilian clears the player by 495.238 m."
+    },
+    {
+      "name": "new-vehicle-unique-id",
+      "expected": 42,
+      "actual": 42,
+      "pass": true,
+      "detail": "Registry identities stay unique."
+    },
+    {
+      "name": "new-vehicle-single-actor",
+      "expected": 42,
+      "actual": 42,
+      "pass": true,
+      "detail": "Exactly one new actor per added vehicle."
+    }
+  ],
+  "summary": {
+    "checks": 31,
+    "passed": 31,
+    "pass": true
+  }
+}

@@ -290,11 +290,16 @@ test('283 an unexplained stationary actor produces an explicit 054 recovery requ
       destinationLaneId: 'lane-a',
     });
     let command = rules.step({ tick: 1, actors: [view] }).commands.get('vehicle-283')!;
-    for (let tick = 2; tick <= 420; tick += 1)
+    let recovery: string | null = null;
+    for (let tick = 2; tick <= 420; tick += 1) {
       command = rules.step({ tick, actors: [view] }).commands.get('vehicle-283')!;
+      // PBI284: the request must survive the BLOCKED hold command so 058 can execute it.
+      if (command.recovery !== null) recovery = command.recovery.action;
+    }
     const report = rules.report();
     assert.ok(report.blocked.episodes >= 1);
     assert.ok(report.blocked.rerouteRequests >= 1);
+    assert.equal(recovery, 'REQUEST_REROUTE');
     assert.equal(command.holdKind, 'BLOCKED');
     assert.equal(command.targetMps, 0);
   } finally {

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <title>284 civil autonomy browser probe</title>
+    <style>
+      body {
+        margin: 0;
+        background: #0d1b22;
+        color: #e8f4f8;
+        font:
+          14px/1.45 system-ui,
+          sans-serif;
+        display: grid;
+        grid-template-columns: 900px 340px;
+        gap: 12px;
+        padding: 12px;
+      }
+      canvas {
+        width: 900px;
+        height: 620px;
+        background: #12242c;
+        border: 1px solid #2b414c;
+        border-radius: 8px;
+      }
+      aside {
+        padding: 12px;
+        background: #10222b;
+        border: 1px solid #2b414c;
+        border-radius: 8px;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        background: #1f6f5c;
+        font-weight: 600;
+      }
+      .badge.red {
+        background: #8a2f2f;
+      }
+      .badge.green {
+        background: #1f6f5c;
+      }
+      #notice {
+        display: none;
+        margin-top: 10px;
+        padding: 8px;
+        border: 1px solid #e0b34a;
+        background: #3a2f13;
+        border-radius: 6px;
+      }
+      pre {
+        max-height: 390px;
+        overflow: auto;
+        white-space: pre-wrap;
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="view" width="900" height="620"></canvas>
+    <aside>
+      <h1 style="font-size: 18px; margin: 0 0 8px">284 — preluarea unui civil</h1>
+      <p><span id="phase" class="badge">RUNNING</span></p>
+      <p id="line"></p>
+      <div id="notice"></div>
+      <pre id="report"></pre>
+    </aside>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

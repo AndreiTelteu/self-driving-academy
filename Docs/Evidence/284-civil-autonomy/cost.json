@@ -1,0 +1,82 @@
+{
+  "version": "284-civil-autonomy-v1",
+  "generatedBy": "npm run civil:autonomy:cost",
+  "measuredAt": "2026-11-28T09:45:32.816Z",
+  "protocol": {
+    "warmupTicks": 120,
+    "measuredTicks": 600,
+    "repetitions": 3,
+    "tickHz": 60,
+    "budgetMs": 8,
+    "budgetSource": "Docs/25 laptop authoritative tick p95",
+    "subsystem": "058 traffic step with one live 283 rules owner on the real 032/033 map"
+  },
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "win32",
+    "arch": "x64",
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "totalMemoryBytes": 14702026752,
+    "renderer": "NONE_HEADLESS"
+  },
+  "samples": [
+    {
+      "taxis": 20,
+      "civilians": 24,
+      "actors": 44,
+      "classification": "NORMAL",
+      "samples": 1800,
+      "p50Ms": 3.6054,
+      "p95Ms": 6.0624,
+      "p99Ms": 7.2127,
+      "maxMs": 8.4705,
+      "withinBudget": true
+    },
+    {
+      "taxis": 20,
+      "civilians": 32,
+      "actors": 52,
+      "classification": "NORMAL",
+      "samples": 1800,
+      "p50Ms": 4.2042,
+      "p95Ms": 7.603,
+      "p99Ms": 9.3737,
+      "maxMs": 11.0574,
+      "withinBudget": true
+    },
+    {
+      "taxis": 20,
+      "civilians": 40,
+      "actors": 60,
+      "classification": "NORMAL",
+      "samples": 1800,
+      "p50Ms": 4.5117,
+      "p95Ms": 6.7964,
+      "p99Ms": 8.8028,
+      "maxMs": 16.0502,
+      "withinBudget": true
+    },
+    {
+      "taxis": 30,
+      "civilians": 40,
+      "actors": 70,
+      "classification": "STRESS",
+      "samples": 1800,
+      "p50Ms": 5.7502,
+      "p95Ms": 9.1122,
+      "p99Ms": 11.4059,
+      "maxMs": 16.1025,
+      "withinBudget": false
+    }
+  ],
+  "additional40Vs24P95Ms": 0.734,
+  "pass": true,
+  "stressPass": false,
+  "limits": [
+    "Headless Node measurement; it is not a browser frame, GPU or hardware certificate.",
+    "Only the 058 traffic subsystem with the 283 adapter is measured, not the complete authoritative tick.",
+    "The 8 ms budget is the laptop tick p95 from Docs/25; the full tick remains the 287 release gate.",
+    "The cost includes the taxi bodies that coexist with the civilians in the same live fleet.",
+    "The 24–40 civilian gate uses the normal 20-taxi fleet; the 30-taxi maximum-workload row is labeled STRESS and reported separately."
+  ]
+}
