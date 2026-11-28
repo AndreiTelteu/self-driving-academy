@@ -995,6 +995,27 @@ export {
 } from './session-flow';
 
 export {
+  createLivePedestrianHazards,
+  planLiveHazardObstacles,
+  LIVE_HAZARD_OBSTACLE_PREFIX,
+  LIVE_HAZARD_PHYSICS_PREFIX,
+  LIVE_PEDESTRIAN_HAZARDS_POLICY,
+  LIVE_PEDESTRIAN_HAZARDS_VERSION,
+  type LiveHazardCommandFact,
+  type LiveHazardObstacleType,
+  type LiveHazardPhysicsPort,
+  type LiveHazardVisualEntry,
+  type LivePedestrianCommandContext,
+  type LivePedestrianHazards,
+  type LivePedestrianHazardsOptions,
+  type LivePedestrianObserveInput,
+  type LivePedestrianStats,
+  type LivePedestrianVehicleObservation,
+  type LivePedestrianVisualEntry,
+  type LivePedestrianVisualFrame,
+} from './live-pedestrian-hazards';
+
+export {
   createLiveChaos,
   liveChaosPhysicalWindow,
   LIVE_CHAOS_DEFAULTS,

@@ -14,6 +14,8 @@ import {
   createLiveLearningPipeline,
   createLiveMissions,
   createLiveModeSegments,
+  createLivePedestrianHazards,
+  planLiveHazardObstacles,
   createLiveSettings,
   createLiveTelemetryComposition,
   createLiveRideComposition,
@@ -24,6 +26,7 @@ import {
   dailyCalendarInputOf,
   LIVE_DAILY_PROGRESS_VERSION,
   LIVE_LEARNING_VERSION,
+  LIVE_PEDESTRIAN_HAZARDS_VERSION,
   LIVE_MISSIONS_VERSION,
   LIVE_PERSISTENCE_VERSION,
   LIVE_TELEMETRY_COMPOSITION_VERSION,
@@ -54,6 +57,7 @@ import {
   type LiveLearningPipeline,
   type LiveMissions,
   type LiveModeSegments,
+  type LivePedestrianHazards,
   type LivePersistence,
   type LiveRideComposition,
   type LiveSettings,
@@ -202,6 +206,8 @@ app.append(destructionNotice);
 let destructionNoticeTimer: number | null = null;
 /** PBI 285: the live owners of this backend; a renderer reload releases them together. */
 let liveChaos: LiveChaos | undefined;
+/** PBI 286: the same live world, observed after its one physical step. */
+let livePedestrians: LivePedestrianHazards | undefined;
 let liveAudio: AudioEngine | undefined;
 let releaseAudioGesture: (() => void) | undefined;
 
@@ -601,6 +607,15 @@ function livePhysicalState(): string {
       .sort((left, right) => String(left[0]).localeCompare(String(right[0]))),
   );
 }
+const pedestriansTickPort: GameTickPort = {
+  id: 'pedestrians',
+  version: LIVE_PEDESTRIAN_HAZARDS_VERSION,
+  step(context) {
+    // The named hazard boxes of the 282 world are prepared before the world step; the pedestrian
+    // phase itself observes the exact post-physics frame inside the composition.
+    livePedestrians?.prepare(context.tick);
+  },
+};
 const telemetryTickPort: GameTickPort = {
   id: 'telemetry',
   version: LIVE_TELEMETRY_COMPOSITION_VERSION,
@@ -829,6 +844,7 @@ const shell = createGameShell({
     settings: settingsTickPort,
     sessions: sessionTickPort,
     control: controlTickPort,
+    pedestrians: pedestriansTickPort,
     rides: ridesTickPort,
     economy: economyTickPort,
     missions: missionsTickPort,
@@ -1967,6 +1983,7 @@ const application = createApplicationLifecycle({
         let ownedPhysics: LiveVehiclePhysics | undefined;
         let ownedAudio: AudioEngine | undefined;
         let ownedChaos: LiveChaos | undefined;
+        let ownedLivePedestrians: LivePedestrianHazards | undefined;
         let ownedTraffic: ReturnType<typeof createAmbientTraffic> | undefined;
         let ownedRides: LiveRides | undefined;
         let ownedRideComposition: LiveRideComposition | undefined;
@@ -2054,6 +2071,45 @@ const application = createApplicationLifecycle({
           });
           liveAudio = ownedAudio;
           liveChaos = ownedChaos;
+          // PBI 286: the same 282 world receives one named live hazard box on the seeded taxi lane;
+          // pedestrians are derived from the real 039 crosswalks and the real 042 sidewalks. The
+          // V2 frames and the yield evidence come from the post-physics frame, never from the HUD.
+          const seedTaxi = world.vehicles[0];
+          const seedTaxiLane =
+            seedTaxi === undefined
+              ? null
+              : ((['TAXI', 'CIVIL'] as const)
+                  .map((access) =>
+                    world.graph.locateLane({
+                      positionM: { x: seedTaxi.positionM.x, y: 0, z: seedTaxi.positionM.z },
+                      access,
+                    }),
+                  )
+                  .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
+                  .sort((left, right) => left.distanceM - right.distanceM)[0] ?? null);
+          ownedLivePedestrians = createLivePedestrianHazards({
+            context: compositionContext,
+            map: world.map,
+            graph: world.graph,
+            seed: 286,
+            physics: ownedPhysics,
+            obstacles:
+              seedTaxiLane === null
+                ? []
+                : planLiveHazardObstacles(world.graph, {
+                    laneIds: [seedTaxiLane.lane.id],
+                    count: 1,
+                    distanceM: 55,
+                    types: ['BARRIER'],
+                  }),
+            maxPedestrians: 96,
+            focusVehicleId: () => {
+              const frame = ownedComposition?.composition.frame;
+              if (frame === undefined) return null;
+              return frame.playerVehicleId ?? frame.selectedVehicleId ?? null;
+            },
+          });
+          livePedestrians = ownedLivePedestrians;
           ownedComposition = createV3BrowserComposition({
             scene: backend.scene,
             surface: app,
@@ -2074,6 +2130,7 @@ const application = createApplicationLifecycle({
             onCameraModeChanged: rememberCameraMode,
             physics: ownedPhysics,
             chaos: ownedChaos,
+            livePedestrians: ownedLivePedestrians,
           });
           // PBI 271: the single 069 live boundary owner over this composition, before the first
           // shell tick. It closes/opens segments at the exact accepted tick without a second model.
@@ -2207,6 +2264,8 @@ const application = createApplicationLifecycle({
             ownedComposition?.dispose();
             ownedChaos?.dispose();
             if (liveChaos === ownedChaos) liveChaos = undefined;
+            ownedLivePedestrians?.dispose();
+            if (livePedestrians === ownedLivePedestrians) livePedestrians = undefined;
             releaseAudioGesture?.();
             releaseAudioGesture = undefined;
             ownedAudio?.dispose();
@@ -2264,6 +2323,8 @@ const application = createApplicationLifecycle({
                 ownedComposition?.dispose();
                 ownedChaos?.dispose();
                 if (liveChaos === ownedChaos) liveChaos = undefined;
+                ownedLivePedestrians?.dispose();
+                if (livePedestrians === ownedLivePedestrians) livePedestrians = undefined;
                 releaseAudioGesture?.();
                 releaseAudioGesture = undefined;
                 ownedAudio?.dispose();

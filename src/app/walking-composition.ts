@@ -94,6 +94,11 @@ import {
   type RoadMap,
   type RoutePlanner,
 } from '../world';
+import type {
+  LivePedestrianCommandContext,
+  LivePedestrianObserveInput,
+  LivePedestrianVehicleObservation,
+} from './live-pedestrian-hazards';
 
 export const V3_COMPOSITION_VERSION = '236-v3-composition-v1' as const;
 
@@ -180,6 +185,22 @@ export interface CompositionVehicleSeed {
   readonly controlMode?: ControlMode;
 }
 
+/**
+ * PBI 286: the live pedestrian/hazard owner of the world. The composition only applies its hazard
+ * command before the one physical step and hands it the post-step facts; it never simulates a
+ * pedestrian, a yield or an obstacle itself.
+ */
+export interface CompositionLivePedestriansPort {
+  readonly version: string;
+  prepare(tick: number): void;
+  adjustCommand(
+    vehicleId: string,
+    command: LiveVehicleCommand,
+    context: LivePedestrianCommandContext,
+  ): LiveVehicleCommand;
+  observe(input: LivePedestrianObserveInput): void;
+}
+
 export interface CompositionOptions {
   readonly layout: CityLayout;
   readonly start: Readonly<{ x: number; z: number; yawRad: number }>;
@@ -204,6 +225,8 @@ export interface CompositionOptions {
   readonly modeSegments?: CompositionModeSegmentPort;
   /** PBI 282: the one live Rapier owner. Absent keeps the pre-282 kinematic fixture. */
   readonly physics?: LiveVehiclePhysics;
+  /** PBI 286: the live pedestrians/hazards owner over the same tick and the same 282 physics. */
+  readonly livePedestrians?: CompositionLivePedestriansPort;
 }
 
 /** Mașina compusă: contractul 195/196 plus viteza reală pe care o integrează compunerea. */
@@ -663,6 +686,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       : traffic.list().map((actor) => trafficActorVehicle(actor, options.layout))),
   ]);
   const livePhysics = options.physics ?? null;
+  const livePedestrians = options.livePedestrians ?? null;
   if (livePhysics !== null) {
     for (const vehicle of seededVehicles) {
       livePhysics.registerVehicle({
@@ -913,8 +937,32 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
   const stepLivePhysics = (atTick: number): void => {
     if (livePhysics === null) return;
     const commands: LiveVehicleCommand[] = [];
-    for (const command of physicsAutoCommands.values()) commands.push(command);
-    for (const command of physicsPlayerCommands.values()) commands.push(command);
+    const commandContext = (vehicleId: string): LivePedestrianCommandContext | null => {
+      const vehicle = vehicleById(vehicleId);
+      if (vehicle === undefined) return null;
+      return Object.freeze({
+        tick: atTick,
+        speedMps: Math.abs(vehicle.speedMps),
+        positionM: vehicle.positionM,
+        yawRad: vehicle.yawRad,
+      });
+    };
+    for (const [vehicleId, command] of physicsAutoCommands) {
+      const context = commandContext(vehicleId);
+      commands.push(
+        livePedestrians === null || context === null
+          ? command
+          : livePedestrians.adjustCommand(vehicleId, command, context),
+      );
+    }
+    for (const [vehicleId, command] of physicsPlayerCommands) {
+      const context = commandContext(vehicleId);
+      commands.push(
+        livePedestrians === null || context === null
+          ? command
+          : livePedestrians.adjustCommand(vehicleId, command, context),
+      );
+    }
     const focus = playerVehicle() ?? controlledVehicle();
     const previous = new Map<
       string,
@@ -1038,8 +1086,34 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
         }),
       );
     }
-    if (updates.size === 0) return;
-    vehicles = Object.freeze(vehicles.map((vehicle) => updates.get(vehicle.vehicleId) ?? vehicle));
+    if (updates.size > 0)
+      vehicles = Object.freeze(
+        vehicles.map((vehicle) => updates.get(vehicle.vehicleId) ?? vehicle),
+      );
+    if (livePedestrians !== null) {
+      const observations: LivePedestrianVehicleObservation[] = vehicles.map((vehicle) =>
+        Object.freeze({
+          vehicleId: vehicle.vehicleId,
+          driverKind: vehicle.driverKind,
+          classId: vehicle.classId,
+          controlMode: vehicle.controlMode,
+          positionM: vehicle.positionM,
+          yawRad: vehicle.yawRad,
+          speedMps: vehicle.speedMps,
+          speedLimitMps: vehicle.speedLimitMps,
+          laneId: vehicle.laneId,
+          blocked: vehicle.blocked,
+          maneuverState: vehicle.maneuverState,
+        }),
+      );
+      livePedestrians.observe({
+        tick: atTick,
+        vehicles: observations,
+        commands,
+        incidents: livePhysics.readIncidents(),
+        vehiclesComplete: true,
+      });
+    }
   };
 
   /** PBI 257: AUTO se sprijină pe harta 032 și graful 033; plannerul este creat o singură dată. */
@@ -2309,6 +2383,9 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
           ? arbiter.getStats().delivered.CHARACTER
           : arbiter.getStats().delivered.VEHICLE;
       if (deliveredAfter - deliveredBefore !== 1) ticksWithoutDelivery += 1;
+      // PBI 286: the named hazard boxes exist in the one 282 world before its step; the reaction
+      // command is applied inside stepLivePhysics, never as a parallel solver.
+      livePedestrians?.prepare(atTick);
       // PBI 282: one physical step after the one 024 delivery of this tick.
       stepLivePhysics(atTick);
 
