@@ -1,13 +1,13 @@
 ---
 id: "286"
 title: "Pietoni, treceri și pericole V2 în lumea live"
-status: "To Do"
+status: "In Progress"
 release: "V2"
 module: "Pietoni și pericole"
 depends_on: ["282","283"]
 performance_checks: ["simulation","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-286"
+started_at: "2026-11-28T13:06:31.249Z"
 completed_at: null
 ---
 
