@@ -1,13 +1,13 @@
 ---
 id: "282"
 title: "Fizica Rapier live pentru jucător și AI"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Fizică"
 depends_on: ["260","262"]
 performance_checks: ["simulation","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-282"
+started_at: "2026-11-28T01:25:31.265Z"
 completed_at: null
 ---
 
