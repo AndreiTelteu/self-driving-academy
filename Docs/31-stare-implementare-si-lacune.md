@@ -548,6 +548,8 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 
 **PBI:** [283](../PBI/README.md) · **Dependențe:** 260, 262, 282.
 
+**Stare:** Done la 28 noiembrie 2026. Shell-ul Babylon complet rămâne limitat de pauza 012 `overload` în randarea software headless; proba de browser folosește fixture-ul Chromium peste modulele reale și nu este un gate hardware.
+
 ### 284 — Traficul civil complet autonom și preluarea oricărei mașini
 
 **Ce lipsește:** Traficul AI live folosește doar cruise/following, nu respectă semafoare și nu poate fi preluat; nu este autonomia documentată.

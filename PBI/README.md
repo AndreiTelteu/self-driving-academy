@@ -16,8 +16,8 @@
 | Progres | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Release | V4 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Sesiuni | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Trafic | V1 | 1 | 1 | 0 / 2 | `░░░░░░░░░░` 0% |
-| Total | - | 5 | 2 | 22 / 29 | `███████░░░` 76% |
+| Trafic | V1 | 1 | 0 | 1 / 2 | `█████░░░░░` 50% |
+| Total | - | 5 | 1 | 23 / 29 | `███████░░░` 79% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy

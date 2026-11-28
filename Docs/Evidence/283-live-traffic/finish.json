@@ -1,0 +1,12 @@
+{
+  "id": "283",
+  "criteriaSatisfied": true,
+  "result": "One live adapter over 036/037/038/050-054 advances signal phases at tick, makes every live vehicle respect its movement colour, separates full stops, rolling stops and stop-line crossings, resolves priority/yield from authored map rules and real observations, changes lanes only with gap/advantage/cooldown, and requests explicit recovery for stagnation. Player red/STOP violations are observable 036/037 events with a visible notice, never fabricated. Traffic stays deadlock-free in the 40/56-actor reports and reports rules cost separately.",
+  "limitations": "The full Babylon shell could not be exercised end-to-end in headless software because the 012 fixed-tick loop enters its overload pause before a 226 s signal cycle. The Chromium browser fixture runs the same authoritative 032/033/058/283 owners but is not a rendered-shell or hardware/FPS gate. Signal cycles are authored; the adapter does not invent green or shorten them. 054 is requested and executed as a 058 route rebuild; physical 030 placement remains a later host port. 284 civil autonomy, 285 destructibles and 286 pedestrians are out of scope. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/autonomy/live-traffic-rules.test.ts", "tests/fleet/civil-traffic-rules.test.ts", "tests/world/stop-rules.test.ts"],
+    ["npm", "run", "traffic:live", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}
