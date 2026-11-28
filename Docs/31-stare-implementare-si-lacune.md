@@ -562,7 +562,7 @@ Dovezile sunt în [Evidence/284-civil-autonomy](Evidence/284-civil-autonomy/READ
 
 **PBI:** [284](../PBI/README.md) · **Dependențe:** 262, 283.
 
-**Stare:** Implementat local la 28 noiembrie 2026. Boardul canonic, mutarea în Done și publicarea rămân orchestratorului. Shell-ul Babylon complet randat, decorul destructibil 285, pietonii 286 și soak-ul rămân în afara scope-ului.
+**Stare:** Done la 28 noiembrie 2026. Shell-ul Babylon complet randat, decorul destructibil 285, pietonii 286 și soak-ul rămân în afara scope-ului.
 
 ### 285 — Decor destructibil, feedback audio și replay în joc
 

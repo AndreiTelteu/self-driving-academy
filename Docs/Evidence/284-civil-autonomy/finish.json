@@ -1,0 +1,12 @@
+{
+  "id": "284",
+  "criteriaSatisfied": true,
+  "result": "Every live civilian uses the complete 044 context and the 283 signal, STOP, priority, yield, lane and recovery policies. G/M can take any live AI car: its route is suspended at the current pose, the driven pose is reconciled on 033, and exit returns to AUTO on the same route/destination without teleport; off-graph exit reports the reason. The common profile applies to taxis and civilians, hidden actors keep simulating, new vehicles keep unique IDs and spawn clearance, and the 24-40 civilian cost stays under the 8 ms budget.",
+  "limitations": "Browser evidence is a Chromium fixture over the real 032/033/058/283 composition with a 2D canvas, not the fully rendered Babylon shell; it is not a hardware FPS/GPU gate. Off-graph exit falls back to the last on-graph lane and can reposition the car onto the lane, with the reason in EXIT_ACCEPTED; normal on-graph exit has no teleport. Un-taken AI cars remain 058 kinematic proxies; 284 does not move the whole fleet to Rapier. The 30-taxi + 40-civil row exceeds 8 ms in the committed cost run, but the 24-40 civilian acceptance rows pass. 285 and 286 remain out of scope. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/app/civil-autonomy.test.ts", "tests/fleet/civil-autonomy-report.test.ts", "tests/app/ambient-traffic.test.ts", "tests/autonomy/live-traffic-rules.test.ts"],
+    ["npm", "run", "civil:autonomy", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}
