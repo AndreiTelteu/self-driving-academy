@@ -732,22 +732,18 @@ export function createNeighbourhoodMap(): RoadMap {
   };
   const validated = parseRoadMap({
     ...base,
-    signals: buildSignalPrograms(base, directions, false),
+    signals: buildSignalPrograms(base, false),
   });
-  return parseRoadMap({ ...base, signals: buildSignalPrograms(validated, directions, true) });
+  return parseRoadMap({ ...base, signals: buildSignalPrograms(validated, true) });
 }
 
 /**
- * Deterministic phases: through movements are packed into as few GREEN phases as the declared
- * quadrants and the PBI035 relation allow, every turning movement gets one single-movement GREEN
- * phase, each GREEN phase is followed by its YELLOW clearance phase, and the program ends with an
- * all-red phase. Live cycling remains PBI036's contract.
+ * Deterministic phases: every compatible movement is packed into as few GREEN phases as the
+ * declared quadrants and the PBI035 relation allow, each GREEN phase is followed by its YELLOW
+ * clearance phase, and the program ends with an all-red phase. Live cycling remains PBI036's
+ * contract. PBI283 packs all movements, not only throughs, so the live block keeps a bounded cycle.
  */
-function buildSignalPrograms(
-  map: RoadMap,
-  directions: ReadonlyMap<string, Direction>,
-  packThrough: boolean,
-): RoadSignal[] {
+function buildSignalPrograms(map: RoadMap, packThrough: boolean): RoadSignal[] {
   const conflicts = packThrough ? createIntersectionConflicts(map) : null;
   const lanes = new Map(map.lanes.map((lane) => [lane.id, lane]));
   const signals: RoadSignal[] = [];
@@ -757,24 +753,22 @@ function buildSignalPrograms(
     const ordered = [...junction.movements].sort((a, b) =>
       a.id < b.id ? -1 : a.id > b.id ? 1 : 0,
     );
-    const through = ordered.filter(
-      (movement) => directions.get(movement.fromLaneId) === directions.get(movement.toLaneId),
-    );
-    const turning = ordered.filter((movement) => !through.includes(movement));
     const compatible = (first: Movement, second: Movement): boolean => {
       if (first.toLaneId === second.toLaneId) return false;
       if (first.conflictZoneIds.some((zone) => second.conflictZoneIds.includes(zone))) return false;
       return !(conflicts?.getRelation(junction.id, first.id, second.id)?.incompatible ?? false);
     };
     const packs: Movement[][] = [];
-    for (const movement of through) {
+    for (const movement of ordered) {
+      // PBI283: the live signal plan packs every compatible movement, not only the through ones,
+      // so a block-sized junction keeps a bounded cycle instead of one 8 s phase per turn.
       const target = packThrough
         ? packs.find((pack) => pack.every((member) => compatible(movement, member)))
         : undefined;
       if (target) target.push(movement);
       else packs.push([movement]);
     }
-    const greens: Movement[][] = [...packs, ...turning.map((movement) => [movement])];
+    const greens: Movement[][] = packs;
     const phases: SignalPhase[] = [];
     let order = 0;
     const states = (green: readonly Movement[], state: 'GREEN' | 'YELLOW'): SignalPhase =>

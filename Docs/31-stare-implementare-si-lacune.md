@@ -533,7 +533,7 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 
 ### 283 — Regulile de trafic live: semafoare, STOP, prioritate, yield și benzi
 
-**Ce lipsește:** Semaforii sunt randați, dar traficul live are `signals: []`; STOP-ul este decorativ, iar prioritatea, yield-ul și schimbările de bandă nu sunt active.
+**Ce lipsește:** Regulile live sunt implementate local (036/037/038/050–054 peste 058); probele de browser, integrarea și mutarea în Done rămân în așteptare.
 
 - `civil-traffic` trimite `signals: []` și `completeness.signals: false`; niciun vehicul nu oprește la roșu.
 - Semnele STOP sunt decorative, nu reguli de intersecție.
@@ -541,6 +541,8 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 - Nu există schimbări de bandă, depășiri sau cooldown în traficul live.
 - Nu există încălcări observabile pentru jucător și nici consecințe în review.
 - Nu există o probă de browser cu roșu, STOP și conflict.
+
+**Stare:** Implementat local la 28 noiembrie 2026: un singur controller 036 avansează fazele, 050/051/037 separă roșul, oprirea completă, rolling stop-ul și linia, 038/052 folosesc un sidecar authored și observații reale, 053 execută prin plannerul 041, iar 054 cere recuperare explicită. Raportul determinist are `deadlockStalls: 0` pentru 40 și 56 de actori, iar fixture-ul Chromium trece 5/5 (AI oprit la roșu, jucător pe roșu, notificare). Shell-ul Babylon complet rămâne limitat de pauza 012 `overload` în randarea software headless; proba de browser nu este un gate hardware.
 
 **Documentație:** [Autonomie și trafic](06-autonomie-si-trafic.md) · [Semaforare](signals.md) · [Politica STOP](stop-policy.md) · [Regulile STOP](stop-rules.md) · [Prioritate](priority-rules.md) · [Yield](yield-policy.md) · [Schimbarea benzii](lane-change-policy.md) · [Blocaj și reintrare](blocked-recovery.md) · [Conflictele intersecțiilor](intersection-conflicts.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 

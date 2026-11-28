@@ -22,3 +22,4 @@ export * from './lateral-policy-v2';
 export * from './route-policy-v2';
 export * from './hazard-policy-v2';
 export * from './pickup-policy-v2';
+export * from './live-traffic-rules';

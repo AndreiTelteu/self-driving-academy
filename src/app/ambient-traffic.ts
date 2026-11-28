@@ -26,6 +26,12 @@ import {
   type FleetRegistry,
 } from '../fleet';
 import {
+  createLiveTrafficRules,
+  type LiveTrafficRules,
+  type LiveTrafficRulesReport,
+  type LiveTrafficViolationEvent,
+} from '../autonomy';
+import {
   parameterDefinitions,
   parseDrivingProfile,
   parsePublishableDrivingProfile,
@@ -78,6 +84,11 @@ export interface AmbientTrafficOptions {
   readonly style?: DrivingProfile;
   /** Sursa activă a orașului; dacă există, vehiculele noi citesc versiunea curentă. */
   readonly styleSource?: CityStyleSource;
+  /**
+   * PBI283: mount the live 036/037/038/050–054 rules. It is enabled by the live composition root;
+   * the pre-283 fixtures keep their exact behaviour unless they explicitly ask for the rules.
+   */
+  readonly liveRules?: boolean;
 }
 
 export interface AmbientAuthorityCounts {
@@ -101,12 +112,16 @@ export interface AmbientFleetReport {
   readonly byAuthority: AmbientAuthorityCounts;
   readonly style: Readonly<{ profileId: string; versionId: string }>;
   readonly traffic: CivilTrafficReport;
+  /** PBI283: signal/STOP/yield/lane-change/blocked/violation counters when the live rules are mounted. */
+  readonly trafficRules?: LiveTrafficRulesReport;
 }
 
 export interface AmbientTraffic {
   readonly version: typeof AMBIENT_TRAFFIC_VERSION;
   readonly traffic: CivilTraffic;
   readonly registry: FleetRegistry;
+  /** PBI283: one live rules owner for the same 036/037/038/050-054 contracts. */
+  readonly rules: LiveTrafficRules | null;
   readonly style: DrivingProfile;
   readonly seed: number;
   readonly taxiCount: number;
@@ -122,12 +137,15 @@ export interface AmbientTraffic {
   removeVehicle(vehicleId: string): boolean;
   route(vehicleId: string): CivilRouteSnapshot | undefined;
   report(): AmbientFleetReport;
+  trafficRules(): LiveTrafficRulesReport | null;
+  violations(): readonly LiveTrafficViolationEvent[];
   dispose(): void;
 }
 
 interface PreparedTraffic {
   readonly registry: FleetRegistry;
   readonly traffic: CivilTraffic;
+  readonly rules: LiveTrafficRules | null;
   readonly seed: number;
   readonly clearanceM: number;
 }
@@ -149,6 +167,7 @@ interface ReadTrafficOptions {
   readonly style: DrivingProfile | null;
   readonly styleSource: CityStyleSource | null;
   readonly profileSource: CityProfileSource | null;
+  readonly liveRules: boolean;
 }
 
 function readCount(value: unknown, minimum: number, maximum: number, label: string): number {
@@ -225,6 +244,7 @@ function readOptions(value: unknown): ReadTrafficOptions {
     style,
     styleSource,
     profileSource,
+    liveRules: data.liveRules === true,
   };
 }
 
@@ -376,7 +396,14 @@ function prepare(
     fleetConfiguration(options.context, seed, options.taxiCount, options.civilianCount, style),
     options.profileSource === null ? {} : { profileSource: options.profileSource },
   );
+  let rules: LiveTrafficRules | null = null;
   try {
+    if (options.liveRules)
+      rules = createLiveTrafficRules({
+        map: options.map,
+        graph: options.graph,
+        context: options.context,
+      });
     const traffic = createCivilTraffic({
       registry,
       map: options.map,
@@ -386,6 +413,7 @@ function prepare(
       seed,
       spawnLanesByKind: plan.lanesByKind,
       spawnOffsetsMByKind: plan.offsetsByKind,
+      ...(rules === null ? {} : { rules }),
       ...(options.styleSource === null ? { style } : { styleSource: options.styleSource }),
     });
     const actors = traffic.list();
@@ -401,10 +429,12 @@ function prepare(
     return {
       registry,
       traffic,
+      rules,
       seed,
       clearanceM: minimumClearance(actors, options.avoid),
     };
   } catch (error) {
+    rules?.dispose();
     registry.dispose();
     throw error;
   }
@@ -433,16 +463,19 @@ export function createAmbientTraffic(options: unknown): AmbientTraffic {
     }
     if (candidate.clearanceM >= AMBIENT_TRAFFIC_POLICY.spawnClearanceM) {
       best?.traffic.dispose();
+      best?.rules?.dispose();
       best?.registry.dispose();
       best = candidate;
       break;
     }
     if (best === null || candidate.clearanceM > best.clearanceM) {
       best?.traffic.dispose();
+      best?.rules?.dispose();
       best?.registry.dispose();
       best = candidate;
     } else {
       candidate.traffic.dispose();
+      candidate.rules?.dispose();
       candidate.registry.dispose();
     }
   }
@@ -457,6 +490,7 @@ export function createAmbientTraffic(options: unknown): AmbientTraffic {
     version: AMBIENT_TRAFFIC_VERSION,
     traffic: prepared.traffic,
     registry: prepared.registry,
+    rules: prepared.rules,
     style,
     seed: prepared.seed,
     taxiCount: read.taxiCount,
@@ -468,6 +502,8 @@ export function createAmbientTraffic(options: unknown): AmbientTraffic {
     addVehicle: (vehicleId: string) => prepared.traffic.addVehicle(vehicleId),
     removeVehicle: (vehicleId: string) => prepared.traffic.removeVehicle(vehicleId),
     route: (vehicleId: string) => prepared.traffic.get(vehicleId)?.route,
+    trafficRules: () => prepared.rules?.report() ?? null,
+    violations: () => prepared.rules?.violations() ?? Object.freeze([]),
     report(): AmbientFleetReport {
       const actors = prepared.traffic.list();
       const byAuthority = { AUTO: 0, MANUAL: 0, LEARNING: 0 };
@@ -494,12 +530,14 @@ export function createAmbientTraffic(options: unknown): AmbientTraffic {
         byAuthority: Object.freeze(byAuthority),
         style: prepared.traffic.style,
         traffic,
+        ...(prepared.rules === null ? {} : { trafficRules: prepared.rules.report() }),
       });
     },
     dispose(): void {
       if (disposed) return;
       disposed = true;
       prepared.traffic.dispose();
+      prepared.rules?.dispose();
       prepared.registry.dispose();
     },
   });
