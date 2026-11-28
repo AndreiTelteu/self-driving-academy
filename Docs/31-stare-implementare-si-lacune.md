@@ -142,7 +142,7 @@ Sunt montate minimapa (281) și HUD-ul complet; nu sunt montate sunetul, decorul
 
 **PBI:** [262](../PBI/README.md) · **Dependențe:** 260.
 
-**Stare:** Done la 26 noiembrie 2026. Taxiurile AI sunt simulate, dar rămân nepreluabile până la 263/284.
+**Stare:** Done la 26 noiembrie 2026. Taxiurile AI sunt simulate, iar din 263/284 pot fi preluate cu ruta suspendată și reluată.
 
 ### 263 — Selectarea oricărui taxi sau civil, camera și un singur scaun PLAYER
 
@@ -523,13 +523,13 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 
 - Dovezi: `npm run physics:live` (15/15, paritate PLAYER/AUTONOMY exactă, sedan/compact, contact, recuperare, cost) și `npm run physics:live:probe` (Chrome 157/WEBGL2, 10/10: frânare, impact, recuperare, AUTO/MANUAL).
 - Cost: pas Rapier p95 0,367 ms; tick de compunere p95 4,158 ms față de baseline-ul pereche 3,886 ms pe fixture-ul normal V1 (buget 8 ms), incremental 0,272 ms. Targetul desktop de 5,5 ms este raportat separat.
-- Limitări: proxy-urile 058 sunt cinematice până la 284, decorul rămâne resolver 026, iar frame-ul Chrome nu este un gate hardware.
+- Limitări: proxy-urile 058 rămân cinematice și după 284 (284 acoperă autonomia și preluarea, nu fizica întregii flote), decorul rămâne resolver 026, iar frame-ul Chrome nu este un gate hardware.
 
 **Documentație:** [Vehicule și fizică](05-vehicule-si-fizica.md) · [Adaptorul fizic](physics-adapter.md) · [Controllerul vehiculului](vehicle-controller.md) · [Dinamica roților](wheel-dynamics.md) · [Daunele vehiculului](vehicle-damage.md) · [Recuperarea vehiculului](vehicle-recovery.md) · [Calibrarea fizicii](physics-calibration.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [282](../PBI/README.md) · **Dependențe:** 260, 262.
 
-**Stare:** Done la 28 noiembrie 2026. Proxy-urile 058 rămân cinematice până la 284, decorul rămâne resolver 026, iar frame-ul Chrome nu este un gate hardware.
+**Stare:** Done la 28 noiembrie 2026. Proxy-urile 058 rămân cinematice și după 284, decorul rămâne resolver 026, iar frame-ul Chrome nu este un gate hardware.
 
 ### 283 — Regulile de trafic live: semafoare, STOP, prioritate, yield și benzi
 
@@ -552,18 +552,17 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 
 ### 284 — Traficul civil complet autonom și preluarea oricărei mașini
 
-**Ce lipsește:** Traficul AI live folosește doar cruise/following, nu respectă semafoare și nu poate fi preluat; nu este autonomia documentată.
+**Ce lipsește:** Traficul AI live folosea doar cruise/following, nu respecta semafoare și nu putea fi preluat; nu era autonomia documentată.
 
-- Traficul civil live are context incomplet (`signals: []`, fără obstacole/zone).
-- Nu folosește semafoare, STOP, prioritate, yield, benzi sau recuperare.
-- Nu poate fi preluat de jucător; `requestEntry` îl refuză.
-- Nu există reconcilierea rutei la preluare și nici reluarea ei la ieșire.
-- Nu există paritate taxi/civil pentru profilul comun și pentru moduri.
-- Nu există o probă de browser cu preluarea unui civil AI.
+**Ce s-a livrat:** toți civilii primesc același cadru 044 și aceleași comenzi 283 ca taxiurile; contextul publică semnalele 036 și zonele reale 032. `holdCommand` predă acum cererea 054 executorului 058, deci recuperarea din blocaj nu mai rămâne doar un contor. `requestEntry` (G) și `requestTakeover` (M) pot prelua orice mașină AI: ruta este suspendată la poza curentă, poza condusă este reconciliată pe 033, iar ieșirea revine în AUTO la aceeași rută/destinație, fără teleport; dacă poza este off-graph, actorul revine totuși în AUTO la ultima poziție reconciliată, cu motivul în eveniment. `addVehicle` acceptă o constrângere de spawn, iar achiziția 269 evită jucătorul și mașinile existente fără un al doilea router.
+
+Dovezile sunt în [Evidence/284-civil-autonomy](Evidence/284-civil-autonomy/README.md): raport determinist 31/31 pe 24 taxiuri + 40 civili (9 000 tick-uri), cost p95 6,06/7,60/6,80 ms pentru 24/32/40 civili sub bugetul de 8 ms, și probă Chromium 13/13 cu preluare, condus 11,49 m, ieșire, salt 0,73 m și reluare 2,02 m. Rândul 30 taxiuri + 40 civili este raportat separat ca `STRESS` (p95 9,11 ms), nu ascuns în gate-ul normal.
 
 **Documentație:** [Flotă și curse](07-flota-si-curse.md) · [Traficul civil](civil-traffic.md) · [Traficul AI din browser](browser-ai-traffic.md) · [Schimbarea vehiculului](vehicle-switch.md) · [Cursa completă și intervenția](manual-trip.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [284](../PBI/README.md) · **Dependențe:** 262, 283.
+
+**Stare:** Implementat local la 28 noiembrie 2026. Boardul canonic, mutarea în Done și publicarea rămân orchestratorului. Shell-ul Babylon complet randat, decorul destructibil 285, pietonii 286 și soak-ul rămân în afara scope-ului.
 
 ### 285 — Decor destructibil, feedback audio și replay în joc
 

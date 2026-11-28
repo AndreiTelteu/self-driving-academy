@@ -21,8 +21,10 @@ const traffic = createCivilTraffic({
 
 traffic.list(); // CivilActorSnapshot[] ordonat după vehicleId
 traffic.get(vehicleId); // CivilActorSnapshot | undefined
+traffic.addVehicle(vehicleId, { avoid, clearanceM }); // 269/284, fără ID duplicat sau spawn peste jucător
 traffic.step({ tick, dtSeconds, vehicles }); // un tick, cel mult 1/60 s
-traffic.setAuthority(vehicleId, 'MANUAL' | 'LEARNING', tick);
+traffic.setAuthority(vehicleId, 'MANUAL' | 'LEARNING', tick); // suspendă ruta, nu o duplică
+traffic.reconcile(vehicleId, { positionM, headingRad, speedMps }, tick); // poza condusă, proiectată pe 033
 traffic.resume(vehicleId, tick); // AUTO: păstrează ruta, recitește stilul comun
 traffic.refreshStyle(); // actualizare explicită a tuturor actorilor
 traffic.report();
@@ -39,6 +41,31 @@ Modulul acceptă opțional `driverKinds: ['TAXI', 'CIVILIAN']` și `spawnLanesBy
 `contextRefresh: 'DECISION_PERIOD'` folosește cadența reală de decizii 10 Hz din Docs/25, păstrând controller-ul la 60 Hz. Liderul fizic este recalculat la fiecare tick din pozițiile curente, deci gap-ul 048 rămâne actual chiar între decizii. `'EVERY_TICK'` rămâne implicit și păstrează comportamentul istoric 058.
 
 Flota live folosește `'DECISION_PERIOD'`; costul măsurat pentru 70 de vehicule este raportat în [Evidence/262-live-fleet/cost.json](Evidence/262-live-fleet/cost.json).
+
+## Preluare, suspendare și reluare (PBI 284)
+
+Orice actor taxi sau civil poate fi preluat de jucător, fie prin `M` din panoul `Flotă`, fie prin
+intrarea directă `G` când ușa este în rază. La preluare, compunerea cheamă `setAuthority(..., 'MANUAL')`
+sau `'LEARNING'` și îngheață exact progresul curent al rutei; nu creează o a doua rută, un al doilea
+actor sau o a doua autoritate. `step` nu avansează un actor cu autoritate non-AUTO, deci ruta rămâne
+suspendată cât timp jucătorul conduce.
+
+La ieșire, compunerea trimite poza condusă prin `reconcile`: dacă banda este încă pe rută, progresul
+este proiectat pe ea și ruta rămâne identică; dacă jucătorul a părăsit ruta, plannerul 041 produce o
+continuare către aceeași destinație. Apoi `resume` revine în AUTO și recitește stilul comun. Proiecția cere o bandă reală din graful 033;
+pe drum, poza condusă este păstrată, iar când ieșirea este off-graph actorul revine în AUTO la ultima
+poză reconciliată pe bandă, iar evenimentul `EXIT_ACCEPTED` raportează motivul. Această margine poate
+repoziționa mașina pe bandă; ea nu este raportată ca un handoff fără teleport.
+`reconcile` și `resume` sunt singurele căi de handoff; ele păstrează `vehicleId`, clasa și destinația.
+
+`addVehicle` acceptă opțional `avoid: [{ x, z, radiusM }]` și `clearanceM`. Un vehicul creat după
+start (achiziție 269) alege o origine reală `CIVIL`/`TAXI`, cere ruta tot prin 041 și păstrează
+distanța cerută față de jucător, mașinile existente și decor; dacă nu există o bandă complet liberă,
+alege determinist originea cu cea mai mare distanță. Nu inventează o poziție în afara path-ului.
+
+Contextul 044 publicat de 058 include semnalele reale 036 și amprentele 032 ale zonelor de serviciu.
+Obstacolele destructibile rămân sursa 285, iar pietonii 286; absența lor nu este raportată ca un
+context complet inventat.
 
 ## Rute și determinism
 
@@ -93,13 +120,18 @@ Traficul deține stările civililor, controllerul longitudinal 047, motorul 044 
 npm test
 npm run civil:traffic
 npm run civil:traffic -- --check
+npm run civil:autonomy
+npm run civil:autonomy -- --check
+npm run civil:autonomy:cost
 ```
 
-Raportul comis este [Docs/Evidence/058-civil-traffic/report.json](Evidence/058-civil-traffic/report.json), cu tabelul uman în [report.md](Evidence/058-civil-traffic/report.md).
+Raportul comis 058 este [Docs/Evidence/058-civil-traffic/report.json](Evidence/058-civil-traffic/report.json), cu tabelul uman în [report.md](Evidence/058-civil-traffic/report.md). Dovezile 284 pentru autonomia completă, preluare, reluare, profil, spawn și cost sunt în [Evidence/284-civil-autonomy](Evidence/284-civil-autonomy/README.md).
 
 ## Limite
 
 - Nu creează corpuri Rapier, mesh-uri sau materiale. Pozițiile și vitezele sunt contractul de simulare pe care composition root le poate lega la 022/024; legarea fizică și randarea rămân în afara 058.
 - Nu implementează semafoare live, priorități de intersecție, STOP sau yield ca actuatoare noi. Acestea rămân contractele 036/037/038/045/050–054; 058 le poate consuma prin același lanț 044/045 când composition root le furnizează.
 - Nu este dispecer, nu creează curse, ETA sau KPI și nu generează încasări pentru civili.
-- Nu pretinde FPS, soak, browser sau acceptare hardware; raportul este o probă funcțională deterministă.
+- Preluarea și reluarea sunt dovedite în compunerea reală Node și într-un fixture Chromium; shell-ul Babylon complet randat rămâne proba 287, nu o afirmație a acestui contract.
+- Obstacolele destructibile (285) și pietonii (286) nu sunt surse de context încă; 058 nu le inventează.
+- Nu pretinde FPS, soak, browser hardware sau acceptare hardware; raportul este o probă funcțională deterministă.

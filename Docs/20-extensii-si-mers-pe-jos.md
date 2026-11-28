@@ -338,8 +338,8 @@ orașul să pară viu din primul cadru; restul populației rămâne împrăștia
 
 Graful măsoară headingul cu `0 = +X`, compunerea cu `0 = +Z`; conversia `yaw = normalize(π/2 − heading)` este
 verificată pe un actor care avansează pe `+Z`. Taxiul și civilul static intră în cadrul 044 ca observații externe,
-deci mașinile AI frânează în spatele lor. Mașinile AI nu sunt preluabile: `requestEntry` le refuză cu
-`ENTER_REFUSED: AI_TRAFFIC`, deoarece 058 are propriul progres de rută. Proba reală în Chromium/WebGL2 (SwiftShader)
+deci mașinile AI frânează în spatele lor. În 256 mașinile AI nu erau preluabile; din 263/284 `requestEntry` și
+`requestTakeover` suspendă ruta 058 și o reiau în AUTO după ieșire, fără teleport. Proba reală în Chromium/WebGL2 (SwiftShader)
 raportează 26 de vehicule în scenă, **24/24 actori deplasați peste 1 m**, 0 erori de pagină/consolă, tick p50
 **3,70 ms** și p95 **5,50 ms** (sub bugetul provizoriu de 8 ms), plus capturile celor șapte secvențe. Frame-ul rămâne
 o măsurătoare software, nu hardware. Detalii în [traficul AI din browser](browser-ai-traffic.md) și
