@@ -1,0 +1,428 @@
+{
+  "version": "282-live-physics-probe-v1",
+  "generatedAt": "2026-11-28T02:42:20.660Z",
+  "run": {
+    "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+    "backend": "WEBGL2",
+    "viewport": "1440x900",
+    "tick": 659,
+    "checks": [
+      {
+        "name": "real Rapier car with four wheels and suspension",
+        "pass": true,
+        "detail": "contacts 4, cars 2"
+      },
+      {
+        "name": "S brakes the real car to rest",
+        "pass": true,
+        "detail": "4.68 m, final -0.065 m/s"
+      },
+      {
+        "name": "impact produces real 029 damage on both cars",
+        "pass": true,
+        "detail": "DAMAGED/DAMAGED"
+      },
+      {
+        "name": "impact does not pass the bodies through each other",
+        "pass": true,
+        "detail": "7.166 m center gap"
+      },
+      {
+        "name": "impact is a real 028/029 incident, not a UI state",
+        "pass": true,
+        "detail": "id-v1:9:collision19:session-261-academy3:0281:15:91:923:479, contacts 4/4"
+      },
+      {
+        "name": "R performs a real 030 lane teleport and zeroes velocity",
+        "pass": true,
+        "detail": "COMPLETED, speed 0.0000 m/s, history 1"
+      },
+      {
+        "name": "recovery restores 029 availability",
+        "pass": true,
+        "detail": "AVAILABLE"
+      },
+      {
+        "name": "M changes mode without a teleport",
+        "pass": true,
+        "detail": "AUTO, 0.015 m, 0.153 m/s, 0.0000 rad"
+      },
+      {
+        "name": "AUTO and MANUAL use the same live physics owner",
+        "pass": true,
+        "detail": "players 1 → 0"
+      },
+      {
+        "name": "M returns to MANUAL with the same body",
+        "pass": true,
+        "detail": "MANUAL, 0.292 m"
+      }
+    ],
+    "screenshots": [
+      "screenshots/01-braked.png",
+      "screenshots/01-braked.png",
+      "screenshots/02-impact.png",
+      "screenshots/02-impact.png",
+      "screenshots/03-recovered.png",
+      "screenshots/03-recovered.png",
+      "screenshots/04-auto.png",
+      "screenshots/04-auto.png"
+    ],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "braking": {
+      "distanceM": 4.6785736083984375,
+      "finalSpeedMps": -0.06487776193042635
+    },
+    "impact": {
+      "gapM": 7.165938975271519,
+      "taxi": {
+        "availability": "DAMAGED",
+        "contacts": 4
+      },
+      "civil": {
+        "availability": "DAMAGED",
+        "contacts": 4
+      },
+      "contacts": 0,
+      "incidents": 0
+    },
+    "recovery": {
+      "status": "COMPLETED",
+      "speedMps": 0,
+      "availability": "AVAILABLE",
+      "history": 1
+    },
+    "mode": {
+      "from": "MANUAL",
+      "to": "AUTO",
+      "deltaM": 0.01458740234375,
+      "speedDelta": 0.15332029880525339,
+      "yawDelta": 4.723468216560889e-8
+    },
+    "costs": {
+      "tick": {
+        "samples": 600,
+        "meanMs": 4.570166657765706,
+        "p50Ms": 4.400000095367432,
+        "p95Ms": 6.300000190734863,
+        "maxMs": 23.09999990463257
+      },
+      "present": {
+        "samples": 600,
+        "meanMs": 0.2506666648387909,
+        "p50Ms": 0.20000004768371582,
+        "p95Ms": 0.40000009536743164,
+        "maxMs": 0.6000001430511475
+      },
+      "frame": {
+        "samples": 600,
+        "meanMs": 14.929333333571751,
+        "p50Ms": 14.899999856948853,
+        "p95Ms": 25.5,
+        "maxMs": 42.89999985694885
+      },
+      "physics": {
+        "samples": 600,
+        "meanMs": 0.48416666785875956,
+        "p50Ms": 0.5,
+        "p95Ms": 0.7000000476837158,
+        "maxMs": 4.5
+      }
+    },
+    "shell": {
+      "version": "260-game-shell-v1",
+      "sessionId": "session-261-academy",
+      "worldEpoch": 1,
+      "learningEpoch": 0,
+      "contextSwitches": 0,
+      "tick": 661,
+      "started": true,
+      "paused": false,
+      "cause": null,
+      "mode": "MANUAL",
+      "surfaces": {
+        "panel": false,
+        "menu": false,
+        "diagnostic": false
+      },
+      "panelOpen": false,
+      "activePanelId": null,
+      "systems": [
+        {
+          "order": 1,
+          "id": "settings",
+          "phase": "PRE_WORLD",
+          "owner": "279",
+          "title": "Setări runtime și remapare",
+          "status": "PRESENT",
+          "steps": 660
+        },
+        {
+          "order": 2,
+          "id": "sessions",
+          "phase": "PRE_WORLD",
+          "owner": "261",
+          "title": "Sesiuni Academie/Haos",
+          "status": "PRESENT",
+          "steps": 660
+        },
+        {
+          "order": 3,
+          "id": "control",
+          "phase": "PRE_WORLD",
+          "owner": "271",
+          "title": "Moduri AUTO/MANUAL/LEARNING",
+          "status": "PRESENT",
+          "steps": 660
+        },
+        {
+          "order": 4,
+          "id": "fleet",
+          "phase": "PRE_WORLD",
+          "owner": "262–263",
+          "title": "Flota live și selecția",
+          "status": "ABSENT",
+          "steps": 0
+        },
+        {
+          "order": 5,
+          "id": "traffic",
+          "phase": "PRE_WORLD",
+          "owner": "283–284",
+          "title": "Reguli de trafic și civili autonomi",
+          "status": "ABSENT",
+          "steps": 0
+        },
+        {
+          "order": 6,
+          "id": "pedestrians",
+          "phase": "PRE_WORLD",
+          "owner": "286",
+          "title": "Pietoni, treceri și pericole V2",
+          "status": "ABSENT",
+          "steps": 0
+        },
+        {
+          "order": 7,
+          "id": "world",
+          "phase": "WORLD",
+          "owner": "260/282",
+          "title": "Lumea autoritară V3 (fizică)",
+          "status": "PRESENT",
+          "steps": 660
+        },
+        {
+          "order": 8,
+          "id": "rides",
+          "phase": "POST_WORLD",
+          "owner": "264–265",
+          "title": "Curse, pickup/dropoff și pasageri",
+          "status": "PRESENT",
+          "steps": 660
+        },
+        {
+          "order": 9,
+          "id": "economy",
+          "phase": "POST_WORLD",
+          "owner": "266–270",
+          "title": "Economie, KPI și companie",
+          "status": "PRESENT",
+          "steps": 660
+        },
+        {
+          "order": 10,
+          "id": "missions",
+          "phase": "POST_WORLD",
+          "owner": "275–277",
+          "title": "Campanie, daily/XP și provocări",
+          "status": "PRESENT",
+          "steps": 660
+        },
+        {
+          "order": 11,
+          "id": "telemetry",
+          "phase": "POST_WORLD",
+          "owner": "272",
+          "title": "Telemetrie și oportunități",
+          "status": "PRESENT",
+          "steps": 660
+        },
+        {
+          "order": 12,
+          "id": "learning",
+          "phase": "POST_WORLD",
+          "owner": "273–274",
+          "title": "Learning și profil",
+          "status": "PRESENT",
+          "steps": 660
+        },
+        {
+          "order": 13,
+          "id": "destruction",
+          "phase": "POST_WORLD",
+          "owner": "285",
+          "title": "Decor destructibil, audio și replay",
+          "status": "ABSENT",
+          "steps": 0
+        },
+        {
+          "order": 14,
+          "id": "persistence",
+          "phase": "PERSISTENCE",
+          "owner": "278",
+          "title": "Autosave și checkpoint",
+          "status": "PRESENT",
+          "steps": 660
+        },
+        {
+          "order": 15,
+          "id": "camera",
+          "phase": "PRESENTATION",
+          "owner": "280",
+          "title": "Camera first-person",
+          "status": "ABSENT",
+          "steps": 0
+        },
+        {
+          "order": 16,
+          "id": "hud",
+          "phase": "PRESENTATION",
+          "owner": "281",
+          "title": "Minimapa și HUD complet",
+          "status": "ABSENT",
+          "steps": 0
+        }
+      ],
+      "portsPresent": 9,
+      "portsAbsent": 6,
+      "tickOrder": [
+        "settings",
+        "sessions",
+        "control",
+        "fleet",
+        "traffic",
+        "pedestrians",
+        "world",
+        "rides",
+        "economy",
+        "missions",
+        "telemetry",
+        "learning",
+        "destruction",
+        "persistence",
+        "camera",
+        "hud"
+      ],
+      "world": {
+        "attached": true,
+        "tick": 661,
+        "attachments": 1,
+        "activeWorlds": 1,
+        "maxActiveWorlds": 1
+      },
+      "ticks": 660,
+      "refusedTicks": 0,
+      "reentrantTicks": 0,
+      "fault": null,
+      "pause": {
+        "version": "070-pause-focus-v1",
+        "disposed": false,
+        "suspensions": 1,
+        "resumes": 1,
+        "refusedResumes": 0,
+        "heldResets": 1,
+        "noopReconciles": 650,
+        "surfacesOpen": 0,
+        "heldResetPort": true
+      },
+      "costs": {
+        "tick": {
+          "samples": 600,
+          "meanMs": 10.124666665792466,
+          "p50Ms": 9.799999952316284,
+          "p95Ms": 13.299999952316284,
+          "maxMs": 28.799999952316284
+        },
+        "present": {
+          "samples": 600,
+          "meanMs": 0.2514999985694885,
+          "p50Ms": 0.20000004768371582,
+          "p95Ms": 0.40000009536743164,
+          "maxMs": 0.6000001430511475
+        }
+      },
+      "disposed": false
+    },
+    "physicsStats": {
+      "contacts": 0,
+      "incidents": 0,
+      "costMs": 0.5,
+      "corrections": 0,
+      "maxCorrectionM": 0,
+      "cost": {
+        "samples": 600,
+        "meanMs": 0.4838333344459534,
+        "p50Ms": 0.5,
+        "p95Ms": 0.7000000476837158,
+        "maxMs": 4.5
+      },
+      "native": {
+        "version": "282-live-rapier-v1",
+        "tick": 656,
+        "vehicles": 2,
+        "trafficProxies": 56,
+        "staticBoxes": 90,
+        "controller": {
+          "vehicles": 2,
+          "players": 1,
+          "targets": 0,
+          "projections": 2,
+          "disposed": false,
+          "fault": null
+        },
+        "damage": {
+          "vehicles": 2,
+          "historyRecords": 2,
+          "operationIds": 2,
+          "disposed": false
+        },
+        "collision": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 656
+        },
+        "recovery": {
+          "records": 1,
+          "operations": 1,
+          "pending": false,
+          "result": "COMPLETED",
+          "fault": null
+        },
+        "costs": {
+          "controllerMs": 0.10000014305114746,
+          "stepMs": 0.09999990463256836,
+          "queryMs": 0,
+          "bridgeMs": 0,
+          "collisionMs": 0.10000014305114746,
+          "syncMs": 0,
+          "totalMs": 0.5,
+          "queryCount": 2,
+          "bridgeCalls": 50
+        },
+        "disposed": false
+      },
+      "recovery": {
+        "enabled": true,
+        "available": true,
+        "vehicleId": "taxi-01",
+        "mode": "MANUAL",
+        "pointId": "id-v1:14:recovery-point24:neighbourhood-compact-v14:TAXI9:lane:00W06:38.6865:2.100",
+        "status": "COMPLETED",
+        "failure": null,
+        "history": 1
+      }
+    }
+  }
+}
