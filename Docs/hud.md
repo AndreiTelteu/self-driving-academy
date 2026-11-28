@@ -3,15 +3,20 @@
 Status: implementare și validare funcțională locală. `src/ui/taxi-hud.ts` este adaptorul DOM, iar
 `src/ui/taxi-hud-format.ts` conține contractul, validarea și formatarea pură. Compunerea dintre starea
 reală și HUD este `src/app/taxi-hud.ts`. Modulul nu creează viteză, taxi, profil, cursă sau ETA și nu
-desenează harta; el afișează exact read-model-urile acceptate de host.
+desenează harta; el afișează exact read-model-urile acceptate de host. PBI 281 adaugă sesiunea 261 și
+starea explicită a cursei.
 
 ## Ce afișează
 
-HUD-ul implicit are nouă rânduri: viteză, mod de control, taxi, etapă, obiectiv, rută, ETA, progres și
-starea serviciului. Rândul taxi arată slotul semantic 057 („Taxi #12”), nu ID-ul de mașină. ID-ul
-complet al taxiului, clasa, ID-ul profilului, versiunea profilului aplicat, ID-ul cursei, etapa
-tehnică 061, intervalul ETA, distanța rămasă și motivul ETA sunt într-un `<details>` închis implicit. Butonul „Detalii” este un `summary` nativ, deci se deschide din tastatură fără un
-listener suplimentar și fără să blocheze condusul liber.
+HUD-ul implicit are unsprezece valori: viteză, mod de control, taxi, sesiune, etapă, obiectiv, stare,
+rută, ETA, progres și starea serviciului. Rândul taxi arată slotul semantic 057 („Taxi #12”), nu ID-ul
+de mașină; sesiunea 261 apare ca „Academia”/„Haos”, iar un tip necunoscut afișează ID-ul real, fără a
+inventa unul. Rândul „Stare” este starea explicită a cursei (`Fără cursă`, `În desfășurare`,
+`Încheiată`, `Eșuată`, `Anulată`, `Cursă a altui taxi`), distinctă de etapa player-facing.
+ID-ul complet al taxiului, clasa, ID-ul profilului, versiunea profilului aplicat, ID-ul cursei, etapa
+tehnică 061, intervalul ETA, distanța rămasă, motivul ETA și sesiunea sunt într-un `<details>` închis
+implicit. Butonul „Detalii” este un `summary` nativ, deci se deschide din tastatură fără un listener
+suplimentar și fără să blocheze condusul liber.
 
 Modul este afișat simultan prin text și simbol, nu doar prin culoare:
 
@@ -38,6 +43,7 @@ const snapshot = readTaxiHudSnapshot(
     mode,                                    // proiecția acceptată 066/067
     tick,                                    // tick-ul autoritativ acceptat
     speedMps,                                // citirea fizică 005, magnitudine m/s
+    sessionKind: 'ACADEMY',                  // 261; opțional, altfel UNKNOWN + ID real
     rideId,                                  // opțional; altfel cursa activă a taxiului
   },
 );
@@ -47,8 +53,8 @@ hud.dispose();
 ```
 
 Funcțiile pure exportate sunt `parseTaxiHudSnapshot`, `projectTaxiHud`, `modeView`, `rideStageView`,
-`formatSpeedKmh`, `formatDuration`, `formatEtaRange` și `formatDistanceM`. `TAXI_HUD_VERSION` este
-`073-taxi-hud-v1`.
+`rideStanceView`, `sessionView`, `formatSpeedKmh`, `formatDuration`, `formatEtaRange` și
+`formatDistanceM`. `TAXI_HUD_VERSION` este `073-taxi-hud-v1`.
 
 ## Snapshot
 
@@ -60,6 +66,7 @@ Funcțiile pure exportate sunt `parseTaxiHudSnapshot`, `projectTaxiHud`, `modeVi
 | `tick` | tick-ul acceptat al hostului | întreg nenegativ, monoton |
 | `speedMps` | citirea fizică 005 | finit, nenegativ sau `null` |
 | `mode` | proiecția 066/067 | `AUTO`, `MANUAL` sau `LEARNING` |
+| `session` | contextul 261 + `sessionKind` | ID real; tip `ACADEMY`/`CHAOS`/`UNKNOWN` |
 | `taxi` | 057 `FleetVehicle` + `FleetVehicleState` | ID, slot, clasă, profil, versiune aplicată |
 | `ride` | 061 `RideRecord` | ID, taxi, stare, zone pickup/dropoff |
 | `ride.eta` | 064 `EtaSnapshot` | status, motiv, serviciu, secunde, interval, progres |
@@ -121,8 +128,8 @@ motivul închis 064 apare doar în detalii. Lipsa unei curse este „Nicio curs�
 
 | Limită | Valoare |
 | --- | ---: |
-| Elemente DOM | 45 |
-| Noduri de text | 38 |
+| Elemente DOM | 50 |
+| Noduri de text | 43 |
 | Listeners | 0 |
 | Frecvență de scriere | 10 Hz |
 | Proiecții reținute | 1 |
@@ -130,11 +137,12 @@ motivul închis 064 apare doar în detalii. Lipsa unei curse este „Nicio curs�
 
 ## Verificare
 
-`tests/ui/taxi-hud.test.ts` (12 teste) acoperă: conversia și rotunjirea vitezei, formatul duratei și
+`tests/ui/taxi-hud.test.ts` (13 teste) acoperă: conversia și rotunjirea vitezei, formatul duratei și
 al intervalului, etichetele și simbolurile celor trei moduri, toate stările 061, legarea la
 registrul 057/lifecycle 061/ETA 064 reale, profilul și versiunea din detalii, starea fără cursă,
 schimbarea taxiului și a modului fără text rămas, cursa altui taxi, cursa terminală, serviciul
-`BLOCKED`, respingerea cadrelor malformate sau în urmă, ciclul de viață mărginit și transcriptul comis.
+`BLOCKED`, sesiunea 261 și starea explicită a cursei, respingerea cadrelor malformate sau în urmă,
+ciclul de viață mărginit și transcriptul comis.
 
 ```powershell
 npm run hud:taxi
@@ -154,6 +162,14 @@ registrul 057 real, lifecycle-ul 061 și ETA 064. În timpul cursei, rândurile 
 `Spre pasager`/`La pasager`/`Spre destinație`/`La destinație`, obiectivul cu zonele reale, ETA cu
 interval, progresul certificat și motivul `SERVICE_BLOCKED` în detalii. După terminal, HUD-ul nu mai
 pretinde o cursă activă; panoul `Curse` păstrează rândul terminal cu motivul.
+
+## Montarea live 281
+
+`main.ts` montează HUD-ul 073 și îl actualizează la un plafon de 10 Hz pe ceas de perete, împreună cu
+minimapa 281. Modul afișat este cel al vehiculului citit (AUTO pe un taxi observat, MANUAL/LEARNING
+când jucătorul conduce), nu modul personajului. Sesiunea vine din identitatea 261 adoptată de shell,
+iar „Stare” din starea 061 a cursei. Proba de browser și raportul determinist sunt în
+[Evidence/281-minimap-hud](Evidence/281-minimap-hud/README.md).
 
 ## Ce NU este
 
